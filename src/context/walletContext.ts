@@ -1,9 +1,12 @@
 import { createContext } from 'react'
 
 export type token = {
+    balance: number,
+    id: string,
     ticker: string,
-    contract: string,
-    contractState: any
+    state: any,
+    name: string,
+    logo: string
 }
 
 export type wallet = {

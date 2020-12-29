@@ -28,24 +28,14 @@ const walletReducer = (state: walletState, action: { type: string, payload: any 
                 tokens: action.payload.tokens
             }
         }
-        case 'SET_PICTURE': {
-            return {
-                ...state,
-                picture: action.payload.picture
-            }
-        }
+
         case 'SET_BLOCK_HEIGHT': {
             return {
                 ...state,
                 blockHeight: action.payload.blockHeight
             }
         }
-        case 'SET_TOKEN_ADDRESSES': {
-            return {
-                ...state,
-                tokenAddresses: action.payload.tokenAddresses
-            }
-        }
+
         case 'CHANGE_ACTIVE_WALLET': {
             let newWallet = state.wallets.find((wallet) => wallet.address === action.payload.address)
             return {
@@ -56,6 +46,7 @@ const walletReducer = (state: walletState, action: { type: string, payload: any 
                 mnemonic: newWallet?.mnemonic
             }
         }
+        
         case 'REMOVE_WALLET': {
             let wallets = state.wallets.filter((wallet) => wallet.address !== action.payload.address)
             if (wallets.length > 0)
