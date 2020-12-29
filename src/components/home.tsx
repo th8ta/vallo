@@ -16,6 +16,7 @@ import {
   IonRow,
   IonSpinner,
 } from "@ionic/react";
+import { ArrowRightIcon } from "@primer/octicons-react";
 
 const Home: React.FC = () => {
   const { state, dispatch } = React.useContext(WalletContext);
@@ -60,9 +61,14 @@ const Home: React.FC = () => {
             )}
             {state.tokens.length > 0 &&
               !loading &&
-              state.tokens.map((token) => {
+              state.tokens.slice(0,state.tokens.length > 3 ? 3 : state.tokens.length).map((token) => {
                 return <TokenDisplay key={token.id + token.logo} {...token} />;
               })}
+             {state.tokens.length > 3 &&
+              !loading && <IonItem class="ion-text-end"> <IonLabel>
+                <IonText slot="end">All Tokens</IonText>
+                <ArrowRightIcon size={16}/>
+              </IonLabel></IonItem>}
           </IonCardContent>
         </IonCard>
         <IonCard>
