@@ -24,7 +24,7 @@ const Home: React.FC = () => {
 
   React.useEffect(() => {
     async function getTokensAsync() {
-      let tokens = await getTokenBalances("vxUdiv2fGHMiIoek5E4l3M5qSuKCZtSaOBYjMRc94JU");
+      let tokens = await getTokenBalances(state.address);
       dispatch({
         type: "UPDATE_TOKENS",
         payload: { tokens: tokens },
@@ -61,7 +61,7 @@ const Home: React.FC = () => {
             )}
             {state.tokens.length > 0 &&
               !loading &&
-              state.tokens.slice(0,state.tokens.length > 3 ? 3 : state.tokens.length).map((token) => {
+              state.tokens.map((token) => {
                 return <TokenDisplay key={token.id + token.logo} {...token} />;
               })}
              {state.tokens.length > 3 &&
