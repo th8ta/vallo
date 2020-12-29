@@ -16,7 +16,7 @@ import {
   IonRow,
   IonSpinner,
 } from "@ionic/react";
-import { ArrowRightIcon } from "@primer/octicons-react";
+import { ArrowRightIcon, QuestionIcon } from "@primer/octicons-react";
 
 const Home: React.FC = () => {
   const { state, dispatch } = React.useContext(WalletContext);
@@ -24,7 +24,7 @@ const Home: React.FC = () => {
 
   React.useEffect(() => {
     async function getTokensAsync() {
-      let tokens = await getTokenBalances(state.address);
+      let tokens = await getTokenBalances("vxUdiv2fGHMiIoek5E4l3M5qSuKCZtSaOBYjMRc94JU");
       dispatch({
         type: "UPDATE_TOKENS",
         payload: { tokens: tokens },
@@ -100,7 +100,7 @@ const TokenDisplay: React.FC<TokenProps> = ({
   return (
     <IonItem key={id}>
       <IonAvatar key={logo} slot="start">
-        <img src={`https://arweave.net/${logo}`} alt={`${name} logo`} />
+        {logo !== '' ? <img src={`https://arweave.net/${logo}`} alt={`${name} logo`} /> : <QuestionIcon size={24} />}
       </IonAvatar>
       <IonLabel key={name}>{name}</IonLabel>
       <IonText slot="end" key={balance + id}>

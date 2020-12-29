@@ -21,9 +21,12 @@ export const getTokenBalances = async (address:string): Promise<token[]> => {
     let tokenStates = tokens.map( (token) => {
         let url = ''
         //@ts-ignore
-        if(token.state.settings)
+        if(token.state.settings) {
         //@ts-ignore
-            url = token.state.settings.filter((setting: any) => setting[0] === 'communityLogo')[0][1]
+            let logo = token.state.settings.filter((setting: any) => setting[0] === 'communityLogo');
+            if (logo)
+                url = logo[0][1];
+        }
         //@ts-ignore
         return {...token, logo: url, state: token.state}
     })
