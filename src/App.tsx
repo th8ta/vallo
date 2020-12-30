@@ -1,23 +1,5 @@
 import React from "react";
-
-/* Core CSS required for Ionic components to work properly */
-import "@ionic/react/css/core.css";
-
-/* Basic CSS for apps built with Ionic */
-import "@ionic/react/css/normalize.css";
-import "@ionic/react/css/structure.css";
-import "@ionic/react/css/typography.css";
-
-/* Optional CSS utils that can be commented out */
-import "@ionic/react/css/padding.css";
-import "@ionic/react/css/float-elements.css";
-import "@ionic/react/css/text-alignment.css";
-import "@ionic/react/css/text-transformation.css";
-import "@ionic/react/css/flex-utils.css";
-import "@ionic/react/css/display.css";
-
-/* Theme variables */
-import "./theme/variables.sass";
+import { ArrowSwitchIcon, HomeIcon, PersonIcon } from "@primer/octicons-react";
 import {
   IonApp,
   IonLabel,
@@ -29,13 +11,26 @@ import {
 import { IonReactRouter } from "@ionic/react-router";
 import { Redirect, Route } from "react-router";
 
-/* App specific imports */
+import "@ionic/react/css/core.css";
+import "@ionic/react/css/normalize.css";
+import "@ionic/react/css/structure.css";
+import "@ionic/react/css/typography.css";
+import "@ionic/react/css/padding.css";
+import "@ionic/react/css/float-elements.css";
+import "@ionic/react/css/text-alignment.css";
+import "@ionic/react/css/text-transformation.css";
+import "@ionic/react/css/flex-utils.css";
+import "@ionic/react/css/display.css";
+
 import WalletLoader from "./components/walletLoader";
 import WalletContext, { initWalletState } from "./context/walletContext";
 import walletReducer from "./reducers/walletReducer";
+
 import WelcomePage from "./components/welcome";
-import { ArrowSwitchIcon, HomeIcon, PersonIcon } from "@primer/octicons-react";
 import Home from "./components/home";
+
+import "./theme/global.sass"
+import "./theme/variables.sass";
 
 const App: React.FunctionComponent = () => {
   const [state, dispatch] = React.useReducer(walletReducer, initWalletState);
