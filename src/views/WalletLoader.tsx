@@ -4,8 +4,6 @@ import { useHistory } from "react-router";
 import WalletContext from "../context/walletContext";
 import { addWallet } from "../providers/wallets";
 import vertoLogo from "../assets/logo.png";
-import th8ta from "../assets/th8ta.png";
-
 import {
   IonPage,
   IonInput,
@@ -17,8 +15,11 @@ import {
   IonLoading,
   IonCardTitle,
   IonToast,
-  IonText
+  IonItemDivider,
+  IonLabel,
+  IonItem
 } from "@ionic/react";
+import styles from "../theme/pages/login.module.sass";
 
 const WalletLoader: React.FC = () => {
   const { dispatch } = useContext(WalletContext),
@@ -60,6 +61,7 @@ const WalletLoader: React.FC = () => {
         try {
           let walletObject = JSON.parse(event!.target!.result as string),
             walletDeets = await addWallet(walletObject);
+
           dispatch({
             type: "ADD_WALLET",
             payload: {
@@ -90,30 +92,36 @@ const WalletLoader: React.FC = () => {
   return (
     <IonPage>
       <IonContent fullscreen={true}>
-        <IonCard>
+        <IonCard className={styles.Center}>
           <IonCardContent>
-            <img src={vertoLogo} alt="Verto logo" />
+            <img src={vertoLogo} alt="logo" className={styles.Logo} />
             <IonCardHeader>
-              <IonCardTitle>Sign In</IonCardTitle>
+              <IonCardTitle className={styles.Title}>Sign In</IonCardTitle>
             </IonCardHeader>
-            <IonInput
-              value={address}
-              placeholder="Enter 12 word seed phrase"
-              onIonChange={(e) => setAddress(e.detail.value!)}
-            ></IonInput>
+            <IonItem>
+              <IonInput
+                value={address}
+                onIonChange={(e) => setAddress(e.detail.value!)}
+              ></IonInput>
+              <IonLabel position="floating">Enter 12 word seed phrase</IonLabel>
+            </IonItem>
             <IonButton
               fill="solid"
               expand="full"
               color="dark"
+              className={"Button " + styles.Button}
+              shape="round"
               onClick={() => loadWalletFromMnemonic(address)}
             >
               Load Wallet
             </IonButton>
-            <IonText class="ion-text-center">Or</IonText>
+            <IonItemDivider></IonItemDivider>
             <IonButton
               fill="outline"
               expand="full"
               color="dark"
+              className={"Button " + styles.Button}
+              shape="round"
               onClick={() => handleFileClick()}
             >
               I have a wallet keyfile
@@ -129,11 +137,6 @@ const WalletLoader: React.FC = () => {
             />
           </IonCardContent>
         </IonCard>
-        <img
-          src={th8ta}
-          style={{ position: "absolute", bottom: "10px", left: "50%" }}
-          alt="Theta logo"
-        />
       </IonContent>
       <IonLoading isOpen={loading} message={"Loading wallet..."} />
       <IonToast

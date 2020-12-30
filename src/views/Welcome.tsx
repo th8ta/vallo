@@ -13,7 +13,7 @@ import {
   IonLoading,
   IonCardTitle
 } from "@ionic/react";
-import styles from "../theme/pages/welcome.module.sass";
+import styles from "../theme/pages/login.module.sass";
 
 const Welcome: React.FC = () => {
   const { dispatch } = useContext(WalletContext),
@@ -44,7 +44,7 @@ const Welcome: React.FC = () => {
         <IonCardContent>
           <img src={vertoLogo} alt="logo" className={styles.Logo} />
           <IonCardHeader>
-            <IonCardTitle className={styles.Welcome}>Welcome</IonCardTitle>
+            <IonCardTitle className={styles.Title}>Welcome</IonCardTitle>
           </IonCardHeader>
           <IonButton
             className={"Button " + styles.Button}
