@@ -32,9 +32,6 @@
   "gitHooks": {
     "pre-commit": "prettier --write . && git add -A"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
   "browserslist": {
     "production": [
       ">0.2%",
