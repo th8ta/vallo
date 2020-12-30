@@ -2,6 +2,7 @@ import React, { useReducer } from "react";
 import { IonApp } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import { Redirect, Route } from "react-router";
+import { VertoProvider } from "@verto/ui";
 
 import "@ionic/react/css/core.css";
 import "@ionic/react/css/normalize.css";
@@ -28,17 +29,19 @@ const App: React.FunctionComponent = () => {
   const [state, dispatch] = useReducer(walletReducer, initWalletState);
 
   return (
-    <WalletContext.Provider value={{ dispatch, state }}>
-      <IonApp>
-        <IonReactRouter>
-          <Route path="/welcome" component={WelcomePage} />
-          <Route path="/loadwallet" component={WalletLoader} />
-          {(state.key && state.address !== "" && (
-            <Route path="/" component={Tabs} />
-          )) || <Redirect exact from="/" to="/welcome" />}
-        </IonReactRouter>
-      </IonApp>
-    </WalletContext.Provider>
+    <VertoProvider theme={"Dark"}>
+      <WalletContext.Provider value={{ dispatch, state }}>
+        <IonApp>
+          <IonReactRouter>
+            <Route path="/welcome" component={WelcomePage} />
+            <Route path="/loadwallet" component={WalletLoader} />
+            {(state.key && state.address !== "" && (
+              <Route path="/" component={Tabs} />
+            )) || <Redirect exact from="/" to="/welcome" />}
+          </IonReactRouter>
+        </IonApp>
+      </WalletContext.Provider>
+    </VertoProvider>
   );
 };
 

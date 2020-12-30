@@ -2,3 +2,19 @@
   text-transform: none
   --border-radius: 5px
   --border-width: 2px
+  --border-color: var(--ion-color-light-contrast)
+
+.Input
+  $inputSidePadding: 1em
+  border-width: 2px
+  border-color: var(--ion-color-light-contrast)
+
+  &:focus-within
+    border-color: var(--ion-color-light-contrast)
+
+  input
+    padding: .5em $inputSidePadding
+
+  span
+    left: $inputSidePadding !important
+    color: var(--ion-color-step-500) !important

@@ -4,15 +4,7 @@ import { useHistory } from "react-router";
 import WalletContext from "../context/walletContext";
 import { addWallet } from "../providers/wallets";
 import vertoLogo from "../assets/logo.png";
-import {
-  IonPage,
-  IonButton,
-  IonCard,
-  IonCardHeader,
-  IonCardContent,
-  IonLoading,
-  IonCardTitle
-} from "@ionic/react";
+import { IonPage, IonButton, IonLoading, IonContent } from "@ionic/react";
 import styles from "../theme/pages/login.module.sass";
 
 const Welcome: React.FC = () => {
@@ -40,12 +32,10 @@ const Welcome: React.FC = () => {
 
   return (
     <IonPage>
-      <IonCard className={styles.Center}>
-        <IonCardContent>
+      <IonContent className="IonContent" fullscreen>
+        <div className={styles.Center}>
           <img src={vertoLogo} alt="logo" className={styles.Logo} />
-          <IonCardHeader>
-            <IonCardTitle className={styles.Title}>Welcome</IonCardTitle>
-          </IonCardHeader>
+          <h1 className={styles.Title}>Welcome</h1>
           <IonButton
             className={"Button " + styles.Button}
             fill="solid"
@@ -66,8 +56,8 @@ const Welcome: React.FC = () => {
           >
             I have a wallet
           </IonButton>
-        </IonCardContent>
-      </IonCard>
+        </div>
+      </IonContent>
       <IonLoading isOpen={loading} message={"Generating wallet..."} />
     </IonPage>
   );

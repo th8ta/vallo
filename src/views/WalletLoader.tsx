@@ -8,17 +8,12 @@ import {
   IonPage,
   IonInput,
   IonButton,
-  IonCard,
-  IonCardHeader,
-  IonCardContent,
   IonContent,
   IonLoading,
-  IonCardTitle,
   IonToast,
-  IonItemDivider,
-  IonLabel,
   IonItem
 } from "@ionic/react";
+import { Input } from "@verto/ui";
 import styles from "../theme/pages/login.module.sass";
 
 const WalletLoader: React.FC = () => {
@@ -92,51 +87,45 @@ const WalletLoader: React.FC = () => {
   return (
     <IonPage>
       <IonContent fullscreen={true}>
-        <IonCard className={styles.Center}>
-          <IonCardContent>
-            <img src={vertoLogo} alt="logo" className={styles.Logo} />
-            <IonCardHeader>
-              <IonCardTitle className={styles.Title}>Sign In</IonCardTitle>
-            </IonCardHeader>
-            <IonItem>
-              <IonInput
-                value={address}
-                onIonChange={(e) => setAddress(e.detail.value!)}
-              ></IonInput>
-              <IonLabel position="floating">Enter 12 word seed phrase</IonLabel>
-            </IonItem>
-            <IonButton
-              fill="solid"
-              expand="full"
-              color="dark"
-              className={"Button " + styles.Button}
-              shape="round"
-              onClick={() => loadWalletFromMnemonic(address)}
-            >
-              Load Wallet
-            </IonButton>
-            <IonItemDivider></IonItemDivider>
-            <IonButton
-              fill="outline"
-              expand="full"
-              color="dark"
-              className={"Button " + styles.Button}
-              shape="round"
-              onClick={() => handleFileClick()}
-            >
-              I have a wallet keyfile
-            </IonButton>
-            <input
-              ref={fileRef}
-              type="file"
-              style={{ display: "none" }}
-              accept="application/json"
-              onChange={(evt) => {
-                if (evt.target.files) loadWalletFromFile(evt.target.files);
-              }}
-            />
-          </IonCardContent>
-        </IonCard>
+        <div className={styles.Center}>
+          <img src={vertoLogo} alt="logo" className={styles.Logo} />
+          <h1 className={styles.Title}>Sign In</h1>
+          <Input
+            label="Enter 12 word seedphrase..."
+            onChange={(e) => setAddress(e.target.value)}
+            className={"Input " + styles.Input}
+          />
+          <IonButton
+            fill="solid"
+            expand="full"
+            color="dark"
+            className={"Button " + styles.Button}
+            shape="round"
+            onClick={() => loadWalletFromMnemonic(address)}
+          >
+            Load Wallet
+          </IonButton>
+          <span className={styles.seperate}>Or</span>
+          <IonButton
+            fill="outline"
+            expand="full"
+            color="dark"
+            className={"Button " + styles.Button}
+            shape="round"
+            onClick={() => handleFileClick()}
+          >
+            I have a wallet keyfile
+          </IonButton>
+          <input
+            ref={fileRef}
+            type="file"
+            style={{ display: "none" }}
+            accept="application/json"
+            onChange={(evt) => {
+              if (evt.target.files) loadWalletFromFile(evt.target.files);
+            }}
+          />
+        </div>
       </IonContent>
       <IonLoading isOpen={loading} message={"Loading wallet..."} />
       <IonToast

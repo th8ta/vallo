@@ -4,10 +4,12 @@
   "private": true,
   "dependencies": {
     "@capacitor/core": "^2.4.5",
+    "@ionic-native/theme-detection": "^5.30.0",
     "@ionic/react": "^5.0.7",
     "@ionic/react-router": "^5.0.7",
     "@primer/octicons-react": "^11.2.0",
     "@verto/lib": "^0.8.4",
+    "@verto/ui": "^0.0.0",
     "arweave": "^1.10.0",
     "arweave-mnemonic-keys": "0.0.3",
     "cacheweave": "^2.1.0",
@@ -16,7 +18,8 @@
     "react-dom": "^16.13.0",
     "react-router": "^5.1.2",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.4.0"
+    "react-scripts": "3.4.0",
+    "use-prefers-color-scheme": "^0.1.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -31,6 +34,9 @@
   },
   "gitHooks": {
     "pre-commit": "prettier --write . && git add -A"
+  },
+  "eslintConfig": {
+    "ignorePatterns": "**/*"
   },
   "browserslist": {
     "production": [
@@ -52,6 +58,7 @@
     "@types/node": "^12.12.24",
     "@types/react": "^16.9.17",
     "@types/react-dom": "^16.9.4",
+    "@types/react-responsive": "^8.0.2",
     "@types/react-router": "^5.1.4",
     "@types/react-router-dom": "^5.1.3",
     "prettier": "^2.2.1",
