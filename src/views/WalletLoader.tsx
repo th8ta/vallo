@@ -1,5 +1,5 @@
 import { getKeyFromMnemonic } from "arweave-mnemonic-keys";
-import React from "react";
+import React, { useContext, useState, useRef } from "react";
 import { useHistory } from "react-router";
 import WalletContext from "../context/walletContext";
 import { addWallet } from "../providers/wallets";
@@ -17,52 +17,56 @@ import {
   IonLoading,
   IonCardTitle,
   IonToast,
-  IonText,
+  IonText
 } from "@ionic/react";
 
 const WalletLoader: React.FC = () => {
-  const { dispatch } = React.useContext(WalletContext);
-  const [loading, setLoading] = React.useState<boolean>(false);
-  const [address, setAddress] = React.useState<string>("");
-  const [toast, showToast] = React.useState<boolean>(false);
-  const fileRef = React.useRef(null);
-  const history = useHistory();
+  const { dispatch } = useContext(WalletContext),
+    [loading, setLoading] = useState<boolean>(false),
+    [address, setAddress] = useState<string>(""),
+    [toast, showToast] = useState<boolean>(false),
+    fileRef = useRef(null),
+    history = useHistory();
 
-  const loadWalletFromMnemonic = async (mnemonic: string) => {
+  async function loadWalletFromMnemonic(mnemonic: string) {
     setLoading(true);
-    let walletObject = await getKeyFromMnemonic(mnemonic);
+    let walletObject = await getKeyFromMnemonic(mnemonic),
+      walletDeets = await addWallet(walletObject);
+
     console.log(`get keys`);
     console.log(JSON.stringify(walletObject));
-    let walletDeets = await addWallet(walletObject);
+
     setLoading(false);
     history.push("/home");
     dispatch({
       type: "ADD_WALLET",
-      payload: { ...walletDeets, key: walletObject, mnemonic: mnemonic },
+      payload: { ...walletDeets, key: walletObject, mnemonic: mnemonic }
     });
-  };
+  }
 
-  const handleFileClick = () => {
+  function handleFileClick() {
     //@ts-ignore
     fileRef.current!.click();
-  };
-  const loadWalletFromFile = async (acceptedFiles: any) => {
+  }
+
+  async function loadWalletFromFile(acceptedFiles: any) {
     const reader = new FileReader();
+
     reader.onabort = () => console.log("file reading was aborted");
     reader.onerror = () => console.log("file reading has failed");
     reader.onload = async function (event) {
       setLoading(true);
       if (acceptedFiles[0].type === "application/json") {
         try {
-          let walletObject = JSON.parse(event!.target!.result as string);
-          let walletDeets = await addWallet(walletObject);
+          let walletObject = JSON.parse(event!.target!.result as string),
+            walletDeets = await addWallet(walletObject);
           dispatch({
             type: "ADD_WALLET",
             payload: {
               ...walletDeets,
               key: walletObject,
-              mnemonic: walletObject.mnemonic,
-            },
+              mnemonic: walletObject.mnemonic
+            }
           });
           history.push("/home");
         } catch (err) {
@@ -81,7 +85,7 @@ const WalletLoader: React.FC = () => {
       console.log("Invalid file type");
       showToast(true);
     }
-  };
+  }
 
   return (
     <IonPage>

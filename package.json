@@ -7,15 +7,6 @@
     "@ionic/react": "^5.0.7",
     "@ionic/react-router": "^5.0.7",
     "@primer/octicons-react": "^11.2.0",
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.4.0",
-    "@testing-library/user-event": "^8.0.3",
-    "@types/jest": "^24.0.25",
-    "@types/node": "^12.12.24",
-    "@types/react": "^16.9.17",
-    "@types/react-dom": "^16.9.4",
-    "@types/react-router": "^5.1.4",
-    "@types/react-router-dom": "^5.1.3",
     "@verto/lib": "^0.8.4",
     "arweave": "^1.10.0",
     "arweave-mnemonic-keys": "0.0.3",
@@ -25,17 +16,21 @@
     "react-dom": "^16.13.0",
     "react-router": "^5.1.2",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.4.0",
-    "typescript": "^4.1.3"
+    "react-scripts": "3.4.0"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "fmt": "prettier --write .",
+    "fmt:check": "prettier --check .",
     "build-debug-apk": "npm run build && npx cap sync android && cd android && ./gradlew assembleDebug && cd ..",
     "deploy-debug-apk": "npm run build && npx cap sync android && cd android && ./gradlew assembleDebug && ./gradlew installDebug && cd ..",
     "start-avd": "emulator -avd Pixel_3a_XL_API_30"
+  },
+  "gitHooks": {
+    "pre-commit": "prettier --write . && git add -A"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -53,6 +48,18 @@
     ]
   },
   "devDependencies": {
-    "sass": "^1.30.0"
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.4.0",
+    "@testing-library/user-event": "^8.0.3",
+    "@types/jest": "^24.0.25",
+    "@types/node": "^12.12.24",
+    "@types/react": "^16.9.17",
+    "@types/react-dom": "^16.9.4",
+    "@types/react-router": "^5.1.4",
+    "@types/react-router-dom": "^5.1.3",
+    "prettier": "^2.2.1",
+    "sass": "^1.30.0",
+    "typescript": "^4.1.3",
+    "yorkie": "^2.0.0"
   }
 }

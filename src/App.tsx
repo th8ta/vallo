@@ -1,13 +1,5 @@
-import React from "react";
-import { ArrowSwitchIcon, HomeIcon, PersonIcon } from "@primer/octicons-react";
-import {
-  IonApp,
-  IonLabel,
-  IonRouterOutlet,
-  IonTabBar,
-  IonTabButton,
-  IonTabs,
-} from "@ionic/react";
+import React, { useReducer } from "react";
+import { IonApp } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import { Redirect, Route } from "react-router";
 
@@ -22,45 +14,28 @@ import "@ionic/react/css/text-transformation.css";
 import "@ionic/react/css/flex-utils.css";
 import "@ionic/react/css/display.css";
 
-import WalletLoader from "./components/walletLoader";
 import WalletContext, { initWalletState } from "./context/walletContext";
 import walletReducer from "./reducers/walletReducer";
 
-import WelcomePage from "./components/welcome";
-import Home from "./components/home";
+import WelcomePage from "./views/Welcome";
+import WalletLoader from "./views/WalletLoader";
+import Tabs from "./views/private/Tabs";
 
-import "./theme/global.sass"
+import "./theme/global.sass";
 import "./theme/variables.sass";
 
 const App: React.FunctionComponent = () => {
-  const [state, dispatch] = React.useReducer(walletReducer, initWalletState);
+  const [state, dispatch] = useReducer(walletReducer, initWalletState);
 
   return (
     <WalletContext.Provider value={{ dispatch, state }}>
       <IonApp>
         <IonReactRouter>
-          <IonTabs>
-            <IonRouterOutlet>
-              <Route path="/welcome" component={WelcomePage} />
-              <Route path="/loadwallet" component={WalletLoader} />
-              <Route path="/home" component={Home} />
-              <Redirect exact from="/" to="/welcome" />
-            </IonRouterOutlet>
-             <IonTabBar slot="bottom">
-               <IonTabButton tab="home" href="/home">
-                 <HomeIcon size={24}/>
-                <IonLabel>Home</IonLabel>
-              </IonTabButton>
-              <IonTabButton tab="prices" href="/prices">
-                <ArrowSwitchIcon size={24}/>
-                <IonLabel>Exchange</IonLabel>
-              </IonTabButton>
-              <IonTabButton tab="profile" href="/profile">
-                <PersonIcon size={24} />
-                <IonLabel>Profile</IonLabel>
-              </IonTabButton>
-            </IonTabBar>
-          </IonTabs>
+          <Route path="/welcome" component={WelcomePage} />
+          <Route path="/loadwallet" component={WalletLoader} />
+          {(state.key && state.address !== "" && (
+            <Route path="/" component={Tabs} />
+          )) || <Redirect exact from="/" to="/welcome" />}
         </IonReactRouter>
       </IonApp>
     </WalletContext.Provider>

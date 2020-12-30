@@ -1,6 +1,6 @@
-import React from "react";
-import WalletContext, { token } from "../context/walletContext";
-import { getTokenBalances } from "../providers/verto";
+import React, { useState, useContext, useEffect } from "react";
+import WalletContext, { token } from "../../context/walletContext";
+import { getTokenBalances } from "../../providers/verto";
 import {
   IonPage,
   IonItem,
@@ -12,22 +12,20 @@ import {
   IonCardTitle,
   IonText,
   IonAvatar,
-  IonGrid,
-  IonRow,
-  IonSpinner,
+  IonSpinner
 } from "@ionic/react";
 import { ArrowRightIcon, QuestionIcon } from "@primer/octicons-react";
 
 const Home: React.FC = () => {
-  const { state, dispatch } = React.useContext(WalletContext);
-  const [loading, setLoading] = React.useState<boolean>(false);
+  const { state, dispatch } = useContext(WalletContext);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     async function getTokensAsync() {
       let tokens = await getTokenBalances(state.address);
       dispatch({
         type: "UPDATE_TOKENS",
-        payload: { tokens: tokens },
+        payload: { tokens: tokens }
       });
       setLoading(false);
     }
@@ -64,11 +62,15 @@ const Home: React.FC = () => {
               state.tokens.map((token) => {
                 return <TokenDisplay key={token.id + token.logo} {...token} />;
               })}
-             {state.tokens.length > 3 &&
-              !loading && <IonItem class="ion-text-end"> <IonLabel>
-                <IonText slot="end">All Tokens</IonText>
-                <ArrowRightIcon size={16}/>
-              </IonLabel></IonItem>}
+            {state.tokens.length > 3 && !loading && (
+              <IonItem class="ion-text-end">
+                {" "}
+                <IonLabel>
+                  <IonText slot="end">All Tokens</IonText>
+                  <ArrowRightIcon size={16} />
+                </IonLabel>
+              </IonItem>
+            )}
           </IonCardContent>
         </IonCard>
         <IonCard>
@@ -94,13 +96,17 @@ const TokenDisplay: React.FC<TokenProps> = ({
   logo,
   id,
   ticker,
-  name,
+  name
 }) => {
   console.log(id);
   return (
     <IonItem key={id}>
       <IonAvatar key={logo} slot="start">
-        {logo !== '' ? <img src={`https://arweave.net/${logo}`} alt={`${name} logo`} /> : <QuestionIcon size={24} />}
+        {logo !== "" ? (
+          <img src={`https://arweave.net/${logo}`} alt={`${name} logo`} />
+        ) : (
+          <QuestionIcon size={24} />
+        )}
       </IonAvatar>
       <IonLabel key={name}>{name}</IonLabel>
       <IonText slot="end" key={balance + id}>

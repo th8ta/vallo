@@ -1,11 +1,9 @@
 import { generateMnemonic, getKeyFromMnemonic } from "arweave-mnemonic-keys";
-import React from "react";
+import React, { useState, useContext } from "react";
 import { useHistory } from "react-router";
 import WalletContext from "../context/walletContext";
 import { addWallet } from "../providers/wallets";
 import vertoLogo from "../assets/logo.png";
-import styles from "../theme/pages/welcome.module.sass";
-
 import {
   IonPage,
   IonButton,
@@ -13,27 +11,32 @@ import {
   IonCardHeader,
   IonCardContent,
   IonLoading,
-  IonCardTitle,
+  IonCardTitle
 } from "@ionic/react";
+import styles from "../theme/pages/welcome.module.sass";
 
 const Welcome: React.FC = () => {
-  const { dispatch } = React.useContext(WalletContext);
-  const [loading, setLoading] = React.useState(false);
-  const history = useHistory();
-  const createWallet = async () => {
+  const { dispatch } = useContext(WalletContext),
+    [loading, setLoading] = useState(false),
+    history = useHistory();
+
+  async function createWallet() {
     setLoading(true);
-    let mnemonic = await generateMnemonic();
-    let walletObject = await getKeyFromMnemonic(mnemonic);
+
+    let mnemonic = await generateMnemonic(),
+      walletObject = await getKeyFromMnemonic(mnemonic),
+      walletDeets = await addWallet(walletObject);
+
     console.log(`get keys`);
     console.log(JSON.stringify(walletObject));
-    let walletDeets = await addWallet(walletObject);
+
     setLoading(false);
     history.push("/home");
     dispatch({
       type: "ADD_WALLET",
-      payload: { ...walletDeets, key: walletObject, mnemonic: mnemonic },
+      payload: { ...walletDeets, key: walletObject, mnemonic: mnemonic }
     });
-  };
+  }
 
   return (
     <IonPage>
@@ -65,10 +68,7 @@ const Welcome: React.FC = () => {
           </IonButton>
         </IonCardContent>
       </IonCard>
-      <IonLoading
-        isOpen={loading}
-        message={'Generating wallet...'}
-      />
+      <IonLoading isOpen={loading} message={"Generating wallet..."} />
     </IonPage>
   );
 };
