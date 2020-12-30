@@ -17,6 +17,7 @@ import "@ionic/react/css/display.css";
 
 import WalletContext, { initWalletState } from "./context/walletContext";
 import walletReducer from "./reducers/walletReducer";
+import { useTheme } from "./utils/theme";
 
 import WelcomePage from "./views/Welcome";
 import WalletLoader from "./views/WalletLoader";
@@ -26,10 +27,11 @@ import "./theme/global.sass";
 import "./theme/variables.sass";
 
 const App: React.FunctionComponent = () => {
-  const [state, dispatch] = useReducer(walletReducer, initWalletState);
+  const [state, dispatch] = useReducer(walletReducer, initWalletState),
+    theme = useTheme();
 
   return (
-    <VertoProvider theme={"Dark"}>
+    <VertoProvider theme={theme}>
       <WalletContext.Provider value={{ dispatch, state }}>
         <IonApp>
           <IonReactRouter>
