@@ -1,20 +1,16 @@
-import { walletState, wallet } from "../context/walletContext";
+import { IWalletState, IWallet } from "../context/walletContext";
 
-const walletReducer = (
-  state: walletState,
+export default function walletReducer(
+  state: IWalletState,
   action: { type: string; payload: any }
-): walletState => {
-  console.log("Current state is:");
-  console.log(state);
-  console.log("Action requested is:");
-  console.log(action);
+): IWalletState {
   switch (action.type) {
     case "LOAD_STATE": {
       return { ...action.payload.state };
     }
     case "ADD_WALLET": {
       let existingWallets = state.wallets?.filter(
-        (wallet: wallet) => wallet.address === action.payload.address
+        (wallet: IWallet) => wallet.address === action.payload.address
       );
       let wallets = state.wallets ? state.wallets : [];
       if (existingWallets && existingWallets.length === 0)
@@ -82,6 +78,4 @@ const walletReducer = (
     default:
       return state;
   }
-};
-
-export default walletReducer;
+}

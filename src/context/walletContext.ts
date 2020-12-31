@@ -1,32 +1,33 @@
 import { createContext } from "react";
 
-export type token = {
+export interface IToken {
   balance: number;
   id: string;
   ticker: string;
   state: any;
   name: string;
   logo: string;
-};
+}
 
-export type wallet = {
+export interface IWallet {
   address: string;
   key?: any;
   mnemonic?: string;
-};
-export type walletState = {
+}
+
+export interface IWalletState {
   key: any;
   mnemonic?: string;
   balance: string;
   address: string;
-  tokens: token[];
-  wallets: wallet[];
+  tokens: IToken[];
+  wallets: IWallet[];
   picture?: string;
   blockHeight?: number;
   tokenAddresses?: string[];
-};
+}
 
-export const initWalletState: walletState = {
+export const initWalletState: IWalletState = {
   key: null as any,
   balance: "",
   address: "",
@@ -36,8 +37,8 @@ export const initWalletState: walletState = {
 };
 
 const WalletContext = createContext<{
-  state: walletState;
+  state: IWalletState;
   dispatch: React.Dispatch<any>;
 }>({ state: initWalletState, dispatch: () => null });
 
-export { WalletContext as default };
+export default WalletContext;

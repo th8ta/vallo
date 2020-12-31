@@ -1,15 +1,8 @@
-import Arweave from "arweave";
+import { getArweaveInstance } from "./verto";
 
-export const getArweaveInstance = () => {
-  return Arweave.init({
-    host: "arweave.net",
-    port: 443
-  });
-};
-
-export const addWallet = async (
+export async function addWallet(
   wallet: any
-): Promise<{ address: string; balance: string }> => {
+): Promise<{ address: string; balance: string }> {
   let arweave = getArweaveInstance();
   let address = "";
   if (typeof wallet === "string") address = wallet;
@@ -19,4 +12,4 @@ export const addWallet = async (
     await arweave.wallets.getBalance(address)
   );
   return { address, balance };
-};
+}

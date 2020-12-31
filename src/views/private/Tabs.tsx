@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  IonLabel,
   IonRouterOutlet,
   IonTabBar,
   IonTabButton,
@@ -8,27 +7,25 @@ import {
 } from "@ionic/react";
 import { ArrowSwitchIcon, HomeIcon, PersonIcon } from "@primer/octicons-react";
 import { Route } from "react-router";
+import styles from "../../theme/components/TabBar.module.sass";
 
 import Home from "./Home";
 
 const Tabs: React.FunctionComponent = () => {
   return (
-    <IonTabs>
+    <IonTabs className={styles.Tabs}>
       <IonRouterOutlet>
         <Route path="/home" component={Home} />
       </IonRouterOutlet>
-      <IonTabBar slot="bottom">
-        <IonTabButton tab="home" href="/home">
+      <IonTabBar slot="bottom" className={styles.TabBar}>
+        <IonTabButton tab="home" href="/home" className={styles.Item}>
           <HomeIcon size={24} />
-          <IonLabel>Home</IonLabel>
         </IonTabButton>
-        <IonTabButton tab="prices" href="/prices">
+        <IonTabButton tab="prices" href="/prices" className={styles.Item}>
           <ArrowSwitchIcon size={24} />
-          <IonLabel>Exchange</IonLabel>
         </IonTabButton>
-        <IonTabButton tab="profile" href="/profile">
+        <IonTabButton tab="profile" href="/profile" className={styles.Item}>
           <PersonIcon size={24} />
-          <IonLabel>Profile</IonLabel>
         </IonTabButton>
       </IonTabBar>
     </IonTabs>

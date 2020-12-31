@@ -35,9 +35,6 @@
   "gitHooks": {
     "pre-commit": "prettier --write . && git add -A"
   },
-  "eslintConfig": {
-    "ignorePatterns": "**/*"
-  },
   "browserslist": {
     "production": [
       ">0.2%",

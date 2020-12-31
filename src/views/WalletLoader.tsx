@@ -6,21 +6,23 @@ import { addWallet } from "../providers/wallets";
 import vertoLogo from "../assets/logo.png";
 import {
   IonPage,
-  IonInput,
   IonButton,
   IonContent,
   IonLoading,
-  IonToast,
-  IonItem
+  IonToast
 } from "@ionic/react";
 import { Input } from "@verto/ui";
 import styles from "../theme/pages/login.module.sass";
 
 const WalletLoader: React.FC = () => {
   const { dispatch } = useContext(WalletContext),
-    [loading, setLoading] = useState<boolean>(false),
-    [address, setAddress] = useState<string>(""),
-    [toast, showToast] = useState<boolean>(false),
+    [loading, setLoading] = useState(false),
+    [address, setAddress] = useState(""),
+    [toastData, setToastData] = useState<{
+      color?: string;
+      text: string;
+      shown: boolean;
+    }>({ text: "", shown: false }),
     fileRef = useRef(null),
     history = useHistory();
 
@@ -48,8 +50,18 @@ const WalletLoader: React.FC = () => {
   async function loadWalletFromFile(acceptedFiles: any) {
     const reader = new FileReader();
 
-    reader.onabort = () => console.log("file reading was aborted");
-    reader.onerror = () => console.log("file reading has failed");
+    reader.onabort = () =>
+      setToastData({
+        text: "File reading was aborted",
+        color: "danger",
+        shown: true
+      });
+    reader.onerror = () =>
+      setToastData({
+        text: "File reading has failed",
+        color: "danger",
+        shown: true
+      });
     reader.onload = async function (event) {
       setLoading(true);
       if (acceptedFiles[0].type === "application/json") {
@@ -67,20 +79,25 @@ const WalletLoader: React.FC = () => {
           });
           history.push("/home");
         } catch (err) {
-          console.log("Invalid json in wallet file");
-          showToast(true);
+          setToastData({
+            text: "Invalid json in wallet file",
+            color: "danger",
+            shown: true
+          });
         }
       } else {
-        console.log("Invalid file type");
-        showToast(true);
+        setToastData({
+          text: "Invalid file type",
+          color: "danger",
+          shown: true
+        });
       }
       setLoading(false);
     };
     try {
       reader.readAsText(acceptedFiles[0]);
     } catch (err) {
-      console.log("Invalid file type");
-      showToast(true);
+      setToastData({ text: "Invalid file type", color: "danger", shown: true });
     }
   }
 
@@ -129,67 +146,15 @@ const WalletLoader: React.FC = () => {
       </IonContent>
       <IonLoading isOpen={loading} message={"Loading wallet..."} />
       <IonToast
-        isOpen={toast}
-        onDidDismiss={() => showToast(false)}
-        message="Error loading wallet"
+        isOpen={toastData.shown}
+        onDidDismiss={() => setToastData((val) => ({ ...val, shown: false }))}
+        message={toastData.text}
         duration={2000}
         position="bottom"
-        color="danger"
+        color={toastData.color}
       />
     </IonPage>
   );
 };
 
-/*
-  const onDrop = async (acceptedFiles: any) => {
-    const reader = new FileReader();
-    reader.onabort = () => console.log("file reading was aborted");
-    reader.onerror = () => console.log("file reading has failed");
-    reader.onload = async function (event) {
-      setLoading(true);
-      if (acceptedFiles[0].type === "application/json") {
-        try {
-          let walletObject = JSON.parse(event!.target!.result as string);
-          let walletDeets = await addWallet(walletObject);
-          dispatch({
-            type: "ADD_WALLET",
-            payload: { ...walletDeets, key: walletObject, mnemonic: walletObject.mnemonic },
-          });
-          set('wallets', JSON.stringify(state))
-        } catch (err) {
-          console.log("Invalid json in wallet file");
-          toast({
-            title: "Error loading wallet",
-            status: "error",
-            duration: 3000,
-            position: "bottom-left",
-            description: "Invalid JSON in wallet file",
-          });
-        }
-      } else {
-        console.log("Invalid file type");
-        toast({
-          title: "Error loading wallet",
-          status: "error",
-          duration: 3000,
-          position: "bottom-left",
-          description: "Invalid file type",
-        });
-      }
-      setLoading(false);
-    };
-    try {
-      reader.readAsText(acceptedFiles[0]);
-    } catch (err) {
-      console.log("Invalid file type");
-      toast({
-        title: "Error loading wallet",
-        status: "error",
-        duration: 3000,
-        position: "bottom-left",
-        description: "Invalid file type",
-      });
-    }
-  };
-*/
 export default WalletLoader;

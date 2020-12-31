@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import WalletContext, { token } from "../../context/walletContext";
+import WalletContext from "../../context/walletContext";
 import { getTokenBalances } from "../../providers/verto";
 import {
   IonPage,
@@ -17,68 +17,75 @@ import {
 import { ArrowRightIcon, QuestionIcon } from "@primer/octicons-react";
 
 const Home: React.FC = () => {
-  const { state, dispatch } = useContext(WalletContext);
-  const [loading, setLoading] = useState<boolean>(false);
+  const { state, dispatch } = useContext(WalletContext),
+    [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    async function getTokensAsync() {
-      let tokens = await getTokenBalances(state.address);
-      dispatch({
-        type: "UPDATE_TOKENS",
-        payload: { tokens: tokens }
-      });
-      setLoading(false);
-    }
     setLoading(true);
-    getTokensAsync();
+    getTokens();
   }, []);
+
+  async function getTokens() {
+    let tokens = await getTokenBalances(state.address);
+
+    dispatch({
+      type: "UPDATE_TOKENS",
+      payload: { tokens: tokens }
+    });
+    setLoading(false);
+  }
 
   return (
     <IonPage>
       <IonContent>
-        <IonCard>
-          <IonCardHeader>
-            <IonCardTitle>AR Balance</IonCardTitle>
-          </IonCardHeader>
-          <IonCardContent>
-            <IonItem>
-              <IonLabel>{state.balance} AR</IonLabel>
-            </IonItem>
-          </IonCardContent>
-        </IonCard>
-        <IonCard>
-          <IonCardHeader>
-            <IonCardTitle>Token Balances</IonCardTitle>
-          </IonCardHeader>
-          <IonCardContent>
-            {loading && (
+        <div className="TopBackgroundSpacer High"></div>
+        <div className="BackgroundLayer Short">
+          <IonCard className="Card">
+            <IonCardHeader>
+              <IonCardTitle>AR Balance</IonCardTitle>
+            </IonCardHeader>
+            <IonCardContent>
               <IonItem>
-                <IonLabel>Loading Tokens</IonLabel>
-                <IonSpinner />
+                <IonLabel>{state.balance} AR</IonLabel>
               </IonItem>
-            )}
-            {state.tokens.length > 0 &&
-              !loading &&
-              state.tokens.map((token) => {
-                return <TokenDisplay key={token.id + token.logo} {...token} />;
-              })}
-            {state.tokens.length > 3 && !loading && (
-              <IonItem class="ion-text-end">
-                {" "}
-                <IonLabel>
-                  <IonText slot="end">All Tokens</IonText>
-                  <ArrowRightIcon size={16} />
-                </IonLabel>
-              </IonItem>
-            )}
-          </IonCardContent>
-        </IonCard>
-        <IonCard>
-          <IonCardHeader>
-            <IonCardTitle>Trade History</IonCardTitle>
-          </IonCardHeader>
-          <IonCardContent></IonCardContent>
-        </IonCard>
+            </IonCardContent>
+          </IonCard>
+          <IonCard className="Card">
+            <IonCardHeader>
+              <IonCardTitle>Token Balances</IonCardTitle>
+            </IonCardHeader>
+            <IonCardContent>
+              {loading && (
+                <IonItem>
+                  <IonLabel>Loading Tokens</IonLabel>
+                  <IonSpinner />
+                </IonItem>
+              )}
+              {state.tokens.length > 0 &&
+                !loading &&
+                state.tokens.map((token) => {
+                  return (
+                    <TokenDisplay key={token.id + token.logo} {...token} />
+                  );
+                })}
+              {state.tokens.length > 3 && !loading && (
+                <IonItem class="ion-text-end">
+                  {" "}
+                  <IonLabel>
+                    <IonText slot="end">All Tokens</IonText>
+                    <ArrowRightIcon size={16} />
+                  </IonLabel>
+                </IonItem>
+              )}
+            </IonCardContent>
+          </IonCard>
+          <IonCard className="Card">
+            <IonCardHeader>
+              <IonCardTitle>Trade History</IonCardTitle>
+            </IonCardHeader>
+            <IonCardContent></IonCardContent>
+          </IonCard>
+        </div>
       </IonContent>
     </IonPage>
   );
