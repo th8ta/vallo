@@ -12,11 +12,16 @@ import {
   IonCardTitle,
   IonText,
   IonAvatar,
-  IonSpinner
+  IonSpinner,
+  IonRouterLink,
+  IonRippleEffect,
+  IonIcon
 } from "@ionic/react";
 import { ArrowRightIcon, QuestionIcon } from "@primer/octicons-react";
+import { qrCodeOutline } from "ionicons/icons";
+import styles from "../../theme/views/home.module.sass";
 
-const Home: React.FC = () => {
+export default function Home() {
   const { state, dispatch } = useContext(WalletContext),
     [loading, setLoading] = useState<boolean>(false);
 
@@ -38,7 +43,29 @@ const Home: React.FC = () => {
   return (
     <IonPage>
       <IonContent>
-        <div className="TopBackgroundSpacer High"></div>
+        <div className="TopBackgroundSpacer High">
+          <div className={styles.Balance}>
+            <p>Wallet Balance</p>
+            <h1>
+              {state.balance}
+              <span>AR</span>
+            </h1>
+            <div className={styles.ButtonGroup}>
+              <IonRouterLink href="/home" className={styles.Link}>
+                Buy
+                <IonRippleEffect />
+              </IonRouterLink>
+              <IonRouterLink href="/home" className={styles.Link}>
+                Transfer
+                <IonRippleEffect />
+              </IonRouterLink>
+              <div className={styles.Link}>
+                <IonIcon icon={qrCodeOutline} />
+                <IonRippleEffect />
+              </div>
+            </div>
+          </div>
+        </div>
         <div className="BackgroundLayer Short">
           <IonCard className="Card">
             <IonCardHeader>
@@ -89,23 +116,9 @@ const Home: React.FC = () => {
       </IonContent>
     </IonPage>
   );
-};
-
-interface TokenProps {
-  balance: number;
-  logo: string;
-  id: string;
-  ticker: string;
-  name: string;
 }
-const TokenDisplay: React.FC<TokenProps> = ({
-  balance,
-  logo,
-  id,
-  ticker,
-  name
-}) => {
-  console.log(id);
+
+function TokenDisplay({ balance, logo, id, ticker, name }: TokenProps) {
   return (
     <IonItem key={id}>
       <IonAvatar key={logo} slot="start">
@@ -124,6 +137,12 @@ const TokenDisplay: React.FC<TokenProps> = ({
       </IonText>
     </IonItem>
   );
-};
+}
 
-export default Home;
+interface TokenProps {
+  balance: number;
+  logo: string;
+  id: string;
+  ticker: string;
+  name: string;
+}

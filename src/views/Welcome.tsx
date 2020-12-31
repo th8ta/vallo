@@ -5,9 +5,9 @@ import WalletContext from "../context/walletContext";
 import { addWallet } from "../providers/wallets";
 import vertoLogo from "../assets/logo.png";
 import { IonPage, IonButton, IonLoading, IonContent } from "@ionic/react";
-import styles from "../theme/pages/login.module.sass";
+import styles from "../theme/views/login.module.sass";
 
-const Welcome: React.FC = () => {
+export default function Welcome() {
   const { dispatch } = useContext(WalletContext),
     [loading, setLoading] = useState(false),
     history = useHistory();
@@ -18,9 +18,6 @@ const Welcome: React.FC = () => {
     let mnemonic = await generateMnemonic(),
       walletObject = await getKeyFromMnemonic(mnemonic),
       walletDeets = await addWallet(walletObject);
-
-    console.log(`get keys`);
-    console.log(JSON.stringify(walletObject));
 
     setLoading(false);
     history.push("/home");
@@ -61,6 +58,4 @@ const Welcome: React.FC = () => {
       <IonLoading isOpen={loading} message={"Generating wallet..."} />
     </IonPage>
   );
-};
-
-export default Welcome;
+}

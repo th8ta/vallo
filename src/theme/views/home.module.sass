@@ -1,0 +1,49 @@
+.Balance
+  position: absolute
+  top: 50%
+  left: 50%
+  width: max-content
+  text-align: center
+  transform: translate(-50%, -50%)
+
+  p
+    text-align: center
+    text-transform: uppercase
+    font-size: .95em
+    font-weight: 500
+    margin: 0
+      bottom: .27em
+
+  h1
+    font-size: 2.3em
+    text-align: center
+    font-weight: 600
+    margin: 0
+      bottom: .45em
+
+    span
+      font-size: .565em
+
+  .ButtonGroup
+    border: 2px solid var(--ion-color-primary-contrast)
+    border-radius: 6px
+    width: min-content
+    margin: 0 auto
+    display: flex
+    align-items: stretch
+
+    .Link
+      $sidePadding: .8em
+      position: relative
+      overflow: hidden
+      font-size: 1.175em
+      padding: .35em $sidePadding
+      color: var(--ion-color-primary-contrast)
+      display: flex
+      align-items: center
+
+      &:first-child
+        border-right: 2px solid var(--ion-color-primary-contrast)
+
+      &:last-child
+        border-left: 2px solid var(--ion-color-primary-contrast)

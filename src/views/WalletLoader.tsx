@@ -12,9 +12,9 @@ import {
   IonToast
 } from "@ionic/react";
 import { Input } from "@verto/ui";
-import styles from "../theme/pages/login.module.sass";
+import styles from "../theme/views/login.module.sass";
 
-const WalletLoader: React.FC = () => {
+export default function WalletLoader() {
   const { dispatch } = useContext(WalletContext),
     [loading, setLoading] = useState(false),
     [address, setAddress] = useState(""),
@@ -28,11 +28,9 @@ const WalletLoader: React.FC = () => {
 
   async function loadWalletFromMnemonic(mnemonic: string) {
     setLoading(true);
+
     let walletObject = await getKeyFromMnemonic(mnemonic),
       walletDeets = await addWallet(walletObject);
-
-    console.log(`get keys`);
-    console.log(JSON.stringify(walletObject));
 
     setLoading(false);
     history.push("/home");
@@ -155,6 +153,4 @@ const WalletLoader: React.FC = () => {
       />
     </IonPage>
   );
-};
-
-export default WalletLoader;
+}

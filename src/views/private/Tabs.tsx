@@ -11,7 +11,7 @@ import styles from "../../theme/components/TabBar.module.sass";
 
 import Home from "./Home";
 
-const Tabs: React.FunctionComponent = () => {
+export default function Tabs() {
   return (
     <IonTabs className={styles.Tabs}>
       <IonRouterOutlet>
@@ -30,6 +30,4 @@ const Tabs: React.FunctionComponent = () => {
       </IonTabBar>
     </IonTabs>
   );
-};
-
-export default Tabs;
+}
