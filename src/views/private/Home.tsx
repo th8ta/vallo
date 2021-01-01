@@ -50,13 +50,13 @@ export default function Home() {
             <IonCardHeader>
               <IonCardTitle className="CardTitle">Balances</IonCardTitle>
             </IonCardHeader>
-            <IonCardContent>
-              <TokenDisplay id="test" href="" />
-              <TokenDisplay id="test" href="" />
+            <IonCardContent className="Content">
+              <TokenDisplay id="test" routerLink="" />
+              <TokenDisplay id="test" routerLink="" />
             </IonCardContent>
             <IonItem
               class="CardFooter ion-text-end"
-              href="/app/tokens"
+              routerLink="/app/tokens"
               lines="none"
             >
               <IonLabel className="view-all">
@@ -70,19 +70,31 @@ export default function Home() {
               <IonCardTitle className="CardTitle">Trade history</IonCardTitle>
             </IonCardHeader>
             <IonCardContent>
-              <IonItem className={styles.HistoryItem} lines="none" href="">
+              <IonItem
+                className={styles.HistoryItem}
+                lines="none"
+                routerLink=""
+              >
                 10 AR
                 <ArrowRightIcon size={16} />
                 100 VRT
                 <div className={styles.Status + " " + styles.Warning}></div>
               </IonItem>
-              <IonItem className={styles.HistoryItem} lines="none" href="">
+              <IonItem
+                className={styles.HistoryItem}
+                lines="none"
+                routerLink=""
+              >
                 10 AR
                 <ArrowRightIcon size={16} />
                 100 VRT
                 <div className={styles.Status + " " + styles.Success}></div>
               </IonItem>
-              <IonItem className={styles.HistoryItem} lines="none" href="">
+              <IonItem
+                className={styles.HistoryItem}
+                lines="none"
+                routerLink=""
+              >
                 10 AR
                 <ArrowRightIcon size={16} />
                 100 VRT
@@ -91,7 +103,7 @@ export default function Home() {
             </IonCardContent>
             <IonItem
               class="CardFooter ion-text-end"
-              href="/app/trades"
+              routerLink="/app/trades"
               lines="none"
             >
               <IonLabel className="view-all">

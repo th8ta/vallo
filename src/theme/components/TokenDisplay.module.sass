@@ -13,6 +13,7 @@
 
   .PST, .Balance
     line-height: 1em
+    margin: 0
 
   .PST
     font-size: 1.5em
@@ -23,3 +24,25 @@
     font-family: var(--code-font-family)
     color: var(--verto-secondary-text)
     text-transform: uppercase
+
+  &.Full
+    height: auto
+    --min-height: auto
+
+    .Logo
+      width: 2.6em
+      height: 2.6em
+      margin-right: 1em
+
+    .PST
+      font-size: 1.6em
+
+      .Ticker
+        display: block
+        font-size: .72em
+        font-family: var(--code-font-family)
+        color: var(--verto-secondary-text)
+        text-transform: uppercase
+
+    .Balance
+      font-size: 1.15em
