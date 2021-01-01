@@ -48,3 +48,34 @@
 
       &:last-child
         border-left: 2px solid var(--ion-color-light-contrast)
+
+.HistoryItem
+  font-family: var(--code-font-family)
+  --inner-padding-start: 0
+  --inner-padding-end: 0
+  --padding-bottom: 0
+  --padding-top: 0
+  --padding-start: 0
+  --padding-end: 0
+  --border-radius: 2px
+  --min-height: 1em
+  padding: .45em 0
+
+  svg
+    margin: 0 1em
+    font-size: 1.2em
+
+  .Status
+    width: 6px
+    height: 6px
+    border-radius: 100%
+    margin-left: 1em
+
+    &.Success
+      background-color: #61FF00
+
+    &.Error
+      background-color: #ff0000
+
+    &.Warning
+      background-color: #FFC700

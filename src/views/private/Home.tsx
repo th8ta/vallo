@@ -69,7 +69,26 @@ export default function Home() {
             <IonCardHeader>
               <IonCardTitle className="CardTitle">Trade history</IonCardTitle>
             </IonCardHeader>
-            <IonCardContent></IonCardContent>
+            <IonCardContent>
+              <IonItem className={styles.HistoryItem} lines="none" href="">
+                10 AR
+                <ArrowRightIcon size={16} />
+                100 VRT
+                <div className={styles.Status + " " + styles.Warning}></div>
+              </IonItem>
+              <IonItem className={styles.HistoryItem} lines="none" href="">
+                10 AR
+                <ArrowRightIcon size={16} />
+                100 VRT
+                <div className={styles.Status + " " + styles.Success}></div>
+              </IonItem>
+              <IonItem className={styles.HistoryItem} lines="none" href="">
+                10 AR
+                <ArrowRightIcon size={16} />
+                100 VRT
+                <div className={styles.Status + " " + styles.Error}></div>
+              </IonItem>
+            </IonCardContent>
             <IonItem
               class="CardFooter ion-text-end"
               href="/app/trades"
