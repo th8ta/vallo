@@ -1,30 +1,24 @@
 import { generateMnemonic, getKeyFromMnemonic } from "arweave-mnemonic-keys";
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router";
-import WalletContext from "../context/walletContext";
-import { addWallet } from "../providers/wallets";
 import vertoLogo from "../assets/logo.png";
 import { IonPage, IonButton, IonLoading, IonContent } from "@ionic/react";
 import styles from "../theme/views/login.module.sass";
 
 export default function Welcome() {
-  const { dispatch } = useContext(WalletContext),
-    [loading, setLoading] = useState(false),
+  const [loading, setLoading] = useState(false),
     history = useHistory();
 
   async function createWallet() {
     setLoading(true);
 
     let mnemonic = await generateMnemonic(),
-      walletObject = await getKeyFromMnemonic(mnemonic),
-      walletDeets = await addWallet(walletObject);
+      walletObject = await getKeyFromMnemonic(mnemonic);
+
+    console.log("Wallet created", "Wallet:", walletObject);
 
     setLoading(false);
     history.push("/home");
-    dispatch({
-      type: "ADD_WALLET",
-      payload: { ...walletDeets, key: walletObject, mnemonic: mnemonic }
-    });
   }
 
   return (

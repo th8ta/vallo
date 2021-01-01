@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React from "react";
 import { IonApp } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import { Redirect, Route } from "react-router";
@@ -15,8 +15,6 @@ import "@ionic/react/css/text-transformation.css";
 import "@ionic/react/css/flex-utils.css";
 import "@ionic/react/css/display.css";
 
-import WalletContext, { initWalletState } from "./context/walletContext";
-import walletReducer from "./reducers/walletReducer";
 import { useTheme } from "./utils/theme";
 
 import WelcomePage from "./views/Welcome";
@@ -27,22 +25,17 @@ import "./theme/global.sass";
 import "./theme/variables.sass";
 
 const App: React.FunctionComponent = () => {
-  const [state, dispatch] = useReducer(walletReducer, initWalletState),
-    theme = useTheme();
+  const theme = useTheme();
 
   return (
     <VertoProvider theme={theme}>
-      <WalletContext.Provider value={{ dispatch, state }}>
-        <IonApp>
-          <IonReactRouter>
-            <Route path="/welcome" component={WelcomePage} />
-            <Route path="/loadwallet" component={WalletLoader} />
-            {(state.key && state.address !== "" && (
-              <Route path="/" component={Tabs} />
-            )) || <Redirect exact from="/" to="/welcome" />}
-          </IonReactRouter>
-        </IonApp>
-      </WalletContext.Provider>
+      <IonApp>
+        <IonReactRouter>
+          <Route path="/welcome" component={WelcomePage} />
+          <Route path="/loadwallet" component={WalletLoader} />
+          <Route path="/app" component={Tabs} />
+        </IonReactRouter>
+      </IonApp>
     </VertoProvider>
   );
 };

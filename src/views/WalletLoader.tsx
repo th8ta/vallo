@@ -1,8 +1,6 @@
 import { getKeyFromMnemonic } from "arweave-mnemonic-keys";
-import React, { useContext, useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { useHistory } from "react-router";
-import WalletContext from "../context/walletContext";
-import { addWallet } from "../providers/wallets";
 import vertoLogo from "../assets/logo.png";
 import {
   IonPage,
@@ -15,8 +13,7 @@ import { Input } from "@verto/ui";
 import styles from "../theme/views/login.module.sass";
 
 export default function WalletLoader() {
-  const { dispatch } = useContext(WalletContext),
-    [loading, setLoading] = useState(false),
+  const [loading, setLoading] = useState(false),
     [address, setAddress] = useState(""),
     [toastData, setToastData] = useState<{
       color?: string;
@@ -29,15 +26,12 @@ export default function WalletLoader() {
   async function loadWalletFromMnemonic(mnemonic: string) {
     setLoading(true);
 
-    let walletObject = await getKeyFromMnemonic(mnemonic),
-      walletDeets = await addWallet(walletObject);
+    let walletObject = await getKeyFromMnemonic(mnemonic);
+
+    console.log("Mnemonic login", "Wallet:", walletObject);
 
     setLoading(false);
     history.push("/home");
-    dispatch({
-      type: "ADD_WALLET",
-      payload: { ...walletDeets, key: walletObject, mnemonic: mnemonic }
-    });
   }
 
   function handleFileClick() {
@@ -64,17 +58,10 @@ export default function WalletLoader() {
       setLoading(true);
       if (acceptedFiles[0].type === "application/json") {
         try {
-          let walletObject = JSON.parse(event!.target!.result as string),
-            walletDeets = await addWallet(walletObject);
+          let walletObject = JSON.parse(event!.target!.result as string);
 
-          dispatch({
-            type: "ADD_WALLET",
-            payload: {
-              ...walletDeets,
-              key: walletObject,
-              mnemonic: walletObject.mnemonic
-            }
-          });
+          console.log("Keyfile login", "Wallet:", walletObject);
+
           history.push("/home");
         } catch (err) {
           setToastData({
