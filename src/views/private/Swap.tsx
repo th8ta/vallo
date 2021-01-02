@@ -9,7 +9,9 @@ import {
   IonLabel,
   IonText,
   IonRippleEffect,
-  IonButton
+  IonButton,
+  IonCardHeader,
+  IonCardTitle
 } from "@ionic/react";
 import { Input } from "@verto/ui";
 import {
@@ -128,6 +130,56 @@ export default function Swap() {
                   Swap
                 </IonButton>
               </IonCardContent>
+            </IonCard>
+            <IonCard className="Card">
+              <IonCardHeader>
+                <IonCardTitle className="CardTitle">Orders</IonCardTitle>
+              </IonCardHeader>
+              <IonCardContent>
+                <IonItem
+                  className={styles.Order + " ion-activatable ripple-parent"}
+                  lines="none"
+                  routerLink=""
+                >
+                  10 AR
+                  <ArrowRightIcon size={16} />
+                  100 VRT
+                  <div className={styles.Status + " " + styles.Warning}></div>
+                  <IonRippleEffect />
+                </IonItem>
+                <IonItem
+                  className={styles.Order + " ion-activatable ripple-parent"}
+                  lines="none"
+                  routerLink=""
+                >
+                  10 AR
+                  <ArrowRightIcon size={16} />
+                  100 VRT
+                  <div className={styles.Status + " " + styles.Success}></div>
+                  <IonRippleEffect />
+                </IonItem>
+                <IonItem
+                  className={styles.Order + " ion-activatable ripple-parent"}
+                  lines="none"
+                  routerLink=""
+                >
+                  10 AR
+                  <ArrowRightIcon size={16} />
+                  100 VRT
+                  <div className={styles.Status + " " + styles.Error}></div>
+                  <IonRippleEffect />
+                </IonItem>
+              </IonCardContent>
+              <IonItem
+                class="CardFooter ion-text-end"
+                routerLink="/app/orders"
+                lines="none"
+              >
+                <IonLabel className="view-all">
+                  <IonText slot="end">View all</IonText>
+                  <ArrowRightIcon size={16} />
+                </IonLabel>
+              </IonItem>
             </IonCard>
           </div>
         </div>

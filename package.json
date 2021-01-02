@@ -9,7 +9,7 @@
     "@ionic/react-router": "^5.0.7",
     "@primer/octicons-react": "^11.2.0",
     "@verto/lib": "^0.8.4",
-    "@verto/ui": "^0.0.0",
+    "@verto/ui": "0.0.1",
     "arweave": "^1.10.0",
     "arweave-mnemonic-keys": "0.0.3",
     "cacheweave": "^2.1.0",
