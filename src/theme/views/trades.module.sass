@@ -1,0 +1,34 @@
+.Trades
+  margin-top: var(--verto-small-header-section-minus-margin)
+
+.Item
+  font-family: var(--code-font-family)
+  --inner-padding-start: 0
+  --inner-padding-end: 0
+  --padding-bottom: 0
+  --padding-top: 0
+  --padding-start: 0
+  --padding-end: 0
+  --border-radius: 2px
+  --min-height: 1em
+  padding: .45em 0
+  cursor: pointer
+
+  svg
+    margin: 0 1em
+    font-size: 1.2em
+
+  .Status
+    width: 6px
+    height: 6px
+    border-radius: 100%
+    margin-left: 1em
+
+    &.Success
+      background-color: var(--ion-color-success)
+
+    &.Error
+      background-color: var(--ion-color-danger)
+
+    &.Warning
+      background-color: var(--ion-color-warning)
