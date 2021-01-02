@@ -1,5 +1,13 @@
 import React from "react";
-import { IonPage, IonContent, IonCard, IonCardContent } from "@ionic/react";
+import {
+  IonPage,
+  IonContent,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardTitle,
+  IonButton
+} from "@ionic/react";
 import { RouteComponentProps } from "react-router-dom";
 import ShortTopLayerTitle from "../../components/ShortTopLayerTitle";
 import { Line } from "react-chartjs-2";
@@ -113,7 +121,57 @@ export default function Token({ history, match }: TokenProps) {
                 </div>
               </IonCardContent>
             </IonCard>
+            <IonCard className="Card">
+              <IonCardHeader>
+                <IonCardTitle className="CardTitle">About</IonCardTitle>
+              </IonCardHeader>
+              <IonCardContent className={"Content " + styles.About}>
+                <p>A decentralized token exchange protocol on Arweave.</p>
+                <ul className={styles.Links}>
+                  {/** TODO: open in BROWSER */}
+                  <li>
+                    <a>verto.exhange</a>
+                  </li>
+                  <li>
+                    <a>verto.exhange/chat</a>
+                  </li>
+                </ul>
+              </IonCardContent>
+            </IonCard>
+            <IonCard className="Card">
+              <IonCardHeader>
+                <IonCardTitle className="CardTitle">Metrics</IonCardTitle>
+              </IonCardHeader>
+              <IonCardContent className={"Content " + styles.Metrics}>
+                <p>
+                  Market Cap: ~0.5 USD <br />
+                  Circulating Supply: 134,491,003 <br />
+                  Total Supply: 258,125,000 <br />
+                </p>
+              </IonCardContent>
+            </IonCard>
           </div>
+        </div>
+        <div className={styles.TokenActions}>
+          <IonButton
+            className={"Button " + styles.Button}
+            fill="outline"
+            expand="full"
+            color="dark"
+            shape="round"
+            style={{ marginBottom: ".57em" }}
+          >
+            Transfer
+          </IonButton>
+          <IonButton
+            className={"Button " + styles.Button}
+            fill="solid"
+            expand="full"
+            color="dark"
+            shape="round"
+          >
+            Buy with fiat
+          </IonButton>
         </div>
       </IonContent>
     </IonPage>

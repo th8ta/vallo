@@ -42,3 +42,31 @@
 
       &.Decrease
         color: var(--ion-color-danger)
+
+.About, .Metrics
+  p, li
+    font-family: var(--code-font-family)
+    color: var(--ion-color-light-contrast)
+    font-size: 1.25em
+
+    a
+      color: var(--ion-color-primary)
+      cursor: pointer
+
+  ul>li
+    padding-left: .6em
+
+    &::before
+      color: var(--ion-color-light-contrast)
+      margin-left: -1.2em
+
+.TokenActions
+  position: sticky
+  bottom: 0
+  left: 0
+  right: 0
+  padding: .7em 1em
+  background-color: var(--verto-background)
+
+  .Button
+    font-size: 1.05em
