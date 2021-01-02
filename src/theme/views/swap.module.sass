@@ -1,0 +1,111 @@
+.Swap
+  margin-top: var(--verto-small-header-section-minus-margin)
+
+.Balance
+  color: var(--ion-color-light-contrast)
+
+  p
+    text-transform: uppercase
+    font-size: 1em
+    font-weight: 500
+    margin: 0
+      bottom: .27em
+
+  h1
+    font-size: 2.75em
+    font-weight: 600
+    margin: 0
+      bottom: .15em
+
+    span
+      font-size: .565em
+
+  .viewProfile
+    cursor: pointer
+    color: var(--ion-color-light-contrast)
+    display: flex
+    font-size: 1.2em
+    align-items: center
+
+    svg
+      margin-left: .3em
+
+.SwapItems
+  display: flex
+  justify-content: space-between
+  align-items: center
+
+  .From, .To
+    display: flex
+    align-items: center
+    margin: .45em 0
+
+    img
+      width: auto
+      height: 2.3em
+      margin-right: 1em
+
+    .Info
+      h2, h1
+        margin: 0
+        font-family: var(--code-font-family)
+        text-align: left
+
+      h2
+        font-size: 1.1em
+        color: var(--verto-secondary-text)
+        font-weight: 500
+
+      h1
+        font-size: 1.7em
+        color: var(--ion-color-light-contrast)
+        font-weight: 600
+
+    &.To
+      img
+        margin:
+          right: 0
+          left: 1em
+
+      .Info
+        h1, h2
+          text-align: right
+
+  .Arrows
+    position: relative
+    overflow: hidden
+    cursor: pointer
+    border-radius: 100%
+    padding: .3em
+
+    svg
+      color: var(--ion-color-light-contrast)
+      width: .9em
+      height: .9em
+      font-size: 1.8em
+
+.SwapForm
+  span
+    font-family: var(--ion-font-family) !important
+    font-weight: 500 !important
+
+  .Input
+    margin-bottom: 1em
+
+    .Ticker
+      display: flex
+      align-items: center
+      justify-content: space-between
+      font-size: 1.6em
+      width: 100%
+      cursor: pointer
+      padding: 0 .2em
+    
+    input
+      font-size: 1.5em
+      padding: 
+        top: .07em
+        bottom: .07em
+
+  .Button
+    font-size: 1.1em

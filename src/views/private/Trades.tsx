@@ -12,7 +12,7 @@ import { RouteComponentProps } from "react-router-dom";
 import ShortTopLayerTitle from "../../components/ShortTopLayerTitle";
 import styles from "../../theme/views/trades.module.sass";
 
-export default function Trades({ history }: TradeProps) {
+export default function Trades({ history }: RouteComponentProps) {
   return (
     <IonPage>
       <IonContent>
@@ -59,8 +59,3 @@ export default function Trades({ history }: TradeProps) {
     </IonPage>
   );
 }
-
-interface TradeProps
-  extends RouteComponentProps<{
-    tokenid: string;
-  }> {}
