@@ -51,8 +51,8 @@ export default function Home() {
               <IonCardTitle className="CardTitle">Balances</IonCardTitle>
             </IonCardHeader>
             <IonCardContent className="Content">
-              <TokenDisplay id="test" routerLink="" />
-              <TokenDisplay id="test" routerLink="" />
+              <TokenDisplay id="test" routerLink="/app/token/test" />
+              <TokenDisplay id="test" routerLink="/app/token/test" />
             </IonCardContent>
             <IonItem
               class="CardFooter ion-text-end"

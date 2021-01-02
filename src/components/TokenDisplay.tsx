@@ -15,7 +15,7 @@ export default function TokenDisplay({
       className={
         styles.TokenDisplay +
         (full ? ` ${styles.Full}` : "") +
-        (ripple ? " ion-activatable ripple-parent" : "")
+        (ripple && !full ? " ion-activatable ripple-parent" : "")
       }
       routerLink={routerLink}
       key={id}
@@ -33,7 +33,7 @@ export default function TokenDisplay({
       <IonText slot="end" className={styles.Balance}>
         10.07 VRT
       </IonText>
-      {ripple && <IonRippleEffect />}
+      {ripple && !full && <IonRippleEffect />}
     </IonItem>
   );
 }

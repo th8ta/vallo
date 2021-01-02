@@ -21,6 +21,7 @@ import WelcomePage from "./views/Welcome";
 import WalletLoader from "./views/WalletLoader";
 import Tabs from "./views/private/Tabs";
 import Tokens from "./views/private/Tokens";
+import Token from "./views/private/Token";
 
 import "./theme/global.sass";
 import "./theme/variables.sass";
@@ -36,6 +37,7 @@ const App: React.FunctionComponent = () => {
           <Route path="/loadwallet" component={WalletLoader} />
           <Route path="/app" component={Tabs} />
           <Route path="/app/tokens" component={Tokens} />
+          <Route path="/app/token/:tokenid" component={Token} />
         </IonReactRouter>
       </IonApp>
     </VertoProvider>
