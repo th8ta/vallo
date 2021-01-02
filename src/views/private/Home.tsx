@@ -38,7 +38,7 @@ export default function Home() {
                 Transfer
                 <IonRippleEffect />
               </IonRouterLink>
-              <div className={styles.Link}>
+              <div className={styles.Link + " ion-activatable ripple-parent"}>
                 <IonIcon icon={qrCodeOutline} />
                 <IonRippleEffect />
               </div>
@@ -71,7 +71,9 @@ export default function Home() {
             </IonCardHeader>
             <IonCardContent>
               <IonItem
-                className={styles.HistoryItem}
+                className={
+                  styles.HistoryItem + " ion-activatable ripple-parent"
+                }
                 lines="none"
                 routerLink=""
               >
@@ -79,9 +81,12 @@ export default function Home() {
                 <ArrowRightIcon size={16} />
                 100 VRT
                 <div className={styles.Status + " " + styles.Warning}></div>
+                <IonRippleEffect />
               </IonItem>
               <IonItem
-                className={styles.HistoryItem}
+                className={
+                  styles.HistoryItem + " ion-activatable ripple-parent"
+                }
                 lines="none"
                 routerLink=""
               >
@@ -89,9 +94,12 @@ export default function Home() {
                 <ArrowRightIcon size={16} />
                 100 VRT
                 <div className={styles.Status + " " + styles.Success}></div>
+                <IonRippleEffect />
               </IonItem>
               <IonItem
-                className={styles.HistoryItem}
+                className={
+                  styles.HistoryItem + " ion-activatable ripple-parent"
+                }
                 lines="none"
                 routerLink=""
               >
@@ -99,6 +107,7 @@ export default function Home() {
                 <ArrowRightIcon size={16} />
                 100 VRT
                 <div className={styles.Status + " " + styles.Error}></div>
+                <IonRippleEffect />
               </IonItem>
             </IonCardContent>
             <IonItem

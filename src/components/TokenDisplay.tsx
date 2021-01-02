@@ -1,17 +1,22 @@
-import { IonItem, IonLabel, IonText } from "@ionic/react";
+import { IonItem, IonLabel, IonRippleEffect, IonText } from "@ionic/react";
 import React, { useEffect } from "react";
 import styles from "../theme/components/TokenDisplay.module.sass";
 
 export default function TokenDisplay({
   id,
   routerLink,
-  full
+  full,
+  ripple = true
 }: TokenDisplayProps) {
   useEffect(() => {}, [id]);
 
   return (
     <IonItem
-      className={styles.TokenDisplay + (full ? ` ${styles.Full}` : "")}
+      className={
+        styles.TokenDisplay +
+        (full ? ` ${styles.Full}` : "") +
+        (ripple ? " ion-activatable ripple-parent" : "")
+      }
       routerLink={routerLink}
       key={id}
       lines="none"
@@ -28,6 +33,7 @@ export default function TokenDisplay({
       <IonText slot="end" className={styles.Balance}>
         10.07 VRT
       </IonText>
+      {ripple && <IonRippleEffect />}
     </IonItem>
   );
 }
@@ -36,4 +42,5 @@ interface TokenDisplayProps {
   id: string;
   routerLink: string;
   full?: boolean;
+  ripple?: boolean;
 }

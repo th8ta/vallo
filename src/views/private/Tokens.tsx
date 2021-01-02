@@ -9,6 +9,7 @@ import {
 import { RouteComponentProps } from "react-router-dom";
 import { ArrowLeftIcon } from "@primer/octicons-react";
 import TokenDisplay from "../../components/TokenDisplay";
+import ShortTopLayerTitle from "../../components/ShortTopLayerTitle";
 import styles from "../../theme/views/tokens.module.sass";
 
 export default function Tokens({ history }: RouteComponentProps) {
@@ -17,54 +18,52 @@ export default function Tokens({ history }: RouteComponentProps) {
       <IonContent>
         <div className="TopBackgroundSpacer">
           <div className={styles.TokensTitle}>
-            <div onClick={() => history.goBack()}>
-              <ArrowLeftIcon className={styles.Back} />
-              <IonRippleEffect />
-            </div>
-            <h1>Tokens</h1>
+            <ShortTopLayerTitle title="Tokens" back={() => history.goBack()} />
           </div>
         </div>
         <div className="BackgroundLayer">
           <div className={styles.Tokens}>
-            <IonCard className="Card ListItem">
+            <IonCard className="Card ListItem ion-activatable ripple-parent">
               <IonCardContent className="Content">
-                <TokenDisplay id="test" routerLink="" full />
+                <TokenDisplay id="test" routerLink="" full ripple={false} />
               </IonCardContent>
+              <IonRippleEffect />
             </IonCard>
-            <IonCard className="Card ListItem">
+            <IonCard className="Card ListItem ion-activatable ripple-parent">
               <IonCardContent className="Content">
-                <TokenDisplay id="test" routerLink="" full />
+                <TokenDisplay id="test" routerLink="" full ripple={false} />
               </IonCardContent>
+              <IonRippleEffect />
             </IonCard>
-            <IonCard className="Card ListItem">
+            <IonCard className="Card ListItem ion-activatable ripple-parent">
               <IonCardContent className="Content">
-                <TokenDisplay id="test" routerLink="" full />
+                <TokenDisplay id="test" routerLink="" full ripple={false} />
               </IonCardContent>
+              <IonRippleEffect />
             </IonCard>
-            <IonCard className="Card ListItem">
+            <IonCard className="Card ListItem ion-activatable ripple-parent">
               <IonCardContent className="Content">
-                <TokenDisplay id="test" routerLink="" full />
+                <TokenDisplay id="test" routerLink="" full ripple={false} />
               </IonCardContent>
+              <IonRippleEffect />
             </IonCard>
-            <IonCard className="Card ListItem">
+            <IonCard className="Card ListItem ion-activatable ripple-parent">
               <IonCardContent className="Content">
-                <TokenDisplay id="test" routerLink="" full />
+                <TokenDisplay id="test" routerLink="" full ripple={false} />
               </IonCardContent>
+              <IonRippleEffect />
             </IonCard>
-            <IonCard className="Card ListItem">
+            <IonCard className="Card ListItem ion-activatable ripple-parent">
               <IonCardContent className="Content">
-                <TokenDisplay id="test" routerLink="" full />
+                <TokenDisplay id="test" routerLink="" full ripple={false} />
               </IonCardContent>
+              <IonRippleEffect />
             </IonCard>
-            <IonCard className="Card ListItem">
+            <IonCard className="Card ListItem ion-activatable ripple-parent">
               <IonCardContent className="Content">
-                <TokenDisplay id="test" routerLink="" full />
+                <TokenDisplay id="test" routerLink="" full ripple={false} />
               </IonCardContent>
-            </IonCard>
-            <IonCard className="Card ListItem">
-              <IonCardContent className="Content">
-                <TokenDisplay id="test" routerLink="" full />
-              </IonCardContent>
+              <IonRippleEffect />
             </IonCard>
           </div>
         </div>
