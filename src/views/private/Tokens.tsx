@@ -22,80 +22,66 @@ export default function Tokens({ history }: RouteComponentProps) {
         </div>
         <div className="BackgroundLayer">
           <div className={styles.Tokens}>
-            <IonCard className="Card ListItem ion-activatable ripple-parent">
+            <IonCard
+              className="Card ListItem ion-activatable ripple-parent"
+              routerLink="/app/token/test"
+            >
               <IonCardContent className="Content">
-                <TokenDisplay
-                  id="test"
-                  routerLink="/app/token/test"
-                  full
-                  ripple={false}
-                />
+                <TokenDisplay id="test" full />
               </IonCardContent>
               <IonRippleEffect />
             </IonCard>
-            <IonCard className="Card ListItem ion-activatable ripple-parent">
+            <IonCard
+              className="Card ListItem ion-activatable ripple-parent"
+              routerLink="/app/token/test"
+            >
               <IonCardContent className="Content">
-                <TokenDisplay
-                  id="test"
-                  routerLink="/app/token/test"
-                  full
-                  ripple={false}
-                />
+                <TokenDisplay id="test" full />
               </IonCardContent>
               <IonRippleEffect />
             </IonCard>
-            <IonCard className="Card ListItem ion-activatable ripple-parent">
+            <IonCard
+              className="Card ListItem ion-activatable ripple-parent"
+              routerLink="/app/token/test"
+            >
               <IonCardContent className="Content">
-                <TokenDisplay
-                  id="test"
-                  routerLink="/app/token/test"
-                  full
-                  ripple={false}
-                />
+                <TokenDisplay id="test" full />
               </IonCardContent>
               <IonRippleEffect />
             </IonCard>
-            <IonCard className="Card ListItem ion-activatable ripple-parent">
+            <IonCard
+              className="Card ListItem ion-activatable ripple-parent"
+              routerLink="/app/token/test"
+            >
               <IonCardContent className="Content">
-                <TokenDisplay
-                  id="test"
-                  routerLink="/app/token/test"
-                  full
-                  ripple={false}
-                />
+                <TokenDisplay id="test" full />
               </IonCardContent>
               <IonRippleEffect />
             </IonCard>
-            <IonCard className="Card ListItem ion-activatable ripple-parent">
+            <IonCard
+              className="Card ListItem ion-activatable ripple-parent"
+              routerLink="/app/token/test"
+            >
               <IonCardContent className="Content">
-                <TokenDisplay
-                  id="test"
-                  routerLink="/app/token/test"
-                  full
-                  ripple={false}
-                />
+                <TokenDisplay id="test" full />
               </IonCardContent>
               <IonRippleEffect />
             </IonCard>
-            <IonCard className="Card ListItem ion-activatable ripple-parent">
+            <IonCard
+              className="Card ListItem ion-activatable ripple-parent"
+              routerLink="/app/token/test"
+            >
               <IonCardContent className="Content">
-                <TokenDisplay
-                  id="test"
-                  routerLink="/app/token/test"
-                  full
-                  ripple={false}
-                />
+                <TokenDisplay id="test" full />
               </IonCardContent>
               <IonRippleEffect />
             </IonCard>
-            <IonCard className="Card ListItem ion-activatable ripple-parent">
+            <IonCard
+              className="Card ListItem ion-activatable ripple-parent"
+              routerLink="/app/token/test"
+            >
               <IonCardContent className="Content">
-                <TokenDisplay
-                  id="test"
-                  routerLink="/app/token/test"
-                  full
-                  ripple={false}
-                />
+                <TokenDisplay id="test" full />
               </IonCardContent>
               <IonRippleEffect />
             </IonCard>

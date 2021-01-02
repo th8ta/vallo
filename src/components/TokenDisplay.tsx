@@ -5,8 +5,7 @@ import styles from "../theme/components/TokenDisplay.module.sass";
 export default function TokenDisplay({
   id,
   routerLink,
-  full,
-  ripple = true
+  full
 }: TokenDisplayProps) {
   useEffect(() => {}, [id]);
 
@@ -14,10 +13,9 @@ export default function TokenDisplay({
     <IonItem
       className={
         styles.TokenDisplay +
-        (full ? ` ${styles.Full}` : "") +
-        (ripple && !full ? " ion-activatable ripple-parent" : "")
+        (full ? ` ${styles.Full}` : " ion-activatable ripple-parent")
       }
-      routerLink={routerLink}
+      routerLink={routerLink ?? undefined}
       key={id}
       lines="none"
     >
@@ -33,14 +31,13 @@ export default function TokenDisplay({
       <IonText slot="end" className={styles.Balance}>
         10.07 VRT
       </IonText>
-      {ripple && !full && <IonRippleEffect />}
+      {!full && <IonRippleEffect />}
     </IonItem>
   );
 }
 
 interface TokenDisplayProps {
   id: string;
-  routerLink: string;
+  routerLink?: string;
   full?: boolean;
-  ripple?: boolean;
 }

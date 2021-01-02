@@ -82,7 +82,7 @@ export default function Token({ history, match }: TokenProps) {
                       elements: {
                         point: { radius: 0 },
                         line: {
-                          borderWidth: 4,
+                          borderWidth: 5,
                           borderCapStyle: "round"
                         }
                       },
