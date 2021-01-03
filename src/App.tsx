@@ -20,7 +20,7 @@ import { useTheme } from "./utils/theme";
 import SplashLoading from "./views/SplashLoading";
 import Welcome from "./views/Welcome";
 import WalletLoader from "./views/WalletLoader";
-import Tabs from "./views/private/Tabs";
+import Tabs from "./components/Tabs";
 import Tokens from "./views/private/Tokens";
 import Token from "./views/private/Token";
 import Trades from "./views/private/Trades";

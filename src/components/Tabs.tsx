@@ -7,10 +7,10 @@ import {
 } from "@ionic/react";
 import { ArrowSwitchIcon, HomeIcon, PersonIcon } from "@primer/octicons-react";
 import { Route, Redirect } from "react-router";
-import styles from "../../theme/components/TabBar.module.sass";
+import styles from "../theme/components/TabBar.module.sass";
 
-import Home from "./Home";
-import Swap from "./Swap";
+import Home from "../views/private/Home";
+import Swap from "../views/private/Swap";
 
 export default function Tabs() {
   return (
