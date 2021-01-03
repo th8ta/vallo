@@ -30,7 +30,7 @@ export default function Swap({ history }: RouteComponentProps) {
       <IonContent>
         <div className="TopBackgroundSpacer">
           <div className="ShortTitle">
-            <ShortTopLayerTitle title="Trades" />
+            <ShortTopLayerTitle title="Swap" />
           </div>
         </div>
         <div className="BackgroundLayer">

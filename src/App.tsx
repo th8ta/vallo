@@ -24,6 +24,7 @@ import Tabs from "./components/Tabs";
 import Tokens from "./views/private/Tokens";
 import Token from "./views/private/Token";
 import Trades from "./views/private/Trades";
+import Analytics from "./views/private/Analytics";
 
 import "./theme/global.sass";
 import "./theme/variables.sass";
@@ -42,6 +43,7 @@ const App: React.FunctionComponent = () => {
           <Route path="/app/tokens" component={Tokens} />
           <Route path="/app/token/:tokenid" component={Token} />
           <Route path="/app/trades" component={Trades} />
+          <Route path="/app/analytics" component={Analytics} />
         </IonReactRouter>
       </IonApp>
     </VertoProvider>

@@ -7,11 +7,13 @@
     display: flex
     align-items: center
     margin: .45em 0
-    cursor: pointer
-    transition: all .24s ease-in-out
+    
+    &:not(.Static)
+      cursor: pointer
+      transition: all .24s ease-in-out
 
-    &:hover
-      opacity: .8
+      &:hover
+        opacity: .8
 
     img
       width: auto
@@ -47,9 +49,11 @@
   .Arrows
     position: relative
     overflow: hidden
-    cursor: pointer
     border-radius: 100%
     padding: .3em
+
+    &:not(.Static)
+      cursor: pointer
 
     svg
       color: var(--ion-color-light-contrast)
