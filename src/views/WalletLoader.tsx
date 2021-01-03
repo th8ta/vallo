@@ -2,6 +2,7 @@ import { getKeyFromMnemonic } from "arweave-mnemonic-keys";
 import React, { useState, useRef } from "react";
 import { useHistory } from "react-router";
 import vertoLogo from "../assets/logo.png";
+import vertoLogoDark from "../assets/logo_dark.png";
 import {
   IonPage,
   IonButton,
@@ -9,6 +10,7 @@ import {
   IonLoading,
   IonToast
 } from "@ionic/react";
+import { useTheme } from "../utils/theme";
 import { Input } from "@verto/ui";
 import styles from "../theme/views/login.module.sass";
 
@@ -21,7 +23,8 @@ export default function WalletLoader() {
       shown: boolean;
     }>({ text: "", shown: false }),
     fileRef = useRef(null),
-    history = useHistory();
+    history = useHistory(),
+    theme = useTheme();
 
   async function loadWalletFromMnemonic(mnemonic: string) {
     setLoading(true);
@@ -90,7 +93,11 @@ export default function WalletLoader() {
     <IonPage>
       <IonContent fullscreen={true}>
         <div className={styles.Center}>
-          <img src={vertoLogo} alt="logo" className={styles.Logo} />
+          <img
+            src={theme === "Dark" ? vertoLogoDark : vertoLogo}
+            alt="logo"
+            className={styles.Logo}
+          />
           <h1 className={styles.Title}>Sign In</h1>
           <Input
             label="Enter 12 word seedphrase..."

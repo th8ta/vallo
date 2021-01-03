@@ -17,7 +17,8 @@ import "@ionic/react/css/display.css";
 
 import { useTheme } from "./utils/theme";
 
-import WelcomePage from "./views/Welcome";
+import SplashLoading from "./views/SplashLoading";
+import Welcome from "./views/Welcome";
 import WalletLoader from "./views/WalletLoader";
 import Tabs from "./views/private/Tabs";
 import Tokens from "./views/private/Tokens";
@@ -34,7 +35,8 @@ const App: React.FunctionComponent = () => {
     <VertoProvider theme={theme}>
       <IonApp>
         <IonReactRouter>
-          <Route path="/welcome" component={WelcomePage} />
+          <Route path="/" component={SplashLoading} />
+          <Route path="/welcome" component={Welcome} />
           <Route path="/loadwallet" component={WalletLoader} />
           <Route path="/app" component={Tabs} />
           <Route path="/app/tokens" component={Tokens} />

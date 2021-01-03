@@ -2,12 +2,15 @@ import { generateMnemonic, getKeyFromMnemonic } from "arweave-mnemonic-keys";
 import React, { useState } from "react";
 import { useHistory } from "react-router";
 import vertoLogo from "../assets/logo.png";
+import vertoLogoDark from "../assets/logo_dark.png";
+import { useTheme } from "../utils/theme";
 import { IonPage, IonButton, IonLoading, IonContent } from "@ionic/react";
 import styles from "../theme/views/login.module.sass";
 
 export default function Welcome() {
   const [loading, setLoading] = useState(false),
-    history = useHistory();
+    history = useHistory(),
+    theme = useTheme();
 
   async function createWallet() {
     setLoading(true);
@@ -18,14 +21,18 @@ export default function Welcome() {
     console.log("Wallet created", "Wallet:", walletObject);
 
     setLoading(false);
-    history.push("/home");
+    history.push("/app/home");
   }
 
   return (
     <IonPage>
       <IonContent className="IonContent" fullscreen>
         <div className={styles.Center}>
-          <img src={vertoLogo} alt="logo" className={styles.Logo} />
+          <img
+            src={theme === "Dark" ? vertoLogoDark : vertoLogo}
+            alt="logo"
+            className={styles.Logo}
+          />
           <h1 className={styles.Title}>Welcome</h1>
           <IonButton
             className={"Button " + styles.Button}
