@@ -11,7 +11,7 @@ import {
 import { RouteComponentProps } from "react-router-dom";
 import ShortTopLayerTitle from "../../components/ShortTopLayerTitle";
 import { Line } from "react-chartjs-2";
-import { GraphOptions, GraphDataConfig } from "../../utils/graph";
+import { GraphOptions, GraphDataConfig, addZero } from "../../utils/graph";
 import styles from "../../theme/views/token.module.sass";
 
 export default function Token({ history, match }: TokenProps) {
@@ -58,14 +58,13 @@ export default function Token({ history, match }: TokenProps) {
                       ],
                       datasets: [
                         {
-                          label: "VRT",
                           data: [1, 2, 10, 7, 8, 3, 2],
                           ...GraphDataConfig
                         }
                       ]
                     }}
                     options={GraphOptions({
-                      tooltipText: ({ value }) => `${value} AR`
+                      tooltipText: ({ value }) => `${addZero(value)} AR`
                     })}
                   />
                 </div>
