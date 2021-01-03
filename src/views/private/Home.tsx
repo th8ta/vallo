@@ -76,7 +76,7 @@ export default function Home() {
                   styles.HistoryItem + " ion-activatable ripple-parent"
                 }
                 lines="none"
-                routerLink=""
+                routerLink="/app/trade/test"
                 detail={false}
               >
                 10 AR
@@ -90,7 +90,7 @@ export default function Home() {
                   styles.HistoryItem + " ion-activatable ripple-parent"
                 }
                 lines="none"
-                routerLink=""
+                routerLink="/app/trade/test"
                 detail={false}
               >
                 10 AR
@@ -104,7 +104,7 @@ export default function Home() {
                   styles.HistoryItem + " ion-activatable ripple-parent"
                 }
                 lines="none"
-                routerLink=""
+                routerLink="/app/trade/test"
                 detail={false}
               >
                 10 AR

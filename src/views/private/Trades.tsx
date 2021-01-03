@@ -32,7 +32,7 @@ export default function Trades({ history }: RouteComponentProps) {
                       key={i}
                       className={styles.Item + " ion-activatable ripple-parent"}
                       lines="none"
-                      routerLink=""
+                      routerLink="/app/trade/test"
                     >
                       10 AR
                       <ArrowRightIcon size={16} />

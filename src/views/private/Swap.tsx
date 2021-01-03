@@ -156,7 +156,7 @@ export default function Swap({ history }: RouteComponentProps) {
                 <IonItem
                   className={styles.Order + " ion-activatable ripple-parent"}
                   lines="none"
-                  routerLink=""
+                  routerLink="/app/trade/test"
                   detail={false}
                 >
                   10 AR
@@ -168,7 +168,7 @@ export default function Swap({ history }: RouteComponentProps) {
                 <IonItem
                   className={styles.Order + " ion-activatable ripple-parent"}
                   lines="none"
-                  routerLink=""
+                  routerLink="/app/trade/test"
                   detail={false}
                 >
                   10 AR
@@ -180,7 +180,7 @@ export default function Swap({ history }: RouteComponentProps) {
                 <IonItem
                   className={styles.Order + " ion-activatable ripple-parent"}
                   lines="none"
-                  routerLink=""
+                  routerLink="/app/trade/test"
                   detail={false}
                 >
                   10 AR
