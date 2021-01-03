@@ -18,6 +18,7 @@ export default function TokenDisplay({
       routerLink={routerLink ?? undefined}
       key={id}
       lines="none"
+      detail={false}
     >
       <img
         className={styles.Logo}

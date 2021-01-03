@@ -21,6 +21,7 @@ import {
 } from "@primer/octicons-react";
 import ShortTopLayerTitle from "../../components/ShortTopLayerTitle";
 import styles from "../../theme/views/swap.module.sass";
+import SwapItemsStyle from "../../theme/components/Swap.module.sass";
 
 export default function Swap() {
   return (
@@ -52,32 +53,34 @@ export default function Swap() {
                 </IonRouterLink>
               </IonCardContent>
             </IonCard>
-            <IonCard className={"Card " + styles.Balance}>
-              <IonCardContent className={"Content " + styles.SwapItems}>
-                <div className={styles.From}>
+            <IonCard className="Card">
+              <IonCardContent className={"Content " + SwapItemsStyle.SwapItems}>
+                <div className={SwapItemsStyle.From}>
                   <img
-                    className={styles.Logo}
+                    className={SwapItemsStyle.Logo}
                     src="https://verto.exchange/logo_dark.svg"
                     alt="Verto Logo"
                   />
-                  <div className={styles.Info}>
+                  <div className={SwapItemsStyle.Info}>
                     <h2>From</h2>
                     <h1>VRT</h1>
                   </div>
                 </div>
                 <div
-                  className={styles.Arrows + " ion-activatable ripple-parent"}
+                  className={
+                    SwapItemsStyle.Arrows + " ion-activatable ripple-parent"
+                  }
                 >
                   <ArrowSwitchIcon />
                   <IonRippleEffect />
                 </div>
-                <div className={styles.To}>
-                  <div className={styles.Info}>
+                <div className={SwapItemsStyle.To}>
+                  <div className={SwapItemsStyle.Info}>
                     <h2>From</h2>
                     <h1>VRT</h1>
                   </div>
                   <img
-                    className={styles.Logo}
+                    className={SwapItemsStyle.Logo}
                     src="https://verto.exchange/logo_dark.svg"
                     alt="Verto Logo"
                   />
@@ -87,6 +90,7 @@ export default function Swap() {
                 class="CardFooter ion-text-end"
                 routerLink="/app/analytics"
                 lines="none"
+                detail={false}
               >
                 <IonLabel className="view-all">
                   <IonText slot="end">View analytics</IonText>
@@ -140,6 +144,7 @@ export default function Swap() {
                   className={styles.Order + " ion-activatable ripple-parent"}
                   lines="none"
                   routerLink=""
+                  detail={false}
                 >
                   10 AR
                   <ArrowRightIcon size={16} />
@@ -151,6 +156,7 @@ export default function Swap() {
                   className={styles.Order + " ion-activatable ripple-parent"}
                   lines="none"
                   routerLink=""
+                  detail={false}
                 >
                   10 AR
                   <ArrowRightIcon size={16} />
@@ -162,6 +168,7 @@ export default function Swap() {
                   className={styles.Order + " ion-activatable ripple-parent"}
                   lines="none"
                   routerLink=""
+                  detail={false}
                 >
                   10 AR
                   <ArrowRightIcon size={16} />
@@ -174,6 +181,7 @@ export default function Swap() {
                 class="CardFooter ion-text-end"
                 routerLink="/app/orders"
                 lines="none"
+                detail={false}
               >
                 <IonLabel className="view-all">
                   <IonText slot="end">View all</IonText>

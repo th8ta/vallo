@@ -1,0 +1,53 @@
+.SwapItems
+  display: flex
+  justify-content: space-between
+  align-items: center
+
+  .From, .To
+    display: flex
+    align-items: center
+    margin: .45em 0
+
+    img
+      width: auto
+      height: 2.3em
+      margin-right: 1em
+
+    .Info
+      h2, h1
+        margin: 0
+        font-family: var(--code-font-family)
+        text-align: left
+
+      h2
+        font-size: 1.1em
+        color: var(--verto-secondary-text)
+        font-weight: 500
+
+      h1
+        font-size: 1.7em
+        color: var(--ion-color-light-contrast)
+        font-weight: 600
+
+    &.To
+      img
+        margin:
+          right: 0
+          left: 1em
+
+      .Info
+        h1, h2
+          text-align: right
+
+  .Arrows
+    position: relative
+    overflow: hidden
+    cursor: pointer
+    border-radius: 100%
+    padding: .3em
+
+    svg
+      color: var(--ion-color-light-contrast)
+      width: .9em
+      height: .9em
+      font-size: 1.8em

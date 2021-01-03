@@ -58,6 +58,7 @@ export default function Home() {
               class="CardFooter ion-text-end"
               routerLink="/app/tokens"
               lines="none"
+              detail={false}
             >
               <IonLabel className="view-all">
                 <IonText slot="end">All tokens</IonText>
@@ -76,6 +77,7 @@ export default function Home() {
                 }
                 lines="none"
                 routerLink=""
+                detail={false}
               >
                 10 AR
                 <ArrowRightIcon size={16} />
@@ -89,6 +91,7 @@ export default function Home() {
                 }
                 lines="none"
                 routerLink=""
+                detail={false}
               >
                 10 AR
                 <ArrowRightIcon size={16} />
@@ -102,6 +105,7 @@ export default function Home() {
                 }
                 lines="none"
                 routerLink=""
+                detail={false}
               >
                 10 AR
                 <ArrowRightIcon size={16} />
@@ -114,6 +118,7 @@ export default function Home() {
               class="CardFooter ion-text-end"
               routerLink="/app/trades"
               lines="none"
+              detail={false}
             >
               <IonLabel className="view-all">
                 <IonText slot="end">View full</IonText>
