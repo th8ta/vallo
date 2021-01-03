@@ -34,7 +34,7 @@ export default function WalletLoader() {
     console.log("Mnemonic login", "Wallet:", walletObject);
 
     setLoading(false);
-    history.push("/home");
+    history.push("/app/home");
   }
 
   function handleFileClick() {

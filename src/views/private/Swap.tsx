@@ -19,11 +19,12 @@ import {
   ArrowSwitchIcon,
   ChevronRightIcon
 } from "@primer/octicons-react";
+import { RouteComponentProps } from "react-router-dom";
 import ShortTopLayerTitle from "../../components/ShortTopLayerTitle";
 import styles from "../../theme/views/swap.module.sass";
 import SwapItemsStyle from "../../theme/components/Swap.module.sass";
 
-export default function Swap() {
+export default function Swap({ history }: RouteComponentProps) {
   return (
     <IonPage>
       <IonContent>
@@ -55,7 +56,10 @@ export default function Swap() {
             </IonCard>
             <IonCard className="Card">
               <IonCardContent className={"Content " + SwapItemsStyle.SwapItems}>
-                <div className={SwapItemsStyle.From}>
+                <div
+                  className={SwapItemsStyle.From}
+                  onClick={() => history.push("/app/tokens?choose=from")}
+                >
                   <img
                     className={SwapItemsStyle.Logo}
                     src="https://verto.exchange/logo_dark.svg"
@@ -74,9 +78,12 @@ export default function Swap() {
                   <ArrowSwitchIcon />
                   <IonRippleEffect />
                 </div>
-                <div className={SwapItemsStyle.To}>
+                <div
+                  className={SwapItemsStyle.To}
+                  onClick={() => history.push("/app/tokens?choose=to")}
+                >
                   <div className={SwapItemsStyle.Info}>
-                    <h2>From</h2>
+                    <h2>To</h2>
                     <h1>VRT</h1>
                   </div>
                   <img
@@ -107,7 +114,10 @@ export default function Swap() {
                   className={styles.Input}
                   bold
                 >
-                  <div className={styles.Ticker}>
+                  <div
+                    className={styles.Ticker}
+                    onClick={() => history.push("/app/tokens?choose=from")}
+                  >
                     VRT
                     <ChevronRightIcon />
                   </div>
@@ -119,7 +129,10 @@ export default function Swap() {
                   className={styles.Input}
                   bold
                 >
-                  <div className={styles.Ticker}>
+                  <div
+                    className={styles.Ticker}
+                    onClick={() => history.push("/app/tokens?choose=to")}
+                  >
                     AR
                     <ChevronRightIcon />
                   </div>
