@@ -130,10 +130,10 @@ export default function Token({ history, match }: TokenProps) {
                 <ul className={styles.Links}>
                   {/** TODO: open in BROWSER */}
                   <li>
-                    <a>verto.exhange</a>
+                    <a href="https://verto.exhange">verto.exhange</a>
                   </li>
                   <li>
-                    <a>verto.exhange/chat</a>
+                    <a href="https://verto.exhange/chat">verto.exhange/chat</a>
                   </li>
                 </ul>
               </IonCardContent>

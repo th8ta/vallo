@@ -1,5 +1,5 @@
 {
-  "short_name": "Verto Wallet",
+  "short_name": "Wallet",
   "name": "Verto Wallet",
   "icons": [
     {
@@ -10,12 +10,12 @@
     {
       "src": "assets/icon/icon.png",
       "type": "image/png",
-      "sizes": "512x512",
+      "sizes": "2048x2048 512x512",
       "purpose": "maskable"
     }
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#ffffff",
-  "background_color": "#ffffff"
+  "theme_color": "#000000",
+  "background_color": "#000000"
 }
