@@ -1,0 +1,13 @@
+{
+  "appId": "org.th8ta.wallet",
+  "appName": "wallet",
+  "bundledWebRuntime": false,
+  "npmClient": "yarn",
+  "webDir": "build",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  },
+  "cordova": {}
+}

@@ -12,7 +12,10 @@ import { RouteComponentProps } from "react-router-dom";
 import ShortTopLayerTitle from "../../components/ShortTopLayerTitle";
 import { Line } from "react-chartjs-2";
 import { GraphOptions, GraphDataConfig, addZero } from "../../utils/graph";
+import { Plugins } from "@capacitor/core";
 import styles from "../../theme/views/token.module.sass";
+
+const { Browser } = Plugins;
 
 export default function Token({ history, match }: TokenProps) {
   return (
@@ -77,12 +80,23 @@ export default function Token({ history, match }: TokenProps) {
               <IonCardContent className={"Content " + styles.About}>
                 <p>A decentralized token exchange protocol on Arweave.</p>
                 <ul className={styles.Links}>
-                  {/** TODO: open in BROWSER */}
                   <li>
-                    <a href="https://verto.exhange">verto.exhange</a>
+                    <p
+                      onClick={() =>
+                        Browser.open({ url: "https://verto.exchange" })
+                      }
+                    >
+                      verto.exchange
+                    </p>
                   </li>
                   <li>
-                    <a href="https://verto.exhange/chat">verto.exhange/chat</a>
+                    <p
+                      onClick={() =>
+                        Browser.open({ url: "https://verto.exchange/chat" })
+                      }
+                    >
+                      verto.exhange/chat
+                    </p>
                   </li>
                 </ul>
               </IonCardContent>
