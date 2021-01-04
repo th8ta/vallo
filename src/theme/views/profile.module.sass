@@ -1,0 +1,51 @@
+.Profile
+  margin-top: var(--verto-small-header-section-minus-margin)
+
+.Address
+  display: flex
+  align-items: flex-end
+  font-size: 1.08em !important
+
+  .CopyIcon
+    font-size: 1em
+    width: 1em
+    height: 1em
+    color: var(--verto-secondary-text)
+    margin-left: .45em
+    cursor: pointer
+    height: 1.7em
+    transition: all .24s ease-in-out
+
+    &:hover
+      opacity: .76
+
+.Setting
+  --inner-border-width: 0
+  --padding-start: 0
+  --padding-end: 0
+  --min-height: 2.5em
+  border-bottom: 1px solid var(--verto-seperate)
+  cursor: pointer
+
+  span
+    padding:
+      left: 1em
+      right: 1em
+
+  &:first-child
+    border-top: 1px solid var(--verto-seperate)
+
+  &:last-child
+    border-bottom: none
+
+  &.SignOut
+    span
+      color: var(--ion-color-danger)
+
+.Version
+  font-family: var(--code-font-family)
+  font-size: .37em
+  color: var(--verto-secondary-text)
+  display: block
+  text-align: center
+  font-weight: 400

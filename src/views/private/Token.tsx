@@ -103,7 +103,7 @@ export default function Token({ history, match }: TokenProps) {
         </div>
         <div className={styles.TokenActions}>
           <IonButton
-            className={"Button " + styles.Button}
+            className={styles.Button}
             fill="outline"
             expand="full"
             color="dark"
@@ -113,7 +113,7 @@ export default function Token({ history, match }: TokenProps) {
             Transfer
           </IonButton>
           <IonButton
-            className={"Button " + styles.Button}
+            className={styles.Button}
             fill="solid"
             expand="full"
             color="dark"

@@ -18,7 +18,7 @@ export default function SplashLoading() {
           <h1>Verto</h1>
           <h2>Wallet</h2>
         </div>
-        <h1 className={styles.th8ta}>
+        <h1 className="th8ta">
           th<span>8</span>ta
         </h1>
       </IonContent>

@@ -35,7 +35,7 @@ export default function Welcome() {
           />
           <h1 className={styles.Title}>Welcome</h1>
           <IonButton
-            className={"Button " + styles.Button}
+            className={styles.Button}
             fill="solid"
             expand="full"
             color="dark"
@@ -45,7 +45,7 @@ export default function Welcome() {
             Create a wallet
           </IonButton>
           <IonButton
-            className={"Button " + styles.Button}
+            className={styles.Button}
             fill="outline"
             expand="full"
             color="dark"

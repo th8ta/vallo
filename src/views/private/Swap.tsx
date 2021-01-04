@@ -138,7 +138,7 @@ export default function Swap({ history }: RouteComponentProps) {
                   </div>
                 </Input>
                 <IonButton
-                  className={"Button " + styles.Button}
+                  className={styles.Button}
                   fill="solid"
                   expand="full"
                   color="dark"

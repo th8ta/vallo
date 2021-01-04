@@ -11,6 +11,7 @@ import styles from "../theme/components/TabBar.module.sass";
 
 import Home from "../views/private/Home";
 import Swap from "../views/private/Swap";
+import Profile from "../views/private/Profile";
 
 export default function Tabs() {
   return (
@@ -18,6 +19,7 @@ export default function Tabs() {
       <IonRouterOutlet>
         <Route path="/app/home" component={Home} />
         <Route path="/app/swap" component={Swap} />
+        <Route path="/app/profile" component={Profile} />
         <Redirect exact from="/app" to="/app/home" />
       </IonRouterOutlet>
       <IonTabBar slot="bottom" className={styles.TabBar}>

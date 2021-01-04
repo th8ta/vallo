@@ -108,7 +108,7 @@ export default function WalletLoader() {
             fill="solid"
             expand="full"
             color="dark"
-            className={"Button " + styles.Button}
+            className={styles.Button}
             shape="round"
             onClick={() => loadWalletFromMnemonic(address)}
           >
@@ -119,7 +119,7 @@ export default function WalletLoader() {
             fill="outline"
             expand="full"
             color="dark"
-            className={"Button " + styles.Button}
+            className={styles.Button}
             shape="round"
             onClick={() => handleFileClick()}
           >

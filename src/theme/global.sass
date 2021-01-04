@@ -1,8 +1,12 @@
-.Button
+.button
   text-transform: none
   --border-radius: 5px
   --border-width: 2px
   --border-color: var(--ion-color-light-contrast)
+  --inner-padding-top: 0
+
+  &.ios
+    height: 36px
 
 .Input
   $inputSidePadding: 1em
@@ -81,3 +85,19 @@
   font-family: var(--code-font-family)
   color: var(--verto-code-color)
   overflow-wrap: anywhere
+
+.th8ta
+  position: absolute
+  bottom: 1em
+  left: 50%
+  font-family: var(--th8ta-font-family)
+  font-size: 2.2em
+  font-weight: 700
+  margin: 0
+  text-align: center
+  transform: translateX(-50%)
+
+  span:not(.NoGradient)
+    background: linear-gradient(142.25deg, #FC9867 23.99%, #AB9DF2 73.9%)
+    -webkit-background-clip: text
+    -webkit-text-fill-color: transparent
