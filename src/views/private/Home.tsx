@@ -30,14 +30,14 @@ export default function Home() {
               <span>AR</span>
             </h1>
             <div className={styles.ButtonGroup}>
-              <IonRouterLink className={styles.Link}>
+              <IonRouterLink className={styles.Link} routerLink="/app/tokens">
                 Buy
                 <IonRippleEffect />
               </IonRouterLink>
-              <IonRouterLink className={styles.Link}>
+              <div className={styles.Link + " ion-activatable ripple-parent"}>
                 Transfer
                 <IonRippleEffect />
-              </IonRouterLink>
+              </div>
               <div className={styles.Link + " ion-activatable ripple-parent"}>
                 <IonIcon icon={qrCodeOutline} />
                 <IonRippleEffect />
