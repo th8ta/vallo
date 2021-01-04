@@ -2,3 +2,5 @@ node_modules
 public
 .github
 build
+ios
+android
