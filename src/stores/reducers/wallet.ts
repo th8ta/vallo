@@ -1,6 +1,6 @@
 import { JWKInterface } from "arweave/node/lib/wallet";
 
-interface IAction {
+export interface IWalletAction {
   type: "ADD_WALLET" | "REMOVE_WALLET" | "REMOVE_ALL";
   payload: {
     keyfile?: JWKInterface;
@@ -17,7 +17,7 @@ interface Wallet {
 
 export default function walletReducer(
   state: Wallet[] = [],
-  action: IAction
+  action: IWalletAction
 ): Wallet[] {
   switch (action.type) {
     case "ADD_WALLET":

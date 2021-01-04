@@ -1,12 +1,28 @@
-import React from "react";
+import React, { useEffect } from "react";
 import vertoLogo from "../assets/logo.png";
 import vertoLogoDark from "../assets/logo_dark.png";
 import { IonPage, IonContent } from "@ionic/react";
 import { useTheme } from "../utils/theme";
+import { loadData } from "../utils/data";
+import { useSelector } from "react-redux";
+import { RouteComponentProps } from "react-router";
+import type { RootState } from "../stores/reducers";
 import styles from "../theme/views/splash.module.sass";
 
-export default function SplashLoading() {
-  const theme = useTheme();
+export default function SplashLoading({ history }: RouteComponentProps) {
+  const theme = useTheme(),
+    wallets = useSelector((state: RootState) => state.wallet);
+
+  useEffect(() => {
+    if (wallets.length < 1) return history.push("/welcome");
+    load();
+    // eslint-disable-next-line
+  }, []);
+
+  async function load() {
+    await loadData();
+    history.push("/app/home");
+  }
 
   // TODO: Load wallet here (check if logged in etc.)
   // then: redirect to the appropriate route

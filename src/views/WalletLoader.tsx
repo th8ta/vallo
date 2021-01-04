@@ -15,7 +15,8 @@ import { Input } from "@verto/ui";
 import { arweaveInstance } from "../utils/arweave";
 import { JWKInterface } from "arweave/node/lib/wallet";
 import { useDispatch } from "react-redux";
-import { addWallet } from "../stores/actions";
+import { addWallet, setProfile } from "../stores/actions";
+import { loadData } from "../utils/data";
 import styles from "../theme/views/login.module.sass";
 
 export default function WalletLoader() {
@@ -39,6 +40,8 @@ export default function WalletLoader() {
         address = await arweave.wallets.jwkToAddress(walletObj);
 
       dispatch(addWallet(walletObj, address, mnemonic));
+      dispatch(setProfile(address));
+      await loadData();
       history.push("/app/home");
     } catch (err) {
       setToastData({
@@ -76,6 +79,7 @@ export default function WalletLoader() {
             address = await arweave.wallets.jwkToAddress(walletObj);
 
           dispatch(addWallet(walletObj, address));
+          await loadData();
           history.push("/app/home");
         } catch (err) {
           setToastData({

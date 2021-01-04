@@ -16,9 +16,14 @@ import {
 import { ArrowRightIcon } from "@primer/octicons-react";
 import { qrCodeOutline } from "ionicons/icons";
 import TokenDisplay from "../../components/TokenDisplay";
+import type { RootState } from "../../stores/reducers";
+import { useSelector } from "react-redux";
 import styles from "../../theme/views/home.module.sass";
 
 export default function Home() {
+  const balances = useSelector((state: RootState) => state.balance),
+    currentAddress = useSelector((state: RootState) => state.profile);
+
   return (
     <IonPage>
       <IonContent>
@@ -26,7 +31,8 @@ export default function Home() {
           <div className={styles.Balance}>
             <p>Wallet Balance</p>
             <h1>
-              0.2490152
+              {balances.find(({ address }) => address === currentAddress)
+                ?.balance ?? "0.00000000"}
               <span>AR</span>
             </h1>
             <div className={styles.ButtonGroup}>
