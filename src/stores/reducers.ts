@@ -4,3 +4,4 @@ import wallet from "./reducers/wallet";
 const reducers = combineReducers({ wallet });
 
 export default reducers;
+export type RootState = ReturnType<typeof reducers>;

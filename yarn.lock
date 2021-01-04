@@ -1125,6 +1125,11 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
+"@capacitor-community/sqlite@^2.4.4":
+  version "2.4.4"
+  resolved "https://registry.yarnpkg.com/@capacitor-community/sqlite/-/sqlite-2.4.4.tgz#8c241f2694b8485be029e4918ba71b2eeefb0f88"
+  integrity sha512-m3rYs20NJaQNA2k3UkDr73DVCPmrHPF/zSgcM/AO2/BJZBX+HRDGlT4cl+u30YxDXCRlA2y48saRgRO4Rb+QLA==
+
 "@capacitor/android@2.4.5":
   version "2.4.5"
   resolved "https://registry.yarnpkg.com/@capacitor/android/-/android-2.4.5.tgz#7ceefd0857eb2f789225bfb88f7467bfa3409125"
@@ -9496,6 +9501,11 @@ react-scripts@3.4.0:
     workbox-webpack-plugin "4.3.1"
   optionalDependencies:
     fsevents "2.1.2"
+
+react-sqlite-hook@^0.0.7:
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/react-sqlite-hook/-/react-sqlite-hook-0.0.7.tgz#2590ccaaafd185d7be146d34100cfa5450c47814"
+  integrity sha512-tjk0+dcDulwn5cw4YXbMVTXKBe89NEvLsOADqlp74FCVmkRdnlNafES41xHDaCSEpCRh0za9kzDVn5ru2AUm7A==
 
 react@^17.0.1:
   version "17.0.1"

@@ -12,12 +12,18 @@ interface IAction {
 interface Wallet {
   keyfile: JWKInterface;
   address: string;
+  mnemonic?: string;
 }
 
-export default function walletReducer(state: Wallet[] = [], action: IAction) {
+export default function walletReducer(
+  state: Wallet[] = [],
+  action: IAction
+): Wallet[] {
   switch (action.type) {
     case "ADD_WALLET":
       if (
+        !action.payload.address ||
+        !action.payload.keyfile ||
         state.filter(({ address }) => address === action.payload.address)
           .length > 0
       )
