@@ -3,6 +3,7 @@ import { IonApp } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import { Route } from "react-router";
 import { VertoProvider } from "@verto/ui";
+import { Provider as ReduxProvider } from "react-redux";
 
 import "@ionic/react/css/core.css";
 import "@ionic/react/css/normalize.css";
@@ -16,6 +17,7 @@ import "@ionic/react/css/flex-utils.css";
 import "@ionic/react/css/display.css";
 
 import { useTheme } from "./utils/theme";
+import store from "./stores";
 
 import SplashLoading from "./views/SplashLoading";
 import Welcome from "./views/Welcome";
@@ -34,21 +36,23 @@ const App: React.FunctionComponent = () => {
   const theme = useTheme();
 
   return (
-    <VertoProvider theme={theme}>
-      <IonApp>
-        <IonReactRouter>
-          <Route path="/" component={SplashLoading} />
-          <Route path="/welcome" component={Welcome} />
-          <Route path="/loadwallet" component={WalletLoader} />
-          <Route path="/app" component={Tabs} />
-          <Route path="/app/tokens" component={Tokens} />
-          <Route path="/app/token/:tokenid" component={Token} />
-          <Route path="/app/trades" component={Trades} />
-          <Route path="/app/analytics" component={Analytics} />
-          <Route path="/app/trade/:tradeid" component={TradeInfo} />
-        </IonReactRouter>
-      </IonApp>
-    </VertoProvider>
+    <ReduxProvider store={store}>
+      <VertoProvider theme={theme}>
+        <IonApp>
+          <IonReactRouter>
+            <Route path="/" component={SplashLoading} />
+            <Route path="/welcome" component={Welcome} />
+            <Route path="/loadwallet" component={WalletLoader} />
+            <Route path="/app" component={Tabs} />
+            <Route path="/app/tokens" component={Tokens} />
+            <Route path="/app/token/:tokenid" component={Token} />
+            <Route path="/app/trades" component={Trades} />
+            <Route path="/app/analytics" component={Analytics} />
+            <Route path="/app/trade/:tradeid" component={TradeInfo} />
+          </IonReactRouter>
+        </IonApp>
+      </VertoProvider>
+    </ReduxProvider>
   );
 };
 

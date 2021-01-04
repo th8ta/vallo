@@ -12,6 +12,10 @@ import {
 } from "@ionic/react";
 import { useTheme } from "../utils/theme";
 import { Input } from "@verto/ui";
+import { arweaveInstance } from "../utils/arweave";
+import { JWKInterface } from "arweave/node/lib/wallet";
+import { useDispatch } from "react-redux";
+import { addWallet } from "../stores/actions";
 import styles from "../theme/views/login.module.sass";
 
 export default function WalletLoader() {
@@ -24,7 +28,8 @@ export default function WalletLoader() {
     }>({ text: "", shown: false }),
     fileRef = useRef(null),
     history = useHistory(),
-    theme = useTheme();
+    theme = useTheme(),
+    dispatch = useDispatch();
 
   async function loadWalletFromMnemonic(mnemonic: string) {
     setLoading(true);
@@ -37,13 +42,9 @@ export default function WalletLoader() {
     history.push("/app/home");
   }
 
-  function handleFileClick() {
-    //@ts-ignore
-    fileRef.current!.click();
-  }
-
   async function loadWalletFromFile(acceptedFiles: any) {
-    const reader = new FileReader();
+    const reader = new FileReader(),
+      arweave = arweaveInstance();
 
     reader.onabort = () =>
       setToastData({
@@ -61,11 +62,13 @@ export default function WalletLoader() {
       setLoading(true);
       if (acceptedFiles[0].type === "application/json") {
         try {
-          let walletObject = JSON.parse(event!.target!.result as string);
+          const walletObj: JWKInterface = JSON.parse(
+              event!.target!.result as string
+            ),
+            address = await arweave.wallets.jwkToAddress(walletObj);
 
-          console.log("Keyfile login", "Wallet:", walletObject);
-
-          history.push("/home");
+          dispatch(addWallet(walletObj, address));
+          history.push("/app/home");
         } catch (err) {
           setToastData({
             text: "Invalid json in wallet file",
@@ -82,11 +85,17 @@ export default function WalletLoader() {
       }
       setLoading(false);
     };
+
     try {
       reader.readAsText(acceptedFiles[0]);
     } catch (err) {
       setToastData({ text: "Invalid file type", color: "danger", shown: true });
     }
+  }
+
+  function handleFileClick() {
+    //@ts-ignore
+    fileRef.current!.click();
   }
 
   return (
