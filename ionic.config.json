@@ -1,6 +1,7 @@
 {
   "name": "Wallet",
-  "app_id": "",
-  "type": "react",
-  "integrations": {}
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
 }
