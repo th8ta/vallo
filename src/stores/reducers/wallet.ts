@@ -5,6 +5,7 @@ interface IAction {
   payload: {
     keyfile?: JWKInterface;
     address?: string;
+    mnemonic?: string;
   };
 }
 
@@ -23,7 +24,11 @@ export default function walletReducer(state: Wallet[] = [], action: IAction) {
         break;
       return [
         ...state,
-        { keyfile: action.payload.keyfile, address: action.payload.address }
+        {
+          keyfile: action.payload.keyfile,
+          address: action.payload.address,
+          mnemonic: action.payload.mnemonic
+        }
       ];
 
     case "REMOVE_WALLET":

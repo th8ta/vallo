@@ -33,13 +33,21 @@ export default function WalletLoader() {
 
   async function loadWalletFromMnemonic(mnemonic: string) {
     setLoading(true);
+    try {
+      const arweave = arweaveInstance(),
+        walletObj: JWKInterface = await getKeyFromMnemonic(mnemonic),
+        address = await arweave.wallets.jwkToAddress(walletObj);
 
-    let walletObject = await getKeyFromMnemonic(mnemonic);
-
-    console.log("Mnemonic login", "Wallet:", walletObject);
-
+      dispatch(addWallet(walletObj, address, mnemonic));
+      history.push("/app/home");
+    } catch (err) {
+      setToastData({
+        text: "Invalid json in wallet file",
+        color: "danger",
+        shown: true
+      });
+    }
     setLoading(false);
-    history.push("/app/home");
   }
 
   async function loadWalletFromFile(acceptedFiles: any) {
