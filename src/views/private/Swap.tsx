@@ -21,10 +21,15 @@ import {
 } from "@primer/octicons-react";
 import { RouteComponentProps } from "react-router-dom";
 import ShortTopLayerTitle from "../../components/ShortTopLayerTitle";
+import type { RootState } from "../../stores/reducers";
+import { useSelector } from "react-redux";
 import styles from "../../theme/views/swap.module.sass";
 import SwapItemsStyle from "../../theme/components/Swap.module.sass";
 
 export default function Swap({ history }: RouteComponentProps) {
+  const balances = useSelector((state: RootState) => state.balance),
+    currentAddress = useSelector((state: RootState) => state.profile);
+
   return (
     <IonPage>
       <IonContent>
@@ -42,7 +47,8 @@ export default function Swap({ history }: RouteComponentProps) {
               <IonCardContent className="Content">
                 <p>Wallet Balance</p>
                 <h1>
-                  0.2490152
+                  {balances.find(({ address }) => address === currentAddress)
+                    ?.balance ?? "0.00000000"}
                   <span>AR</span>
                 </h1>
                 <IonRouterLink

@@ -3,7 +3,8 @@ import wallet from "./reducers/wallet";
 import balance from "./reducers/balance";
 import profile from "./reducers/profile";
 
-const reducers = combineReducers({ wallet, balance, profile });
+export const plainReducers = { wallet, balance, profile };
+const reducers = combineReducers(plainReducers);
 
 export default reducers;
 export type RootState = ReturnType<typeof reducers>;

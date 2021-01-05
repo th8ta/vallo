@@ -1,22 +1,26 @@
 import { createStore } from "redux";
-import reducers from "./reducers";
+import reducers, { plainReducers } from "./reducers";
 
 function saveLocal(state: any) {
   try {
-    const serialisedState = JSON.stringify(state);
-    localStorage.setItem("persistantState", serialisedState);
+    for (const st in state) {
+      localStorage.setItem(st, JSON.stringify({ val: state[st] }));
+    }
   } catch {}
 }
 
 function loadLocal() {
-  try {
-    const serialisedState = localStorage.getItem("persistantState");
-    if (serialisedState === null) return undefined;
+  let serialisedState: Record<string, any> = {};
 
-    return JSON.parse(serialisedState);
-  } catch {
-    return undefined;
-  }
+  try {
+    for (const reducer in plainReducers) {
+      const serialisedReducer = localStorage.getItem(reducer);
+
+      if (serialisedReducer !== null)
+        serialisedState[reducer] = JSON.parse(serialisedReducer).val;
+    }
+  } catch {}
+  return serialisedState;
 }
 
 const store = createStore(reducers, loadLocal());
