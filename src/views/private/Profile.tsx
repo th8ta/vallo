@@ -7,7 +7,8 @@ import {
   IonCardContent,
   IonCardTitle,
   IonItem,
-  IonRippleEffect
+  IonRippleEffect,
+  IonToast
 } from "@ionic/react";
 import { ClippyIcon } from "@primer/octicons-react";
 import { RouteComponentProps } from "react-router-dom";
@@ -20,19 +21,29 @@ import { Plugins } from "@capacitor/core";
 import { AppVersion } from "@ionic-native/app-version";
 import styles from "../../theme/views/profile.module.sass";
 
-const { Browser } = Plugins;
+const { Browser, Clipboard } = Plugins;
 
 export default function Profile({ history }: RouteComponentProps) {
   const dispatch = useDispatch(),
     currentAddress = useSelector((state: RootState) => state.profile),
     [walletManager, setWalletManager] = useState(false),
-    [version, setVersion] = useState<string>();
+    [version, setVersion] = useState<string>(),
+    [toast, setToast] = useState<{ shown: boolean; text: string }>({
+      shown: false,
+      text: ""
+    });
 
   useEffect(() => {
     AppVersion.getVersionNumber()
       .then((version) => setVersion(version))
       .catch(() => setVersion("0.0.0"));
   }, []);
+
+  async function copyAddress() {
+    if (currentAddress === "") return;
+    await Clipboard.write({ string: currentAddress });
+    setToast({ shown: true, text: "Copied address" });
+  }
 
   return (
     <IonPage>
@@ -49,7 +60,10 @@ export default function Profile({ history }: RouteComponentProps) {
                 <IonCardTitle className="CardTitle">Wallet</IonCardTitle>
               </IonCardHeader>
               <IonCardContent>
-                <p className={"CodeParagraph " + styles.Address}>
+                <p
+                  className={"CodeParagraph " + styles.Address}
+                  onClick={copyAddress}
+                >
                   `{currentAddress}`
                   <ClippyIcon className={styles.CopyIcon} />
                 </p>
@@ -114,6 +128,14 @@ export default function Profile({ history }: RouteComponentProps) {
           mode={"delete"}
         />
       </IonContent>
+      <IonToast
+        isOpen={toast.shown}
+        onDidDismiss={() => setToast((val) => ({ ...val, shown: false }))}
+        message={toast.text}
+        duration={2000}
+        position="bottom"
+        cssClass="SmallToast"
+      />
     </IonPage>
   );
 }
