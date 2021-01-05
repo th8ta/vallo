@@ -1,9 +1,9 @@
-import React from "react";
-import { IonReactRouter } from "@ionic/react-router";
-import { Redirect, Route } from "react-router";
+import React, { useEffect } from "react";
+import { Redirect, Route, useLocation } from "react-router";
 
 import type { RootState } from "../stores/reducers";
 import { useSelector } from "react-redux";
+import { loadData } from "../utils/data";
 
 import SplashLoading from "../views/SplashLoading";
 import Welcome from "../views/Welcome";
@@ -16,10 +16,15 @@ import Analytics from "../views/private/Analytics";
 import TradeInfo from "../views/private/TradeInfo";
 
 export default function Routes() {
-  const wallets = useSelector((state: RootState) => state.wallet);
+  const wallets = useSelector((state: RootState) => state.wallet),
+    location = useLocation();
+
+  useEffect(() => {
+    if (wallets.length > 0) loadData();
+  }, [wallets, location]);
 
   return (
-    <IonReactRouter>
+    <>
       <Route path="/" component={SplashLoading} />
       <Route path="/welcome" component={Welcome} />
       <Route path="/loadwallet" component={WalletLoader} />
@@ -33,6 +38,6 @@ export default function Routes() {
           <Route path="/app/trade/:tradeid" component={TradeInfo} />
         </>
       )) || <Redirect from="/app/**/*" to="/welcome" />}
-    </IonReactRouter>
+    </>
   );
 }

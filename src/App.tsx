@@ -1,6 +1,7 @@
 import React from "react";
 import { IonApp } from "@ionic/react";
 import { VertoProvider } from "@verto/ui";
+import { IonReactRouter } from "@ionic/react-router";
 import { Provider as ReduxProvider } from "react-redux";
 
 import "@ionic/react/css/core.css";
@@ -29,7 +30,9 @@ const App: React.FunctionComponent = () => {
     <ReduxProvider store={store}>
       <VertoProvider theme={theme}>
         <IonApp>
-          <Routes />
+          <IonReactRouter>
+            <Routes />
+          </IonReactRouter>
         </IonApp>
       </VertoProvider>
     </ReduxProvider>
