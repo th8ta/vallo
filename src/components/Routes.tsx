@@ -8,6 +8,7 @@ import { loadData } from "../utils/data";
 import SplashLoading from "../views/SplashLoading";
 import Welcome from "../views/Welcome";
 import WalletLoader from "../views/WalletLoader";
+import Slideshow from "../views/Slideshow";
 import Tabs from "../components/Tabs";
 import Tokens from "../views/private/Tokens";
 import Token from "../views/private/Token";
@@ -28,6 +29,7 @@ export default function Routes() {
       <Route path="/" component={SplashLoading} />
       <Route path="/welcome" component={Welcome} />
       <Route path="/loadwallet" component={WalletLoader} />
+      <Route path="/showcase" component={Slideshow} />
       {(wallets.length > 0 && (
         <>
           <Route path="/app" component={Tabs} />

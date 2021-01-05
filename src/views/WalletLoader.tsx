@@ -44,7 +44,7 @@ export default function WalletLoader() {
       dispatch(addWallet(walletObj, address, mnemonic));
       dispatch(setProfile(address));
       await loadData();
-      history.push("/app/home");
+      history.push(wallets.length > 0 ? "/app/home" : "/showcase");
     } catch (err) {
       setToastData({
         text: "Invalid json in wallet file",
@@ -82,7 +82,7 @@ export default function WalletLoader() {
 
           dispatch(addWallet(walletObj, address));
           await loadData();
-          history.push("/app/home");
+          history.push(wallets.length > 0 ? "/app/home" : "/showcase");
         } catch (err) {
           setToastData({
             text: "Invalid json in wallet file",
