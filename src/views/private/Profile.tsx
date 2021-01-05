@@ -125,7 +125,7 @@ export default function Profile({ history }: RouteComponentProps) {
         <WalletManager
           opened={walletManager}
           hide={() => setWalletManager(false)}
-          mode={"delete"}
+          mode="delete"
         />
       </IonContent>
       <IonToast
