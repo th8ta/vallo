@@ -12,6 +12,7 @@ export default function Welcome() {
     history = useHistory(),
     theme = useTheme();
 
+  // TODO
   async function createWallet() {
     setLoading(true);
 

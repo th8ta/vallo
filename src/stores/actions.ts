@@ -14,6 +14,20 @@ export function addWallet(
   };
 }
 
+export function removeWallet(address: string): IWalletAction {
+  return {
+    type: "REMOVE_WALLET",
+    payload: { address }
+  };
+}
+
+export function signOut() {
+  return {
+    type: "USER_SIGNOUT",
+    payload: {}
+  };
+}
+
 export function updateBalance(
   address: string,
   balance: string

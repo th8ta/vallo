@@ -1,7 +1,7 @@
 import { JWKInterface } from "arweave/node/lib/wallet";
 
 export interface IWalletAction {
-  type: "ADD_WALLET" | "REMOVE_WALLET" | "REMOVE_ALL";
+  type: "ADD_WALLET" | "REMOVE_WALLET" | "USER_SIGNOUT";
   payload: {
     keyfile?: JWKInterface;
     address?: string;
@@ -40,7 +40,7 @@ export default function walletReducer(
     case "REMOVE_WALLET":
       return state.filter(({ address }) => address !== action.payload.address);
 
-    case "REMOVE_ALL":
+    case "USER_SIGNOUT":
       return [];
 
     default:

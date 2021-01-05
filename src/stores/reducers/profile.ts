@@ -1,5 +1,5 @@
 export interface IProfileAction {
-  type: "UPDATE_PROFILE";
+  type: "UPDATE_PROFILE" | "USER_SIGNOUT";
   payload: {
     address: string;
   };
@@ -12,6 +12,9 @@ export default function profileReducer(
   switch (action.type) {
     case "UPDATE_PROFILE":
       return action.payload.address;
+
+    case "USER_SIGNOUT":
+      return "";
 
     default:
       break;
