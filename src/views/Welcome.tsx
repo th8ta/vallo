@@ -5,12 +5,15 @@ import vertoLogo from "../assets/logo.png";
 import vertoLogoDark from "../assets/logo_dark.png";
 import { useTheme } from "../utils/theme";
 import { IonPage, IonButton, IonLoading, IonContent } from "@ionic/react";
+import { RootState } from "../stores/reducers";
+import { useSelector } from "react-redux";
 import styles from "../theme/views/login.module.sass";
 
 export default function Welcome() {
   const [loading, setLoading] = useState(false),
     history = useHistory(),
-    theme = useTheme();
+    theme = useTheme(),
+    wallets = useSelector((state: RootState) => state.wallet);
 
   // TODO
   async function createWallet() {
@@ -35,6 +38,12 @@ export default function Welcome() {
             className={styles.Logo}
           />
           <h1 className={styles.Title}>Welcome</h1>
+          {wallets.length > 0 && (
+            <p className={styles.Tip}>
+              Tip: you can switch wallets by holding down the profile icon in
+              the bottom bar
+            </p>
+          )}
           <IonButton
             className={styles.Button}
             fill="solid"

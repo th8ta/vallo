@@ -3,8 +3,6 @@ import { IWalletAction } from "./reducers/wallet";
 import { IBalanceAction } from "./reducers/balance";
 import { IProfileAction } from "./reducers/profile";
 
-import { loadData } from "../utils/data";
-
 export function addWallet(
   keyfile: JWKInterface,
   address: string,
@@ -41,8 +39,6 @@ export function updateBalance(
 }
 
 export function setProfile(address: string): IProfileAction {
-  loadData();
-
   return {
     type: "UPDATE_PROFILE",
     payload: { address }

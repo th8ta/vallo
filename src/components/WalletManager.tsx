@@ -3,6 +3,10 @@ import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "../stores/reducers";
 import { removeWallet, setProfile, signOut } from "../stores/actions";
 import { IonActionSheet, IonToast } from "@ionic/react";
+import { useHistory } from "react-router";
+import { add } from "ionicons/icons";
+import { loadData } from "../utils/data";
+import styles from "../theme/components/WalletManager.module.sass";
 
 export default function WalletManager({
   opened,
@@ -12,6 +16,7 @@ export default function WalletManager({
   const wallets = useSelector((state: RootState) => state.wallet),
     address = useSelector((state: RootState) => state.profile),
     dispatch = useDispatch(),
+    history = useHistory(),
     [toast, setToast] = useState<{ shown: boolean; text: string }>({
       shown: false,
       text: ""
@@ -28,6 +33,7 @@ export default function WalletManager({
         buttons={[
           ...wallets.map((wallet) => ({
             text: wallet.address,
+            cssClass: wallet.address === address ? styles.Active : "",
             handler() {
               if (mode === "delete") {
                 if (wallets.length === 1) dispatch(signOut());
@@ -46,8 +52,21 @@ export default function WalletManager({
                 dispatch(setProfile(wallet.address));
                 setToast({ shown: true, text: "Switched wallet" });
               }
+              loadData();
             }
           })),
+          ...(mode === "switch"
+            ? [
+                {
+                  text: "Add wallet",
+                  icon: add,
+                  cssClass: styles.AddButton,
+                  handler() {
+                    history.push("/welcome");
+                  }
+                }
+              ]
+            : []),
           {
             text: "Cancel",
             role: "cancel",

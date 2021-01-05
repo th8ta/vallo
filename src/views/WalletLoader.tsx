@@ -14,8 +14,9 @@ import { useTheme } from "../utils/theme";
 import { Input } from "@verto/ui";
 import { arweaveInstance } from "../utils/arweave";
 import { JWKInterface } from "arweave/node/lib/wallet";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addWallet, setProfile } from "../stores/actions";
+import { RootState } from "../stores/reducers";
 import { loadData } from "../utils/data";
 import styles from "../theme/views/login.module.sass";
 
@@ -30,7 +31,8 @@ export default function WalletLoader() {
     fileRef = useRef(null),
     history = useHistory(),
     theme = useTheme(),
-    dispatch = useDispatch();
+    dispatch = useDispatch(),
+    wallets = useSelector((state: RootState) => state.wallet);
 
   async function loadWalletFromMnemonic(mnemonic: string) {
     setLoading(true);
@@ -120,6 +122,12 @@ export default function WalletLoader() {
             className={styles.Logo}
           />
           <h1 className={styles.Title}>Sign In</h1>
+          {wallets.length > 0 && (
+            <p className={styles.Tip}>
+              Tip: you can switch wallets by holding down the profile icon in
+              the bottom bar
+            </p>
+          )}
           <Input
             label="Enter 12 word seedphrase..."
             onChange={(e) => setAddress(e.target.value)}
