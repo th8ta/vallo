@@ -7,10 +7,29 @@
   overflow: hidden
   cursor: pointer
 
-  .Logo
+  .Logo, .LoadingLogo, .NoLogo
+    position: relative
+    display: block
     width: auto
     height: 2em
     margin-right: .7em
+
+    &.LoadingLogo
+      width: 2em
+      border-radius: 100%
+
+    &.NoLogo
+      border-radius: 100%
+      background-color: var(--verto-background)
+
+      svg
+        position: absolute
+        top: 50%
+        left: 50%
+        width: 75%
+        height: 75%
+        font-size: 1em
+        transform: translate(-50%, -50%)
 
   .PST, .Balance
     line-height: 1em
@@ -31,10 +50,15 @@
     --min-height: auto
     --background: transparent
 
-    .Logo
-      width: 2.6em
-      height: 2.6em
+    .Logo, .LoadingLogo, .NoLogo
+      $fullLogoWidth: 2.6em
+      width: $fullLogoWidth
+      height: $fullLogoWidth
       margin-right: 1em
+
+      &.LoadingLogo
+        width: $fullLogoWidth
+        height: $fullLogoWidth
 
     .PST
       font-size: 1.6em
