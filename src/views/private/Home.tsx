@@ -32,13 +32,13 @@ export default function Home() {
     );
 
   useEffect(() => {
-    preloadAssets();
+    refresh();
   }, []);
 
-  async function refresh(e: CustomEvent<RefresherEventDetail>) {
+  async function refresh(e?: CustomEvent<RefresherEventDetail>) {
     await loadData();
     await preloadAssets();
-    e.detail.complete();
+    if (e) e.detail.complete();
   }
 
   return (

@@ -4,7 +4,7 @@ import reducers, { plainReducers } from "./reducers";
 function saveLocal(state: any) {
   try {
     for (const st in state) {
-      localStorage.setItem(st, JSON.stringify({ val: state[st] }));
+      localStorage.setItem(`wallet_${st}`, JSON.stringify({ val: state[st] }));
     }
   } catch {}
 }
@@ -17,7 +17,9 @@ function loadLocal() {
       const serialisedReducer = localStorage.getItem(reducer);
 
       if (serialisedReducer !== null)
-        serialisedState[reducer] = JSON.parse(serialisedReducer).val;
+        serialisedState[`wallet_${reducer}`] = JSON.parse(
+          serialisedReducer
+        ).val;
     }
   } catch {}
   return serialisedState;
