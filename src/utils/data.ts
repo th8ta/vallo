@@ -1,16 +1,19 @@
 import Verto from "@verto/lib";
 import stores from "../stores";
-import { updateBalance, setProfile, setTokens } from "../stores/actions";
+import {
+  updateBalance,
+  setProfile,
+  setAssets,
+  setTokens
+} from "../stores/actions";
 import { arweaveInstance } from "./arweave";
 
 export async function loadData() {
   const arweave = arweaveInstance(),
     wallets = stores.getState().wallet;
 
-  if (!stores.getState().profile && wallets.length > 0) {
+  if (!stores.getState().profile && wallets.length > 0)
     stores.dispatch(setProfile(wallets[0].address));
-    await preloadAssets(wallets[0].address);
-  }
 
   for (const wallet of wallets) {
     try {
@@ -25,6 +28,16 @@ export async function loadData() {
   }
 }
 
+export async function preloadData() {
+  const address = stores.getState().profile,
+    wallets = stores.getState().wallet;
+
+  await loadTokens();
+  await preloadAssets(address);
+
+  for (const wallet of wallets) await preloadAssets(wallet.address);
+}
+
 export async function preloadAssets(addr?: string) {
   const verto = new Verto(),
     address = addr ?? stores.getState().profile;
@@ -32,6 +45,16 @@ export async function preloadAssets(addr?: string) {
   try {
     const assets = await verto.getAssets(address);
 
-    stores.dispatch(setTokens(address, assets));
+    stores.dispatch(setAssets(address, assets));
+  } catch {}
+}
+
+export async function loadTokens() {
+  const verto = new Verto();
+
+  try {
+    const tokens = await verto.popularTokens();
+
+    stores.dispatch(setTokens(tokens));
   } catch {}
 }

@@ -17,7 +17,7 @@ import { JWKInterface } from "arweave/node/lib/wallet";
 import { useDispatch, useSelector } from "react-redux";
 import { addWallet, setProfile } from "../stores/actions";
 import { RootState } from "../stores/reducers";
-import { loadData } from "../utils/data";
+import { loadData, preloadData } from "../utils/data";
 import styles from "../theme/views/login.module.sass";
 
 export default function WalletLoader() {
@@ -44,6 +44,7 @@ export default function WalletLoader() {
       dispatch(addWallet(walletObj, address, mnemonic));
       dispatch(setProfile(address));
       await loadData();
+      preloadData();
       history.push(wallets.length > 0 ? "/app/home" : "/showcase");
     } catch (err) {
       setToastData({
@@ -82,6 +83,7 @@ export default function WalletLoader() {
 
           dispatch(addWallet(walletObj, address));
           await loadData();
+          preloadData();
           history.push(wallets.length > 0 ? "/app/home" : "/showcase");
         } catch (err) {
           setToastData({

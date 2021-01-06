@@ -2,7 +2,8 @@ import { JWKInterface } from "arweave/node/lib/wallet";
 import { IWalletAction } from "./reducers/wallet";
 import { IBalanceAction } from "./reducers/balance";
 import { IProfileAction } from "./reducers/profile";
-import { ITokenAction, IToken } from "./reducers/tokens";
+import { IAssetsAction, IAsset } from "./reducers/assets";
+import { IToken, ITokensAction } from "./reducers/tokens";
 
 export function addWallet(
   keyfile: JWKInterface,
@@ -46,9 +47,9 @@ export function setProfile(address: string): IProfileAction {
   };
 }
 
-export function setTokens(address: string, tokens: IToken[]): ITokenAction {
+export function setAssets(address: string, tokens: IAsset[]): IAssetsAction {
   return {
-    type: "UPDATE_TOKENS",
+    type: "UPDATE_ASSETS",
     payload: { address, tokens }
   };
 }
@@ -57,9 +58,23 @@ export function setBalance(
   address: string,
   tokenID: string,
   balance: number
-): ITokenAction {
+): IAssetsAction {
   return {
     type: "SET_BALANCE",
     payload: { address, tokenID, balance }
+  };
+}
+
+export function setTokens(tokens: IToken[]): ITokensAction {
+  return {
+    type: "UPDATE_TOKENS",
+    payload: { tokens }
+  };
+}
+
+export function addToken(tokens: IToken[]): ITokensAction {
+  return {
+    type: "ADD_TOKENS",
+    payload: { tokens }
   };
 }

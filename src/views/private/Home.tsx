@@ -27,7 +27,7 @@ import styles from "../../theme/views/home.module.sass";
 export default function Home() {
   const balances = useSelector((state: RootState) => state.balance),
     currentAddress = useSelector((state: RootState) => state.profile),
-    assets = useSelector((state: RootState) => state.token).find(
+    assets = useSelector((state: RootState) => state.assets).find(
       ({ address }) => address === currentAddress
     );
 

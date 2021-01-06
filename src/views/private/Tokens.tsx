@@ -23,7 +23,7 @@ import styles from "../../theme/views/tokens.module.sass";
 export default function Tokens({ history }: RouteComponentProps) {
   const [choose, setChoose] = useState<null | "from" | "to">(null),
     currentAddress = useSelector((state: RootState) => state.profile),
-    assets = useSelector((state: RootState) => state.token).find(
+    assets = useSelector((state: RootState) => state.assets).find(
       ({ address }) => address === currentAddress
     ),
     [tokens, setTokens] = useState<

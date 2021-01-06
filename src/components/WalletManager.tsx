@@ -5,7 +5,7 @@ import { removeWallet, setProfile, signOut } from "../stores/actions";
 import { IonActionSheet, IonToast } from "@ionic/react";
 import { useHistory } from "react-router";
 import { add } from "ionicons/icons";
-import { loadData } from "../utils/data";
+import { loadData, preloadData } from "../utils/data";
 import styles from "../theme/components/WalletManager.module.sass";
 
 export default function WalletManager({
@@ -53,6 +53,7 @@ export default function WalletManager({
                 setToast({ shown: true, text: "Switched wallet" });
               }
               loadData();
+              preloadData();
             }
           })),
           ...(mode === "switch"

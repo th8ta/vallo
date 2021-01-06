@@ -2,76 +2,36 @@ export interface IToken {
   id: string;
   name: string;
   ticker: string;
-  balance: number;
 }
 
-interface IStateItem {
-  address: string;
-  tokens: IToken[];
+export interface ITokensAction {
+  type: "UPDATE_TOKENS" | "ADD_TOKENS";
+  payload: {
+    tokens: IToken[];
+  };
 }
 
-export interface ITokenAction {
-  type: "UPDATE_TOKENS" | "SET_BALANCE";
-  payload: IUpdateTokensPayload | ISetBalancePayload;
-}
-
-interface IBasePayload {
-  address: string;
-}
-
-interface IUpdateTokensPayload extends IBasePayload {
-  tokens: IToken[];
-}
-
-interface ISetBalancePayload extends IBasePayload {
-  tokenID: string;
-  balance: number;
-}
-
-export default function tokenReducer(
-  state: IStateItem[] = [],
-  action: ITokenAction
-): IStateItem[] {
+export default function tokensReducer(
+  state: IToken[] = [],
+  action: ITokensAction
+): IToken[] {
   switch (action.type) {
     case "UPDATE_TOKENS":
-      return isUpdate(action.payload)
-        ? [
-            ...state.filter(
-              ({ address }) => address !== action.payload.address
-            ),
-            { address: action.payload.address, tokens: action.payload.tokens }
-          ]
-        : state;
+      return action.payload.tokens;
 
-    case "SET_BALANCE":
-      return !isUpdate(action.payload)
-        ? state.map((val) =>
-            val.address === action.payload.address
-              ? {
-                  ...val,
-                  tokens: val.tokens.map((token) =>
-                    !isUpdate(action.payload) &&
-                    token.id === action.payload.tokenID
-                      ? {
-                          ...token,
-                          balance: action.payload.balance
-                        }
-                      : token
-                  )
-                }
-              : val
-          )
-        : state;
+    case "ADD_TOKENS":
+      return [
+        ...state.filter(
+          ({ id }) =>
+            action.payload.tokens.map((newTokens) => newTokens.id === id)
+              .length < 1
+        ),
+        ...action.payload.tokens
+      ];
 
     default:
       break;
   }
 
   return state;
-}
-
-function isUpdate(
-  payload: IUpdateTokensPayload | ISetBalancePayload
-): payload is IUpdateTokensPayload {
-  return (payload as IUpdateTokensPayload).tokens !== undefined;
 }

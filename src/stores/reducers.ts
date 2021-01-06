@@ -1,10 +1,12 @@
 import { combineReducers } from "redux";
+
 import wallet from "./reducers/wallet";
 import balance from "./reducers/balance";
 import profile from "./reducers/profile";
-import token from "./reducers/tokens";
+import assets from "./reducers/assets";
+import tokens from "./reducers/tokens";
 
-export const plainReducers = { wallet, balance, profile, token };
+export const plainReducers = { wallet, balance, profile, assets, tokens };
 const reducers = combineReducers(plainReducers);
 
 export default reducers;
