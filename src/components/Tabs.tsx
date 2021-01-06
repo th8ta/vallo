@@ -9,11 +9,14 @@ import {
 import { ArrowSwitchIcon, HomeIcon, PersonIcon } from "@primer/octicons-react";
 import { Route, Redirect } from "react-router";
 import WalletManager from "./WalletManager";
+import { Plugins, HapticsImpactStyle } from "@capacitor/core";
 import styles from "../theme/components/TabBar.module.sass";
 
 import Home from "../views/private/Home";
 import Swap from "../views/private/Swap";
 import Profile from "../views/private/Profile";
+
+const { Haptics } = Plugins;
 
 export default function Tabs() {
   const profileButtonCover = useRef<HTMLDivElement>(null),
@@ -30,7 +33,10 @@ export default function Tabs() {
         onStart() {
           ended = false;
           setTimeout(() => {
-            if (!ended) setSwitcherOpened(true);
+            if (!ended) {
+              setSwitcherOpened(true);
+              Haptics.impact({ style: HapticsImpactStyle.Medium });
+            }
           }, holdTime);
         },
         onEnd() {

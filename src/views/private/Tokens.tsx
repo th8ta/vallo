@@ -41,7 +41,7 @@ export default function Tokens({ history }: RouteComponentProps) {
               routerLink={choose ? `/app/swap` : "/app/token/test"}
             >
               <IonCardContent className="Content">
-                <TokenDisplay id="test" full />
+                <TokenDisplay id="test" name="Verto" ticker="VRT" full />
               </IonCardContent>
               <IonRippleEffect />
             </IonCard>
@@ -50,7 +50,7 @@ export default function Tokens({ history }: RouteComponentProps) {
               routerLink={choose ? `/app/swap` : "/app/token/test"}
             >
               <IonCardContent className="Content">
-                <TokenDisplay id="test" full />
+                <TokenDisplay id="test" name="Verto" ticker="VRT" full />
               </IonCardContent>
               <IonRippleEffect />
             </IonCard>
@@ -59,7 +59,7 @@ export default function Tokens({ history }: RouteComponentProps) {
               routerLink={choose ? `/app/swap` : "/app/token/test"}
             >
               <IonCardContent className="Content">
-                <TokenDisplay id="test" full />
+                <TokenDisplay id="test" name="Verto" ticker="VRT" full />
               </IonCardContent>
               <IonRippleEffect />
             </IonCard>
@@ -68,7 +68,7 @@ export default function Tokens({ history }: RouteComponentProps) {
               routerLink={choose ? `/app/swap` : "/app/token/test"}
             >
               <IonCardContent className="Content">
-                <TokenDisplay id="test" full />
+                <TokenDisplay id="test" name="Verto" ticker="VRT" full />
               </IonCardContent>
               <IonRippleEffect />
             </IonCard>
@@ -77,7 +77,7 @@ export default function Tokens({ history }: RouteComponentProps) {
               routerLink={choose ? `/app/swap` : "/app/token/test"}
             >
               <IonCardContent className="Content">
-                <TokenDisplay id="test" full />
+                <TokenDisplay id="test" name="Verto" ticker="VRT" full />
               </IonCardContent>
               <IonRippleEffect />
             </IonCard>
@@ -86,7 +86,7 @@ export default function Tokens({ history }: RouteComponentProps) {
               routerLink={choose ? `/app/swap` : "/app/token/test"}
             >
               <IonCardContent className="Content">
-                <TokenDisplay id="test" full />
+                <TokenDisplay id="test" name="Verto" ticker="VRT" full />
               </IonCardContent>
               <IonRippleEffect />
             </IonCard>
@@ -95,7 +95,7 @@ export default function Tokens({ history }: RouteComponentProps) {
               routerLink={choose ? `/app/swap` : "/app/token/test"}
             >
               <IonCardContent className="Content">
-                <TokenDisplay id="test" full />
+                <TokenDisplay id="test" name="Verto" ticker="VRT" full />
               </IonCardContent>
               <IonRippleEffect />
             </IonCard>

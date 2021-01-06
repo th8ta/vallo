@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   IonPage,
   IonItem,
@@ -18,11 +18,19 @@ import { qrCodeOutline } from "ionicons/icons";
 import TokenDisplay from "../../components/TokenDisplay";
 import type { RootState } from "../../stores/reducers";
 import { useSelector } from "react-redux";
+import { preloadAssets } from "../../utils/data";
 import styles from "../../theme/views/home.module.sass";
 
 export default function Home() {
   const balances = useSelector((state: RootState) => state.balance),
-    currentAddress = useSelector((state: RootState) => state.profile);
+    currentAddress = useSelector((state: RootState) => state.profile),
+    assets = useSelector((state: RootState) => state.token).find(
+      ({ address }) => address === currentAddress
+    );
+
+  useEffect(() => {
+    preloadAssets();
+  }, []);
 
   return (
     <IonPage>
@@ -57,8 +65,17 @@ export default function Home() {
               <IonCardTitle className="CardTitle">Balances</IonCardTitle>
             </IonCardHeader>
             <IonCardContent className="Content">
-              <TokenDisplay id="test" routerLink="/app/token/test" />
-              <TokenDisplay id="test" routerLink="/app/token/test" />
+              {(assets &&
+                assets.tokens.length > 0 &&
+                assets.tokens.map((pst) => (
+                  <TokenDisplay
+                    id={pst.id}
+                    name={pst.name}
+                    ticker={pst.ticker}
+                    balance={pst.balance}
+                    routerLink={"/app/token/" + pst.id}
+                  />
+                ))) || <p>{"You don't have any tokens"}</p>}
             </IonCardContent>
             <IonItem
               class="CardFooter ion-text-end"

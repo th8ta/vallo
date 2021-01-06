@@ -20,6 +20,7 @@
     "arweave-mnemonic-keys": "0.0.3",
     "cacheweave": "^2.1.0",
     "chart.js": "^2.9.4",
+    "community-js": "^1.1.14",
     "cordova-plugin-app-version": "^0.1.12",
     "ionicons": "^5.0.0",
     "query-string": "^6.13.8",
