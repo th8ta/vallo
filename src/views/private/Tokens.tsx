@@ -15,10 +15,10 @@ import { RouteComponentProps } from "react-router-dom";
 import TokenDisplay from "../../components/TokenDisplay";
 import type { RootState } from "../../stores/reducers";
 import { useSelector } from "react-redux";
-import { preloadAssets } from "../../utils/data";
-import Verto from "@verto/lib";
+import { loadTokens, preloadAssets } from "../../utils/data";
 import ShortTopLayerTitle from "../../components/ShortTopLayerTitle";
 import styles from "../../theme/views/tokens.module.sass";
+import { IToken } from "../../stores/reducers/tokens";
 
 export default function Tokens({ history }: RouteComponentProps) {
   const [choose, setChoose] = useState<null | "from" | "to">(null),
@@ -26,14 +26,7 @@ export default function Tokens({ history }: RouteComponentProps) {
     assets = useSelector((state: RootState) => state.assets).find(
       ({ address }) => address === currentAddress
     ),
-    [tokens, setTokens] = useState<
-      {
-        id: string;
-        name: string;
-        ticker: string;
-        balance?: number;
-      }[]
-    >([]);
+    tokens = useSelector((state: RootState) => state.tokens);
 
   useEffect(() => {
     refresh();
@@ -47,13 +40,21 @@ export default function Tokens({ history }: RouteComponentProps) {
   }, [history]);
 
   async function refresh(e?: CustomEvent<RefresherEventDetail>) {
-    const verto = new Verto();
-
     await preloadAssets();
-    try {
-      setTokens(await verto.popularTokens());
-    } catch {}
+    await loadTokens();
+
     if (e) e.detail.complete();
+  }
+
+  function combinedTokens(): ITokenWithBalance[] {
+    return [
+      ...(assets?.tokens ?? []),
+      ...tokens.filter(({ id }) =>
+        assets && assets.tokens
+          ? assets.tokens.filter((val) => val.id === id).length < 1
+          : true
+      )
+    ];
   }
 
   return (
@@ -73,15 +74,8 @@ export default function Tokens({ history }: RouteComponentProps) {
         <div className="BackgroundLayer">
           <div className={styles.Tokens}>
             {/** TODO: save selected token on click if choose is true */}
-            {assets &&
-              assets.tokens.length > 0 &&
-              [
-                ...assets.tokens,
-                ...tokens.filter(
-                  ({ id }) =>
-                    assets.tokens.filter((val) => val.id === id).length < 1
-                )
-              ].map((pst) => (
+            {combinedTokens().length > 0 &&
+              combinedTokens().map((pst) => (
                 <IonCard
                   className="Card ListItem ion-activatable ripple-parent"
                   routerLink={choose ? `/app/swap` : `/app/token/${pst.id}`}
@@ -98,7 +92,7 @@ export default function Tokens({ history }: RouteComponentProps) {
                   <IonRippleEffect />
                 </IonCard>
               ))}
-            {tokens.length < 1 && (
+            {combinedTokens().length < 6 && (
               <div className={styles.Loading}>
                 <IonSpinner />
               </div>
@@ -108,4 +102,8 @@ export default function Tokens({ history }: RouteComponentProps) {
       </IonContent>
     </IonPage>
   );
+}
+
+interface ITokenWithBalance extends IToken {
+  balance?: number;
 }

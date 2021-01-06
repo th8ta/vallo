@@ -46,7 +46,9 @@ export async function preloadAssets(addr?: string) {
     const assets = await verto.getAssets(address);
 
     stores.dispatch(setAssets(address, assets));
-  } catch {}
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 export async function loadTokens() {
