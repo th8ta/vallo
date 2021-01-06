@@ -51,8 +51,10 @@ export default function Home() {
           <div className={styles.Balance}>
             <p>Wallet Balance</p>
             <h1>
-              {balances.find(({ address }) => address === currentAddress)
-                ?.balance ?? "0.00000000"}
+              {Number(
+                balances.find(({ address }) => address === currentAddress)
+                  ?.balance ?? 0
+              ).toFixed(7)}
               <span>AR</span>
             </h1>
             <div className={styles.ButtonGroup}>

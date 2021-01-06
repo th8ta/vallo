@@ -14,12 +14,10 @@ function loadLocal() {
 
   try {
     for (const reducer in plainReducers) {
-      const serialisedReducer = localStorage.getItem(reducer);
+      const serialisedReducer = localStorage.getItem(`wallet_${reducer}`);
 
       if (serialisedReducer !== null)
-        serialisedState[`wallet_${reducer}`] = JSON.parse(
-          serialisedReducer
-        ).val;
+        serialisedState[reducer] = JSON.parse(serialisedReducer).val;
     }
   } catch {}
   return serialisedState;

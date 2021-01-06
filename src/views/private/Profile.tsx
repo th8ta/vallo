@@ -112,16 +112,18 @@ export default function Profile({ history }: RouteComponentProps) {
                 </IonItem>
               </div>
             </IonCard>
+            <h1
+              className={styles.th8ta + " th8ta"}
+              onClick={() => Browser.open({ url: "https://th8ta.org" })}
+              style={{ cursor: "pointer" }}
+            >
+              th<span>8</span>ta
+              <span className={styles.Version + " NoGradient"}>
+                v {version}
+              </span>
+            </h1>
           </div>
         </div>
-        <h1
-          className="th8ta"
-          onClick={() => Browser.open({ url: "https://th8ta.org" })}
-          style={{ cursor: "pointer" }}
-        >
-          th<span>8</span>ta
-          <span className={styles.Version + " NoGradient"}>v {version}</span>
-        </h1>
         <WalletManager
           opened={walletManager}
           hide={() => setWalletManager(false)}

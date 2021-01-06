@@ -32,7 +32,7 @@ export default function WalletManager({
         }
         buttons={[
           ...wallets.map((wallet) => ({
-            text: wallet.address,
+            text: `${wallet.address.slice(0, 20)}...`,
             cssClass: wallet.address === address ? styles.Active : "",
             handler() {
               if (mode === "delete") {
