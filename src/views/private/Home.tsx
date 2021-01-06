@@ -11,14 +11,17 @@ import {
   IonText,
   IonRouterLink,
   IonRippleEffect,
-  IonIcon
+  IonIcon,
+  IonRefresher,
+  IonRefresherContent
 } from "@ionic/react";
+import { RefresherEventDetail } from "@ionic/core";
 import { ArrowRightIcon } from "@primer/octicons-react";
 import { qrCodeOutline } from "ionicons/icons";
 import TokenDisplay from "../../components/TokenDisplay";
 import type { RootState } from "../../stores/reducers";
 import { useSelector } from "react-redux";
-import { preloadAssets } from "../../utils/data";
+import { preloadAssets, loadData } from "../../utils/data";
 import styles from "../../theme/views/home.module.sass";
 
 export default function Home() {
@@ -32,9 +35,18 @@ export default function Home() {
     preloadAssets();
   }, []);
 
+  async function refresh(e: CustomEvent<RefresherEventDetail>) {
+    await loadData();
+    await preloadAssets();
+    e.detail.complete();
+  }
+
   return (
     <IonPage>
       <IonContent>
+        <IonRefresher slot="fixed" onIonRefresh={refresh}>
+          <IonRefresherContent></IonRefresherContent>
+        </IonRefresher>
         <div className="TopBackgroundSpacer High">
           <div className={styles.Balance}>
             <p>Wallet Balance</p>
