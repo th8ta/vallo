@@ -36,6 +36,7 @@ export default function Routes() {
           <Route path="/app/tokens" component={Tokens} />
           <Route path="/app/token/:tokenid" component={Token} />
           <Route path="/app/trades" component={Trades} />
+          <Route path="/app/orders/:trading_post" component={Trades} />
           <Route path="/app/analytics" component={Analytics} />
           <Route path="/app/trade/:tradeid" component={TradeInfo} />
         </>

@@ -3,6 +3,7 @@ import { IonApp } from "@ionic/react";
 import { VertoProvider } from "@verto/ui";
 import { IonReactRouter } from "@ionic/react-router";
 import { Provider as ReduxProvider } from "react-redux";
+import { ApolloProvider } from "@apollo/client";
 
 import "@ionic/react/css/core.css";
 import "@ionic/react/css/normalize.css";
@@ -16,6 +17,7 @@ import "@ionic/react/css/flex-utils.css";
 import "@ionic/react/css/display.css";
 
 import { useTheme } from "./utils/theme";
+import client from "./utils/apollo";
 import store from "./stores";
 
 import Routes from "./components/Routes";
@@ -27,15 +29,17 @@ const App: React.FunctionComponent = () => {
   const theme = useTheme();
 
   return (
-    <ReduxProvider store={store}>
-      <VertoProvider theme={theme}>
-        <IonApp>
-          <IonReactRouter>
-            <Routes />
-          </IonReactRouter>
-        </IonApp>
-      </VertoProvider>
-    </ReduxProvider>
+    <ApolloProvider client={client}>
+      <ReduxProvider store={store}>
+        <VertoProvider theme={theme}>
+          <IonApp>
+            <IonReactRouter>
+              <Routes />
+            </IonReactRouter>
+          </IonApp>
+        </VertoProvider>
+      </ReduxProvider>
+    </ApolloProvider>
   );
 };
 

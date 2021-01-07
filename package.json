@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@apollo/client": "^3.3.6",
     "@capacitor-community/sqlite": "^2.4.4",
     "@capacitor/android": "2.4.5",
     "@capacitor/cli": "^2.4.5",
@@ -22,6 +23,7 @@
     "chart.js": "^2.9.4",
     "community-js": "^1.1.14",
     "cordova-plugin-app-version": "^0.1.12",
+    "graphql": "^15.4.0",
     "ionicons": "^5.0.0",
     "query-string": "^6.13.8",
     "react": "^17.0.1",

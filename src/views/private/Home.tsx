@@ -56,14 +56,14 @@ export default function Home() {
 
     try {
       setExchanges(
-        (
-          await verto.getExchanges(currentAddress)
-        ).map(({ id, sent, received, status }) => ({
-          id,
-          sent,
-          received,
-          status
-        }))
+        (await verto.getExchanges(currentAddress)).map(
+          ({ id, sent, received, status }) => ({
+            id,
+            sent,
+            received,
+            status
+          })
+        )
       );
     } catch {}
     setLoadingExchanges(false);

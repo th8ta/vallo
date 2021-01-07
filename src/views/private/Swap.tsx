@@ -200,7 +200,7 @@ export default function Swap({ history }: RouteComponentProps) {
               </IonCardContent>
               <IonItem
                 class="CardFooter ion-text-end"
-                routerLink="/app/orders"
+                routerLink="/app/orders/post_id"
                 lines="none"
                 detail={false}
               >
