@@ -82,6 +82,7 @@ export default function WalletLoader() {
             address = await arweave.wallets.jwkToAddress(walletObj);
 
           dispatch(addWallet(walletObj, address));
+          dispatch(setProfile(address));
           await loadData();
           preloadData();
           history.push(wallets.length > 0 ? "/app/home" : "/showcase");

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   IonPage,
   IonItem,
@@ -13,7 +13,8 @@ import {
   IonRippleEffect,
   IonIcon,
   IonRefresher,
-  IonRefresherContent
+  IonRefresherContent,
+  IonSkeletonText
 } from "@ionic/react";
 import { RefresherEventDetail } from "@ionic/core";
 import { ArrowRightIcon } from "@primer/octicons-react";
@@ -22,6 +23,8 @@ import TokenDisplay from "../../components/TokenDisplay";
 import type { RootState } from "../../stores/reducers";
 import { useSelector } from "react-redux";
 import { preloadAssets, loadData } from "../../utils/data";
+import Verto from "@verto/lib";
+import { getStatusColor } from "../../utils/arweave";
 import styles from "../../theme/views/home.module.sass";
 
 export default function Home() {
@@ -29,15 +32,42 @@ export default function Home() {
     currentAddress = useSelector((state: RootState) => state.profile),
     assets = useSelector((state: RootState) => state.assets).find(
       ({ address }) => address === currentAddress
-    );
+    ),
+    [exchanges, setExchanges] = useState<
+      {
+        id: string;
+        sent: string;
+        received: string;
+        status: string;
+      }[]
+    >([]),
+    [loadingExchanges, setLoadingExchanges] = useState(true);
 
   useEffect(() => {
     refresh();
+    // eslint-disable-next-line
   }, []);
 
   async function refresh(e?: CustomEvent<RefresherEventDetail>) {
+    const verto = new Verto();
+
     await loadData();
     await preloadAssets();
+
+    try {
+      setExchanges(
+        (
+          await verto.getExchanges(currentAddress)
+        ).map(({ id, sent, received, status }) => ({
+          id,
+          sent,
+          received,
+          status
+        }))
+      );
+    } catch {}
+    setLoadingExchanges(false);
+
     if (e) e.detail.complete();
   }
 
@@ -81,13 +111,14 @@ export default function Home() {
             <IonCardContent className="Content">
               {(assets &&
                 assets.tokens.length > 0 &&
-                assets.tokens.map((pst) => (
+                assets.tokens.map((pst, i) => (
                   <TokenDisplay
                     id={pst.id}
                     name={pst.name}
                     ticker={pst.ticker}
                     balance={pst.balance}
                     routerLink={"/app/token/" + pst.id}
+                    key={i}
                   />
                 ))) || <p>{"You don't have any tokens"}</p>}
             </IonCardContent>
@@ -108,48 +139,52 @@ export default function Home() {
               <IonCardTitle className="CardTitle">Trade history</IonCardTitle>
             </IonCardHeader>
             <IonCardContent>
-              <IonItem
-                className={
-                  styles.HistoryItem + " ion-activatable ripple-parent"
-                }
-                lines="none"
-                routerLink="/app/trade/test"
-                detail={false}
-              >
-                10 AR
-                <ArrowRightIcon size={16} />
-                100 VRT
-                <div className={styles.Status + " " + styles.Warning}></div>
-                <IonRippleEffect />
-              </IonItem>
-              <IonItem
-                className={
-                  styles.HistoryItem + " ion-activatable ripple-parent"
-                }
-                lines="none"
-                routerLink="/app/trade/test"
-                detail={false}
-              >
-                10 AR
-                <ArrowRightIcon size={16} />
-                100 VRT
-                <div className={styles.Status + " " + styles.Success}></div>
-                <IonRippleEffect />
-              </IonItem>
-              <IonItem
-                className={
-                  styles.HistoryItem + " ion-activatable ripple-parent"
-                }
-                lines="none"
-                routerLink="/app/trade/test"
-                detail={false}
-              >
-                10 AR
-                <ArrowRightIcon size={16} />
-                100 VRT
-                <div className={styles.Status + " " + styles.Error}></div>
-                <IonRippleEffect />
-              </IonItem>
+              {!loadingExchanges &&
+                exchanges.map((exchange, i) => (
+                  <IonItem
+                    className={
+                      styles.HistoryItem + " ion-activatable ripple-parent"
+                    }
+                    lines="none"
+                    routerLink={`/app/trade/${exchange.id}`}
+                    detail={false}
+                    key={i}
+                  >
+                    {exchange.sent}
+                    <ArrowRightIcon size={16} />
+                    {exchange.received}
+                    <div
+                      className={
+                        styles.Status +
+                        " " +
+                        styles[getStatusColor(exchange.status)]
+                      }
+                    ></div>
+                    <IonRippleEffect />
+                  </IonItem>
+                ))}
+              {!loadingExchanges && exchanges.length < 1 && (
+                <p>You have not yet made an exchange.</p>
+              )}
+              {loadingExchanges &&
+                Array(5)
+                  .fill("_")
+                  .map((_, i) => (
+                    <IonItem
+                      className={styles.HistoryItem}
+                      lines="none"
+                      detail={false}
+                      key={i}
+                    >
+                      <IonSkeletonText
+                        style={{
+                          width: "100%",
+                          height: "1.3em",
+                          borderRadius: "3px"
+                        }}
+                      />
+                    </IonItem>
+                  ))}
             </IonCardContent>
             <IonItem
               class="CardFooter ion-text-end"

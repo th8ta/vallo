@@ -18,3 +18,20 @@ export async function getCommunityLogo(id: string) {
 
   return undefined;
 }
+
+export function getStatusColor(
+  status: string
+): "Success" | "Warning" | "Error" {
+  switch (status) {
+    case "success":
+      return "Success";
+
+    case "pending":
+      return "Warning";
+
+    default:
+      break;
+  }
+
+  return "Error";
+}

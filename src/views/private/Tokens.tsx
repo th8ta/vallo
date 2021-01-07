@@ -75,10 +75,12 @@ export default function Tokens({ history }: RouteComponentProps) {
           <div className={styles.Tokens}>
             {/** TODO: save selected token on click if choose is true */}
             {combinedTokens().length > 0 &&
-              combinedTokens().map((pst) => (
+              combinedTokens().map((pst, i) => (
                 <IonCard
                   className="Card ListItem ion-activatable ripple-parent"
                   routerLink={choose ? `/app/swap` : `/app/token/${pst.id}`}
+                  disabled={choose === "from" && !pst.balance}
+                  key={i}
                 >
                   <IonCardContent className="Content">
                     <TokenDisplay

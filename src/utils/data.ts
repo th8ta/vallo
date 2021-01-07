@@ -29,11 +29,9 @@ export async function loadData() {
 }
 
 export async function preloadData() {
-  const address = stores.getState().profile,
-    wallets = stores.getState().wallet;
+  const wallets = stores.getState().wallet;
 
   await loadTokens();
-  await preloadAssets(address);
 
   for (const wallet of wallets) await preloadAssets(wallet.address);
 }
