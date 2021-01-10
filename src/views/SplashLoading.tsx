@@ -3,7 +3,7 @@ import vertoLogo from "../assets/logo.png";
 import vertoLogoDark from "../assets/logo_dark.png";
 import { IonPage, IonContent } from "@ionic/react";
 import { useTheme } from "../utils/theme";
-import { loadData } from "../utils/data";
+import { loadData, preloadData } from "../utils/data";
 import { useSelector } from "react-redux";
 import { RouteComponentProps } from "react-router";
 import type { RootState } from "../stores/reducers";
@@ -21,6 +21,7 @@ export default function SplashLoading({ history }: RouteComponentProps) {
 
   async function load() {
     await loadData();
+    preloadData(); // no async
     history.push("/app/home");
   }
 

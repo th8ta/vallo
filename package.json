@@ -14,6 +14,7 @@
     "@ionic-native/theme-detection": "^5.30.0",
     "@ionic/react": "^5.0.7",
     "@ionic/react-router": "^5.0.7",
+    "@limestonefi/api": "^0.1.2",
     "@primer/octicons-react": "^11.2.0",
     "@verto/lib": "^0.8.4",
     "@verto/ui": "0.0.2",

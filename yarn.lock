@@ -1460,6 +1460,14 @@
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^13.0.0"
 
+"@limestonefi/api@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@limestonefi/api/-/api-0.1.2.tgz#eb37452ba5a2beede83dee8e965e14cee5e8b8f6"
+  integrity sha512-DoPctY3eGFwGnkqR5Ejom268PSYg+MpHwQ+hTRVrzNUE0YYeKZQYqnVF3vkeHzUdsIaFi/+YbgD+yfl+Cnr7qg==
+  dependencies:
+    ar-gql "^0.0.3"
+    arweave "^1.10.0"
+
 "@lordvlad/asn1.js@^5.1.1":
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/@lordvlad/asn1.js/-/asn1.js-5.1.1.tgz#468d5ff5f9045e0951a7d0e89a33e5f26a252df3"
