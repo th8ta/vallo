@@ -299,6 +299,7 @@ export default function Token({ history, match }: TokenProps) {
                       )) || (
                         <IonSkeletonText
                           style={{
+                            display: "inline-block",
                             height: ".93em",
                             width: "3.4em",
                             borderRadius: "3px"

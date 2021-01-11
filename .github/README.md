@@ -9,8 +9,7 @@
 - [x] Profile view
 - [ ] All trades view
 - [ ] All orders for trading post view
-- [ ] Token info view
-- [ ] Trade info view (functionality from Orbit)
+- [x] Token info view
 - [ ] Analytics view
 - [ ] Token select view
 
@@ -18,6 +17,7 @@
 - [ ] SQLite state cache
 - [ ] Sideshow on first login
 - [ ] Generate wallet
+- [ ] Trade info view (functionality from Orbit)
 - [ ] Swap
 - [ ] Transfer
 - [ ] Buy

@@ -1877,10 +1877,10 @@
     node-fetch "^2.6.1"
     smartweave "^0.4.13"
 
-"@verto/ui@0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@verto/ui/-/ui-0.0.2.tgz#7f3044781729ca5fc458acae5671597cda375043"
-  integrity sha512-JFUI8WWSk3AUX2VW8B55rZke3IhT92qtPxoKnZNWdn9P4vBH4hTmHgo/lMkSnUzKGyZy5xsmXVn/Kr+tMMtfVQ==
+"@verto/ui@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@verto/ui/-/ui-0.0.3.tgz#249fbe5cbfa7283b9011a511feb7a11752fa6790"
+  integrity sha512-SACi1Hhj74jvBZlhBvAD1/EW1IrKneiDASSibv5bNnnne2j4uQCP2oqqTbjQnghuIZekpPnvtKBr+uMid9eD5w==
   dependencies:
     "@geist-ui/react-icons" "^1.0.1"
     "@geist-ui/style" "^2.0.0"
