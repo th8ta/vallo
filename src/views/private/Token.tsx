@@ -9,13 +9,20 @@ import {
   IonButton,
   IonRefresher,
   IonRefresherContent,
-  IonSkeletonText
+  IonSkeletonText,
+  IonToast,
+  IonSpinner
 } from "@ionic/react";
 import { RefresherEventDetail } from "@ionic/core";
 import { RouteComponentProps } from "react-router-dom";
 import ShortTopLayerTitle from "../../components/ShortTopLayerTitle";
 import { Line } from "react-chartjs-2";
-import { GraphOptions, GraphDataConfig, addZero } from "../../utils/graph";
+import {
+  GraphOptions,
+  GraphDataConfig,
+  addZero,
+  addSpaces
+} from "../../utils/graph";
 import { Plugins } from "@capacitor/core";
 import { arweaveInstance } from "../../utils/arweave";
 import Community from "community-js";
@@ -24,7 +31,6 @@ import Verto from "@verto/lib";
 import { StateInterface } from "community-js/lib/faces";
 import { useSelector } from "react-redux";
 import { RootState } from "../../stores/reducers";
-import { IToken } from "../../stores/reducers/tokens";
 import { useTheme } from "../../utils/theme";
 import logo_light from "../../assets/logo.png";
 import logo_dark from "../../assets/logo_dark.png";
@@ -51,14 +57,27 @@ export default function Token({ history, match }: TokenProps) {
       totalSupply?: number;
       marketCap?: number;
     }>({}),
+    [graphInfo, setGraphInfo] = useState<{
+      latestPrice?: number;
+      dates?: number[];
+      prices?: number[];
+      percentage?: number;
+      percentageIncreased?: boolean;
+    }>({}),
     address = useSelector((state: RootState) => state.profile),
     assets = useSelector((state: RootState) => state.assets).find(
       (val) => val.address === address
     ),
-    theme = useTheme();
+    theme = useTheme(),
+    [toastData, setToastData] = useState<{
+      color?: string;
+      text: string;
+      shown: boolean;
+    }>({ text: "", shown: false });
 
   useEffect(() => {
     refresh();
+    // eslint-disable-next-line
   }, []);
 
   async function refresh(e?: CustomEvent<RefresherEventDetail>) {
@@ -68,7 +87,10 @@ export default function Token({ history, match }: TokenProps) {
       );
 
       if (assetToken)
-        setCommunityInfo((val) => ({ ...val, balance: assetToken.balance }));
+        setCommunityInfo((val) => ({
+          ...val,
+          balance: assetToken.balance ?? 0
+        }));
       else setCommunityInfo((val) => ({ ...val, balance: 0 }));
     }
 
@@ -103,11 +125,14 @@ export default function Token({ history, match }: TokenProps) {
     }));
 
     const arPrice = (await limestone.getPrice("AR")).price,
-      usdPrice =
-        ((await verto.latestPrice(match.params.tokenid)) ?? 0) * arPrice,
+      latestPrice = (await verto.latestPrice(match.params.tokenid)) ?? 0,
+      usdPrice = latestPrice * arPrice,
       marketCap = usdPrice * totalSupply;
 
+    setGraphInfo((val) => ({ ...val, latestPrice }));
     setCommunityInfo((val) => ({ ...val, arPrice, marketCap }));
+
+    await loadGraphData();
 
     if (e) e.detail.complete();
   }
@@ -127,6 +152,40 @@ export default function Token({ history, match }: TokenProps) {
     return vaultBalance + circulatingSupply;
   }
 
+  async function loadGraphData() {
+    try {
+      const allPrices = await verto.price(match.params.tokenid);
+
+      if (!allPrices)
+        return setToastData({
+          shown: true,
+          text: "Could not load data for graph",
+          color: "danger"
+        });
+
+      const dates = allPrices.prices,
+        prices = allPrices.prices,
+        firstPrice = prices[0],
+        lastPrice = prices[prices.length - 1],
+        percentage = ((lastPrice - firstPrice) / firstPrice) * 100,
+        percentageIncreased = lastPrice >= firstPrice;
+
+      setGraphInfo((val) => ({
+        ...val,
+        dates,
+        prices,
+        percentage,
+        percentageIncreased
+      }));
+    } catch {
+      setToastData({
+        shown: true,
+        text: "Could not load data for graph",
+        color: "danger"
+      });
+    }
+  }
+
   return (
     <IonPage>
       <IonContent>
@@ -135,7 +194,10 @@ export default function Token({ history, match }: TokenProps) {
         </IonRefresher>
         <div className="TopBackgroundSpacer">
           <div className="ShortTitle">
-            <ShortTopLayerTitle title="Verto" back={() => history.goBack()} />
+            <ShortTopLayerTitle
+              title={communityInfo.token ? communityInfo.token.name : ""}
+              back={() => history.goBack()}
+            />
           </div>
         </div>
         <div className="BackgroundLayer">
@@ -183,7 +245,7 @@ export default function Token({ history, match }: TokenProps) {
                     )}
                   </h1>
                   <span>
-                    {(communityInfo.balance &&
+                    {(communityInfo.balance !== undefined &&
                       communityInfo.token &&
                       `${communityInfo.balance.toFixed(2)} ${
                         communityInfo.token.ticker
@@ -211,33 +273,63 @@ export default function Token({ history, match }: TokenProps) {
                     )}
                   </h1>
                   <h1>
-                    0.0050 AR
-                    <span className={styles.Increase}>+425.00%</span>
+                    {(graphInfo.latestPrice && (
+                      <>{addZero(graphInfo.latestPrice)} AR</>
+                    )) || (
+                      <IonSkeletonText
+                        style={{
+                          height: "1.15em",
+                          width: "3.75em",
+                          borderRadius: "3px"
+                        }}
+                      />
+                    )}
+                    <span
+                      className={
+                        graphInfo.percentageIncreased
+                          ? styles.Increase
+                          : styles.Decrease
+                      }
+                    >
+                      {(graphInfo.percentage !== undefined && (
+                        <>
+                          {graphInfo.percentageIncreased && "+"}
+                          {graphInfo.percentage.toFixed(2)}%
+                        </>
+                      )) || (
+                        <IonSkeletonText
+                          style={{
+                            height: ".93em",
+                            width: "3.4em",
+                            borderRadius: "3px"
+                          }}
+                        />
+                      )}
+                    </span>
                   </h1>
                 </div>
                 <div className={styles.Graph}>
-                  <Line
-                    data={{
-                      labels: [
-                        "January",
-                        "February",
-                        "March",
-                        "April",
-                        "May",
-                        "June",
-                        "July"
-                      ],
-                      datasets: [
-                        {
-                          data: [1, 2, 10, 7, 8, 3, 2],
-                          ...GraphDataConfig
-                        }
-                      ]
-                    }}
-                    options={GraphOptions({
-                      tooltipText: ({ value }) => `${addZero(value)} AR`
-                    })}
-                  />
+                  {(graphInfo.dates && graphInfo.prices && (
+                    <Line
+                      data={{
+                        labels: graphInfo.dates,
+                        datasets: [
+                          {
+                            label: "AR",
+                            data: graphInfo.prices,
+                            ...GraphDataConfig
+                          }
+                        ]
+                      }}
+                      options={GraphOptions({
+                        tooltipText: ({ value }) => `${addZero(value)} AR`
+                      })}
+                    />
+                  )) || (
+                    <div className={styles.Loading}>
+                      <IonSpinner />
+                    </div>
+                  )}
                 </div>
               </IonCardContent>
             </IonCard>
@@ -246,26 +338,45 @@ export default function Token({ history, match }: TokenProps) {
                 <IonCardTitle className="CardTitle">About</IonCardTitle>
               </IonCardHeader>
               <IonCardContent className={"Content " + styles.About}>
-                <p>A decentralized token exchange protocol on Arweave.</p>
+                <p className={styles.Description}>
+                  {communityInfo.description ??
+                    Array(3)
+                      .fill("_")
+                      .map((_, i) => (
+                        <IonSkeletonText
+                          key={i}
+                          style={{
+                            height: "1.05em",
+                            width: i === 2 ? "75%" : "100%",
+                            borderRadius: "3px",
+                            marginBottom: ".6em"
+                          }}
+                        />
+                      ))}
+                </p>
                 <ul className={styles.Links}>
-                  <li>
-                    <p
-                      onClick={() =>
-                        Browser.open({ url: "https://verto.exchange" })
-                      }
-                    >
-                      verto.exchange
-                    </p>
-                  </li>
-                  <li>
-                    <p
-                      onClick={() =>
-                        Browser.open({ url: "https://verto.exchange/chat" })
-                      }
-                    >
-                      verto.exhange/chat
-                    </p>
-                  </li>
+                  {(communityInfo.links &&
+                    communityInfo.links.map((url, i) => (
+                      <li key={i}>
+                        <p onClick={() => Browser.open({ url })}>
+                          {url.replace(/(http|https):\/\//g, "")}
+                        </p>
+                      </li>
+                    ))) ||
+                    Array(3)
+                      .fill("_")
+                      .map((_, i) => (
+                        <li key={i}>
+                          <IonSkeletonText
+                            style={{
+                              height: ".93em",
+                              width: "67%",
+                              borderRadius: "3px",
+                              marginBottom: i !== 3 ? ".625rem" : "0"
+                            }}
+                          />
+                        </li>
+                      ))}
                 </ul>
               </IonCardContent>
             </IonCard>
@@ -275,9 +386,55 @@ export default function Token({ history, match }: TokenProps) {
               </IonCardHeader>
               <IonCardContent className={"Content " + styles.Metrics}>
                 <p>
-                  Market Cap: ~0.5 USD <br />
-                  Circulating Supply: 134,491,003 <br />
-                  Total Supply: 258,125,000 <br />
+                  {(communityInfo.marketCap && (
+                    <>
+                      Market Cap: ~
+                      {addSpaces(
+                        Math.round(communityInfo.marketCap).toFixed(2)
+                      )}{" "}
+                      USD
+                      <br />
+                    </>
+                  )) || (
+                    <IonSkeletonText
+                      style={{
+                        height: "1.05em",
+                        width: "100%",
+                        borderRadius: "3px",
+                        marginBottom: ".44em"
+                      }}
+                    />
+                  )}
+                  {(communityInfo.circulatingSupply && (
+                    <>
+                      Circulating Supply:{" "}
+                      {addSpaces(communityInfo.circulatingSupply)}
+                      <br />
+                    </>
+                  )) || (
+                    <IonSkeletonText
+                      style={{
+                        height: "1.05em",
+                        width: "100%",
+                        borderRadius: "3px",
+                        marginBottom: ".44em"
+                      }}
+                    />
+                  )}
+                  {(communityInfo.totalSupply && (
+                    <>
+                      Total Supply: {addSpaces(communityInfo.totalSupply)}
+                      <br />
+                    </>
+                  )) || (
+                    <IonSkeletonText
+                      style={{
+                        height: "1.05em",
+                        width: "100%",
+                        borderRadius: "3px"
+                      }}
+                    />
+                  )}
                 </p>
               </IonCardContent>
             </IonCard>
@@ -305,6 +462,14 @@ export default function Token({ history, match }: TokenProps) {
           </IonButton>
         </div>
       </IonContent>
+      <IonToast
+        isOpen={toastData.shown}
+        onDidDismiss={() => setToastData((val) => ({ ...val, shown: false }))}
+        message={toastData.text}
+        duration={2000}
+        position="bottom"
+        color={toastData.color}
+      />
     </IonPage>
   );
 }

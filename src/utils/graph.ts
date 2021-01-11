@@ -82,3 +82,7 @@ export function addZero(val: string | number): string {
     ? ("0" + Number(val)).slice(-2)
     : val.toString();
 }
+
+export function addSpaces(val: string | number): string {
+  return String(val).replace(/(?!^)(?=(?:\d{3})+(?:\.|$))/gm, ",");
+}

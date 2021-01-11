@@ -44,10 +44,15 @@
   align-items: flex-start
   justify-content: space-between
   font-family: var(--code-font-family)
+  margin-bottom: .5em
 
   h1
     font-size: 1.85em
     color: var(--ion-color-light-contrast)
+
+    &:last-child
+      text-align: right
+      align-items: end
 
     span
       display: block
@@ -69,6 +74,9 @@
     a
       color: var(--ion-color-primary)
       cursor: pointer
+
+  .Description
+    text-align: justify
 
   ul > li
     padding-left: .6em
@@ -96,3 +104,10 @@
 
 .Graph
   position: relative
+  min-height: 150px
+
+  .Loading
+    position: absolute
+    top: 50%
+    left: 50%
+    transform: translate(-50%, -50%)
