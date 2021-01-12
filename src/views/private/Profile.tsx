@@ -161,7 +161,13 @@ export default function Profile({ history }: RouteComponentProps) {
           />
         </Modal.Content>
         <Modal.Footer>
-          <Modal.Action onClick={() => setAddressModal(false)}>Ok</Modal.Action>
+          <Modal.Action
+            onClick={() => setAddressModal(false)}
+            className="ion-activatable ripple-parent action-button"
+          >
+            Ok
+            <IonRippleEffect />
+          </Modal.Action>
         </Modal.Footer>
       </Modal>
     </IonPage>

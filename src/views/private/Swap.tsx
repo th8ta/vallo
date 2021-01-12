@@ -249,7 +249,7 @@ export default function Swap({ history }: RouteComponentProps) {
             <IonCard className={"Card " + styles.SwapForm}>
               <IonCardContent className="Content">
                 <Input
-                  value="10"
+                  value="0"
                   label="You send"
                   type="number"
                   className={styles.Input}
@@ -259,12 +259,12 @@ export default function Swap({ history }: RouteComponentProps) {
                     className={styles.Ticker}
                     onClick={() => history.push("/app/tokens?choose=from")}
                   >
-                    VRT
+                    {getSwapItemTokens().from?.ticker ?? "---"}
                     <ChevronRightIcon />
                   </div>
                 </Input>
                 <Input
-                  value="1"
+                  value="0"
                   label="You recieve"
                   type="number"
                   className={styles.Input}
@@ -274,7 +274,7 @@ export default function Swap({ history }: RouteComponentProps) {
                     className={styles.Ticker}
                     onClick={() => history.push("/app/tokens?choose=to")}
                   >
-                    AR
+                    {getSwapItemTokens().to?.ticker ?? "---"}
                     <ChevronRightIcon />
                   </div>
                 </Input>

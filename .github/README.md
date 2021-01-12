@@ -11,11 +11,11 @@
 - [ ] All orders for trading post view
 - [x] Token info view
 - [ ] Analytics view
-- [ ] Token select view
+- [x] Token select view
 
 ### Functionality
 - [ ] SQLite state cache
-- [ ] Sideshow on first login
+- [ ] Slideshow on first login
 - [ ] Generate wallet
 - [ ] Trade info view (functionality from Orbit)
 - [ ] Swap

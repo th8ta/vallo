@@ -25,6 +25,7 @@ import { useSelector } from "react-redux";
 import { preloadAssets, loadData } from "../../utils/data";
 import Verto from "@verto/lib";
 import { Modal } from "@verto/ui";
+import TransferModal from "../../components/TransferModal";
 import { getStatusColor } from "../../utils/arweave";
 import { useTheme } from "../../utils/theme";
 import { QRCode } from "react-qr-svg";
@@ -47,6 +48,7 @@ export default function Home() {
     >([]),
     [loadingExchanges, setLoadingExchanges] = useState(true),
     [addressModal, setAddressModal] = useState(false),
+    [transferModal, setTransferModal] = useState(false),
     theme = useTheme();
 
   useEffect(() => {
@@ -98,7 +100,10 @@ export default function Home() {
                 Buy
                 <IonRippleEffect />
               </IonRouterLink>
-              <div className={styles.Link + " ion-activatable ripple-parent"}>
+              <div
+                className={styles.Link + " ion-activatable ripple-parent"}
+                onClick={() => setTransferModal(true)}
+              >
                 Transfer
                 <IonRippleEffect />
               </div>
@@ -225,8 +230,21 @@ export default function Home() {
           />
         </Modal.Content>
         <Modal.Footer>
-          <Modal.Action onClick={() => setAddressModal(false)}>Ok</Modal.Action>
+          <Modal.Action
+            onClick={() => setAddressModal(false)}
+            className="ion-activatable ripple-parent action-button"
+          >
+            Ok
+            <IonRippleEffect />
+          </Modal.Action>
         </Modal.Footer>
+      </Modal>
+      <Modal
+        open={transferModal}
+        backdrop={true}
+        onClose={() => setTransferModal(false)}
+      >
+        <TransferModal close={() => setTransferModal(false)} />
       </Modal>
     </IonPage>
   );
