@@ -30,6 +30,7 @@ export default function Tokens({ history }: RouteComponentProps) {
     ),
     tokens = useSelector((state: RootState) => state.tokens),
     swapItems = useSelector((state: RootState) => state.swap),
+    balances = useSelector((state: RootState) => state.balance),
     dispatch = useDispatch();
 
   useEffect(() => {
@@ -101,7 +102,51 @@ export default function Tokens({ history }: RouteComponentProps) {
         </div>
         <div className="BackgroundLayer">
           <div className={styles.Tokens}>
-            {/** TODO: save selected token on click if choose is true */}
+            {/** TODO: if choose is true, add ETH and AR to the list */}
+            {choose && (
+              <>
+                <IonCard
+                  className="Card ListItem ion-activatable ripple-parent"
+                  onClick={() => {
+                    if (!choose) return;
+                    selectToken("AR_COIN");
+                  }}
+                >
+                  <IonCardContent className="Content">
+                    <TokenDisplay
+                      id="AR_COIN"
+                      name="Arweave"
+                      ticker="AR"
+                      full
+                      balance={Number(
+                        balances.find(
+                          ({ address }) => address === currentAddress
+                        )?.balance ?? 0
+                      )}
+                    />
+                  </IonCardContent>
+                  <IonRippleEffect />
+                </IonCard>
+                <IonCard
+                  className="Card ListItem ion-activatable ripple-parent"
+                  onClick={() => {
+                    if (!choose) return;
+                    selectToken("ETH_COIN");
+                  }}
+                >
+                  <IonCardContent className="Content">
+                    <TokenDisplay
+                      id="ETH_COIN"
+                      name="Etherum"
+                      ticker="ETH"
+                      full
+                      hideBalance
+                    />
+                  </IonCardContent>
+                  <IonRippleEffect />
+                </IonCard>
+              </>
+            )}
             {combinedTokens().length > 0 &&
               combinedTokens().map((pst, i) => (
                 <IonCard

@@ -11,6 +11,8 @@ import { useTheme } from "../utils/theme";
 import { QuestionIcon } from "@primer/octicons-react";
 import logo_light from "../assets/logo.png";
 import logo_dark from "../assets/logo_dark.png";
+import ETH from "./chain_logos/Etherum";
+import AR from "./chain_logos/Arweave";
 import styles from "../theme/components/TokenDisplay.module.sass";
 
 export default function TokenDisplay({
@@ -19,7 +21,8 @@ export default function TokenDisplay({
   ticker,
   balance,
   routerLink,
-  full
+  full,
+  hideBalance = false
 }: TokenDisplayProps) {
   const [logo, setLogo] = useState<string>(),
     [loadingLogo, setLoadingLogo] = useState(true),
@@ -31,7 +34,11 @@ export default function TokenDisplay({
   }, [id]);
 
   async function loadLogo() {
-    if (ticker.toUpperCase() === "VRT") {
+    if (
+      ticker.toUpperCase() === "VRT" ||
+      id === "AR_COIN" ||
+      id === "ETH_COIN"
+    ) {
       setLoadingLogo(false);
       return setLogo(undefined);
     }
@@ -55,18 +62,25 @@ export default function TokenDisplay({
       {(loadingLogo && (
         <IonSkeletonText animated className={styles.LoadingLogo} />
       )) ||
-        ((logo || ticker.toUpperCase() === "VRT") && (
-          <img
-            className={styles.Logo}
-            src={
-              logo
-                ? `https://arweave.net/${logo}`
-                : theme === "Dark"
-                ? logo_dark
-                : logo_light
-            }
-            alt={ticker + "-logo"}
-          />
+        ((logo || ticker.toUpperCase() === "VRT") &&
+          id !== "AR_COIN" &&
+          id !== "ETH_COIN" && (
+            <img
+              className={styles.Logo}
+              src={
+                logo
+                  ? `https://arweave.net/${logo}`
+                  : theme === "Dark"
+                  ? logo_dark
+                  : logo_light
+              }
+              alt={ticker + "-logo"}
+            />
+          )) ||
+        ((id === "AR_COIN" || id === "ETH_COIN") && (
+          <div className={styles.Logo}>
+            {(id === "AR_COIN" && <AR />) || <ETH />}
+          </div>
         )) || (
           <div className={styles.NoLogo}>
             <QuestionIcon />
@@ -75,9 +89,11 @@ export default function TokenDisplay({
       <IonLabel className={styles.PST}>
         {name} {full && <span className={styles.Ticker}>{ticker}</span>}
       </IonLabel>
-      <IonText slot="end" className={styles.Balance}>
-        {(balance ?? 0).toFixed(2)} {ticker}
-      </IonText>
+      {!hideBalance && (
+        <IonText slot="end" className={styles.Balance}>
+          {(balance ?? 0).toFixed(id === "AR_COIN" ? 5 : 2)} {ticker}
+        </IonText>
+      )}
       {!full && <IonRippleEffect />}
     </IonItem>
   );
@@ -90,4 +106,5 @@ interface TokenDisplayProps {
   balance?: number;
   routerLink?: string;
   full?: boolean;
+  hideBalance?: boolean;
 }
