@@ -76,13 +76,18 @@
     position: relative
     overflow: hidden
     border-radius: 100%
-    padding: .3em
+    width: 2em
+    height: 2em
 
     &:not(.Static)
       cursor: pointer
 
     svg
+      position: absolute
+      top: 50%
+      left: 50%
       color: var(--ion-color-light-contrast)
       width: .9em
       height: .9em
       font-size: 1.8em
+      transform: translate(-50%, -50%)

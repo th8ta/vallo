@@ -111,6 +111,12 @@ export default function Swap({ history }: RouteComponentProps) {
     setSwapItemLogos({ from, to });
   }
 
+  function swapTokens() {
+    if (!assets) return;
+    if (!assets.tokens.find(({ id }) => id === swapItems.to)) return;
+    dispatch(updateSwapItems({ from: swapItems.to, to: swapItems.from }));
+  }
+
   return (
     <IonPage>
       <IonContent>
@@ -181,6 +187,7 @@ export default function Swap({ history }: RouteComponentProps) {
                   className={
                     SwapItemsStyle.Arrows + " ion-activatable ripple-parent"
                   }
+                  onClick={swapTokens}
                 >
                   <ArrowSwitchIcon />
                   <IonRippleEffect />
