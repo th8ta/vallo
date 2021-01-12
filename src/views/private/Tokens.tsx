@@ -14,11 +14,13 @@ import { parse as parseQueries } from "query-string";
 import { RouteComponentProps } from "react-router-dom";
 import TokenDisplay from "../../components/TokenDisplay";
 import type { RootState } from "../../stores/reducers";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loadTokens, preloadAssets } from "../../utils/data";
+import { IToken } from "../../stores/reducers/tokens";
+import { ISwap } from "../../stores/reducers/swap";
+import { updateSwapItems } from "../../stores/actions";
 import ShortTopLayerTitle from "../../components/ShortTopLayerTitle";
 import styles from "../../theme/views/tokens.module.sass";
-import { IToken } from "../../stores/reducers/tokens";
 
 export default function Tokens({ history }: RouteComponentProps) {
   const [choose, setChoose] = useState<null | "from" | "to">(null),
@@ -26,7 +28,9 @@ export default function Tokens({ history }: RouteComponentProps) {
     assets = useSelector((state: RootState) => state.assets).find(
       ({ address }) => address === currentAddress
     ),
-    tokens = useSelector((state: RootState) => state.tokens);
+    tokens = useSelector((state: RootState) => state.tokens),
+    swapItems = useSelector((state: RootState) => state.swap),
+    dispatch = useDispatch();
 
   useEffect(() => {
     refresh();
@@ -57,6 +61,30 @@ export default function Tokens({ history }: RouteComponentProps) {
     ];
   }
 
+  // select a token
+  function selectToken(id: string) {
+    if (!choose) return;
+
+    // update the swap items according to the select mode ("to" or "from")
+    let update: ISwap =
+      choose === "to" ? { ...swapItems, to: id } : { ...swapItems, from: id };
+
+    // swap the items, if the selected was the same
+    if (update.to === update.from && update.to !== undefined)
+      if (
+        choose === "to" &&
+        !assets?.tokens.find(({ id }) => id === swapItems.to)
+      )
+        return history.push("/app/swap");
+      else
+        update =
+          choose === "to"
+            ? { ...update, from: swapItems.to }
+            : { ...update, to: swapItems.from };
+
+    dispatch(updateSwapItems(update));
+  }
+
   return (
     <IonPage>
       <IonContent>
@@ -81,6 +109,11 @@ export default function Tokens({ history }: RouteComponentProps) {
                   routerLink={choose ? `/app/swap` : `/app/token/${pst.id}`}
                   disabled={choose === "from" && !pst.balance}
                   key={i}
+                  onClick={() => {
+                    if (!choose) return;
+                    if (choose === "from" && !pst.balance) return;
+                    selectToken(pst.id);
+                  }}
                 >
                   <IonCardContent className="Content">
                     <TokenDisplay

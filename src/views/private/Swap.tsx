@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   IonPage,
   IonContent,
@@ -11,28 +11,112 @@ import {
   IonRippleEffect,
   IonButton,
   IonCardHeader,
-  IonCardTitle
+  IonCardTitle,
+  IonRefresher,
+  IonRefresherContent,
+  IonSkeletonText
 } from "@ionic/react";
+import { RefresherEventDetail } from "@ionic/core";
 import { Input } from "@verto/ui";
 import {
   ArrowRightIcon,
   ArrowSwitchIcon,
-  ChevronRightIcon
+  ChevronRightIcon,
+  QuestionIcon
 } from "@primer/octicons-react";
 import { RouteComponentProps } from "react-router-dom";
 import ShortTopLayerTitle from "../../components/ShortTopLayerTitle";
 import type { RootState } from "../../stores/reducers";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { updateSwapItems } from "../../stores/actions";
+import { IToken } from "../../stores/reducers/tokens";
+import { loadTokens, preloadAssets } from "../../utils/data";
+import { getCommunityLogo } from "../../utils/arweave";
+import logo_light from "../../assets/logo.png";
+import logo_dark from "../../assets/logo_dark.png";
+import { useTheme } from "../../utils/theme";
 import styles from "../../theme/views/swap.module.sass";
 import SwapItemsStyle from "../../theme/components/Swap.module.sass";
 
 export default function Swap({ history }: RouteComponentProps) {
   const balances = useSelector((state: RootState) => state.balance),
-    currentAddress = useSelector((state: RootState) => state.profile);
+    currentAddress = useSelector((state: RootState) => state.profile),
+    assets = useSelector((state: RootState) => state.assets).find(
+      ({ address }) => address === currentAddress
+    ),
+    tokens = useSelector((state: RootState) => state.tokens),
+    swapItems = useSelector((state: RootState) => state.swap),
+    dispatch = useDispatch(),
+    [swapItemLogos, setSwapItemLogos] = useState<{
+      from?: string;
+      to?: string;
+    }>({
+      from: "loading",
+      to: "loading"
+    }),
+    theme = useTheme();
+
+  useEffect(() => {
+    refresh();
+    // eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
+    if (!assets) return history.push("/app/home");
+    if (!swapItems.from || !swapItems.to) {
+      const from = swapItems.from ?? assets.tokens[0]?.id ?? undefined,
+        to =
+          swapItems.to ??
+          tokens.find((val) => val.id !== from)?.id ??
+          undefined;
+
+      dispatch(updateSwapItems({ from, to }));
+      loadSwapItemLogos();
+    }
+    // eslint-disable-next-line
+  }, [assets, swapItems, dispatch, tokens, history]);
+
+  useEffect(() => {
+    setSwapItemLogos({ from: "loading", to: "loading" });
+    loadSwapItemLogos();
+    // eslint-disable-next-line
+  }, [swapItems]);
+
+  async function refresh(e?: CustomEvent<RefresherEventDetail>) {
+    await preloadAssets();
+    await loadTokens();
+    await loadSwapItemLogos();
+
+    if (e) e.detail.complete();
+  }
+
+  function getSwapItemTokens(): { from?: IToken; to?: IToken } {
+    if (!assets) return {};
+
+    const from =
+        tokens.find(({ id }) => id === swapItems.from) ??
+        assets.tokens.find(({ id }) => id === swapItems.from),
+      to =
+        tokens.find(({ id }) => id === swapItems.to) ??
+        assets.tokens.find(({ id }) => id === swapItems.to);
+
+    return { from, to };
+  }
+
+  async function loadSwapItemLogos() {
+    const swapItemTokens = getSwapItemTokens(),
+      from = await getCommunityLogo(swapItemTokens.from?.id ?? ""),
+      to = await getCommunityLogo(swapItemTokens.to?.id ?? "");
+
+    setSwapItemLogos({ from, to });
+  }
 
   return (
     <IonPage>
       <IonContent>
+        <IonRefresher slot="fixed" onIonRefresh={refresh}>
+          <IonRefresherContent></IonRefresherContent>
+        </IonRefresher>
         <div className="TopBackgroundSpacer">
           <div className="ShortTitle">
             <ShortTopLayerTitle title="Swap" />
@@ -68,14 +152,29 @@ export default function Swap({ history }: RouteComponentProps) {
                   className={SwapItemsStyle.From}
                   onClick={() => history.push("/app/tokens?choose=from")}
                 >
-                  <img
-                    className={SwapItemsStyle.Logo}
-                    src="https://verto.exchange/logo_dark.svg"
-                    alt="Verto Logo"
-                  />
+                  {(swapItemLogos.from && swapItemLogos.from !== "loading" && (
+                    <img
+                      className={SwapItemsStyle.Logo}
+                      src={
+                        getSwapItemTokens().from?.ticker.toUpperCase() !== "VRT"
+                          ? `https://arweave.net/${swapItemLogos.from}`
+                          : theme === "Dark"
+                          ? logo_dark
+                          : logo_light
+                      }
+                      alt="Token Logo"
+                    />
+                  )) ||
+                    (swapItemLogos.from && swapItemLogos.from === "loading" && (
+                      <IonSkeletonText className={SwapItemsStyle.LoadingLogo} />
+                    )) || (
+                      <div className={SwapItemsStyle.NoLogo}>
+                        <QuestionIcon />
+                      </div>
+                    )}
                   <div className={SwapItemsStyle.Info}>
                     <h2>From</h2>
-                    <h1>VRT</h1>
+                    <h1>{getSwapItemTokens().from?.ticker ?? "---"}</h1>
                   </div>
                 </div>
                 <div
@@ -92,13 +191,40 @@ export default function Swap({ history }: RouteComponentProps) {
                 >
                   <div className={SwapItemsStyle.Info}>
                     <h2>To</h2>
-                    <h1>VRT</h1>
+                    <h1>{getSwapItemTokens().to?.ticker ?? "---"}</h1>
                   </div>
-                  <img
-                    className={SwapItemsStyle.Logo}
-                    src="https://verto.exchange/logo_dark.svg"
-                    alt="Verto Logo"
-                  />
+                  {(swapItemLogos.to && swapItemLogos.to !== "loading" && (
+                    <img
+                      className={
+                        SwapItemsStyle.Logo + " " + SwapItemsStyle.RightLogo
+                      }
+                      src={
+                        getSwapItemTokens().to?.ticker.toUpperCase() !== "VRT"
+                          ? `https://arweave.net/${swapItemLogos.to}`
+                          : theme === "Dark"
+                          ? logo_dark
+                          : logo_light
+                      }
+                      alt="Token Logo"
+                    />
+                  )) ||
+                    (swapItemLogos.to && swapItemLogos.to === "loading" && (
+                      <IonSkeletonText
+                        className={
+                          SwapItemsStyle.LoadingLogo +
+                          " " +
+                          SwapItemsStyle.RightLogo
+                        }
+                      />
+                    )) || (
+                      <div
+                        className={
+                          SwapItemsStyle.NoLogo + " " + SwapItemsStyle.RightLogo
+                        }
+                      >
+                        <QuestionIcon />
+                      </div>
+                    )}
                 </div>
               </IonCardContent>
               <IonItem

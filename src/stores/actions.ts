@@ -3,7 +3,8 @@ import { IWalletAction } from "./reducers/wallet";
 import { IBalanceAction } from "./reducers/balance";
 import { IProfileAction } from "./reducers/profile";
 import { IAssetsAction, IAsset } from "./reducers/assets";
-import { IToken, ITokensAction } from "./reducers/tokens";
+import { ITokensAction, IToken } from "./reducers/tokens";
+import { ISwapAction, ISwap } from "./reducers/swap";
 
 export function addWallet(
   keyfile: JWKInterface,
@@ -76,5 +77,12 @@ export function addToken(tokens: IToken[]): ITokensAction {
   return {
     type: "ADD_TOKENS",
     payload: { tokens }
+  };
+}
+
+export function updateSwapItems(items: ISwap): ISwapAction {
+  return {
+    type: "UPDATE_SWAP",
+    payload: items
   };
 }

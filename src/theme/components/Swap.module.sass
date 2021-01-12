@@ -15,10 +15,36 @@
       &:hover
         opacity: .8
 
-    img
+    .Logo, .LoadingLogo, .NoLogo
+      $sideMarginLogo: 1em
+      position: relative
+      display: block
       width: auto
       height: 2.3em
-      margin-right: 1em
+      margin-right: $sideMarginLogo
+
+      &.RightLogo
+        margin:
+          right: 0
+          left: $sideMarginLogo
+
+      &.LoadingLogo
+        width: 2.3em
+        border-radius: 100%
+
+      &.NoLogo
+        border-radius: 100%
+        width: 2.3em
+        background-color: var(--verto-background)
+
+        svg
+          position: absolute
+          top: 50%
+          left: 50%
+          width: 75%
+          height: 75%
+          font-size: 1em
+          transform: translate(-50%, -50%)
 
     .Info
       h2, h1
