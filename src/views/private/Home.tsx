@@ -24,7 +24,11 @@ import type { RootState } from "../../stores/reducers";
 import { useSelector } from "react-redux";
 import { preloadAssets, loadData } from "../../utils/data";
 import Verto from "@verto/lib";
+import { Modal } from "@verto/ui";
 import { getStatusColor } from "../../utils/arweave";
+import { useTheme } from "../../utils/theme";
+import { QRCode } from "react-qr-svg";
+import QRModal from "../../theme/components/QRModal.module.sass";
 import styles from "../../theme/views/home.module.sass";
 
 export default function Home() {
@@ -41,7 +45,9 @@ export default function Home() {
         status: string;
       }[]
     >([]),
-    [loadingExchanges, setLoadingExchanges] = useState(true);
+    [loadingExchanges, setLoadingExchanges] = useState(true),
+    [addressModal, setAddressModal] = useState(false),
+    theme = useTheme();
 
   useEffect(() => {
     refresh();
@@ -96,7 +102,10 @@ export default function Home() {
                 Transfer
                 <IonRippleEffect />
               </div>
-              <div className={styles.Link + " ion-activatable ripple-parent"}>
+              <div
+                className={styles.Link + " ion-activatable ripple-parent"}
+                onClick={() => setAddressModal(true)}
+              >
                 <IonIcon icon={qrCodeOutline} />
                 <IonRippleEffect />
               </div>
@@ -200,6 +209,25 @@ export default function Home() {
           </IonCard>
         </div>
       </IonContent>
+      <Modal
+        open={addressModal}
+        backdrop={true}
+        onClose={() => setAddressModal(false)}
+      >
+        <Modal.Content className={QRModal.ModalContent}>
+          <h1>Address</h1>
+          <p>Scan this QR code to transfer assets.</p>
+          <QRCode
+            className={QRModal.QRCode}
+            value={currentAddress}
+            bgColor={theme === "Dark" ? "#000000" : "#ffffff"}
+            fgColor={theme === "Dark" ? "#ffffff" : "#000000"}
+          />
+        </Modal.Content>
+        <Modal.Footer>
+          <Modal.Action onClick={() => setAddressModal(false)}>Ok</Modal.Action>
+        </Modal.Footer>
+      </Modal>
     </IonPage>
   );
 }

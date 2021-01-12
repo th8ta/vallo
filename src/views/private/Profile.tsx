@@ -19,6 +19,10 @@ import { signOut } from "../../stores/actions";
 import WalletManager from "../../components/WalletManager";
 import { Plugins } from "@capacitor/core";
 import { AppVersion } from "@ionic-native/app-version";
+import { Modal } from "@verto/ui";
+import { QRCode } from "react-qr-svg";
+import { useTheme } from "../../utils/theme";
+import QRModal from "../../theme/components/QRModal.module.sass";
 import styles from "../../theme/views/profile.module.sass";
 
 const { Browser, Clipboard } = Plugins;
@@ -31,7 +35,9 @@ export default function Profile({ history }: RouteComponentProps) {
     [toast, setToast] = useState<{ shown: boolean; text: string }>({
       shown: false,
       text: ""
-    });
+    }),
+    [addressModal, setAddressModal] = useState(false),
+    theme = useTheme();
 
   useEffect(() => {
     AppVersion.getVersionNumber()
@@ -77,6 +83,7 @@ export default function Profile({ history }: RouteComponentProps) {
                 <IonItem
                   className={styles.Setting + " ion-activatable ripple-parent"}
                   detail={true}
+                  onClick={() => setAddressModal(true)}
                 >
                   <span>Show address QR code</span>
                   <IonRippleEffect />
@@ -138,6 +145,25 @@ export default function Profile({ history }: RouteComponentProps) {
         position="bottom"
         cssClass="SmallToast"
       />
+      <Modal
+        open={addressModal}
+        backdrop={true}
+        onClose={() => setAddressModal(false)}
+      >
+        <Modal.Content className={QRModal.ModalContent}>
+          <h1>Address</h1>
+          <p>Scan this QR code to transfer assets.</p>
+          <QRCode
+            className={QRModal.QRCode}
+            value={currentAddress}
+            bgColor={theme === "Dark" ? "#000000" : "#ffffff"}
+            fgColor={theme === "Dark" ? "#ffffff" : "#000000"}
+          />
+        </Modal.Content>
+        <Modal.Footer>
+          <Modal.Action onClick={() => setAddressModal(false)}>Ok</Modal.Action>
+        </Modal.Footer>
+      </Modal>
     </IonPage>
   );
 }
