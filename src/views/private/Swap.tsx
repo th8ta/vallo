@@ -93,6 +93,7 @@ export default function Swap({ history }: RouteComponentProps) {
   function getSwapItemTokens(): { from?: IToken; to?: IToken } {
     if (!assets) return {};
 
+    // TODO: ETH and AR support
     const from =
         tokens.find(({ id }) => id === swapItems.from) ??
         assets.tokens.find(({ id }) => id === swapItems.from),
@@ -103,6 +104,7 @@ export default function Swap({ history }: RouteComponentProps) {
     return { from, to };
   }
 
+  // TODO: ETH and AR support: set from/to to "" if they are either AR or ETH
   async function loadSwapItemLogos() {
     const swapItemTokens = getSwapItemTokens(),
       from = await getCommunityLogo(swapItemTokens.from?.id ?? ""),
@@ -113,6 +115,7 @@ export default function Swap({ history }: RouteComponentProps) {
 
   function swapTokens() {
     if (!assets) return;
+    // TODO: ETH and AR support
     if (!assets.tokens.find(({ id }) => id === swapItems.to)) return;
     dispatch(updateSwapItems({ from: swapItems.to, to: swapItems.from }));
   }

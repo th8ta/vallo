@@ -102,7 +102,6 @@ export default function Tokens({ history }: RouteComponentProps) {
         </div>
         <div className="BackgroundLayer">
           <div className={styles.Tokens}>
-            {/** TODO: if choose is true, add ETH and AR to the list */}
             {choose && (
               <>
                 <IonCard

@@ -1871,16 +1871,17 @@
   resolved "https://registry.yarnpkg.com/@ungap/global-this/-/global-this-0.4.3.tgz#44cb668b03e7c4bc88cb6e6f9329d381131878ee"
   integrity sha512-MuHEpDBurNVeD6mV9xBcAN2wfTwuaFQhHuhWkJuXmyVJ5P5sBCw+nnFpdfb0tAvgWkfefWCsAoAsh7MTUr3LPg==
 
-"@verto/lib@^0.8.4":
-  version "0.8.4"
-  resolved "https://registry.yarnpkg.com/@verto/lib/-/lib-0.8.4.tgz#9cb9d77e77ba183a3dc1c9c2055145a3a560ee9b"
-  integrity sha512-LtVkWEmM754CPPaEk/WI7fFrpxZIhLzqD4C8iyPG/2clIQYe5uZQbxrbPVcALLgpczjtxJLcooQzt7WGqasjXQ==
+"@verto/lib@^0.8.9":
+  version "0.8.9"
+  resolved "https://registry.yarnpkg.com/@verto/lib/-/lib-0.8.9.tgz#c5a35a0fa6a204c5cc14f02b8dcebd31f896f57d"
+  integrity sha512-NDyEegOipL6YHR56aJGCx3csYE14r6zwmV7qahpMQBYhcXpB3FERuEAojBks/A8GN77phJ3/i4S9v6lt0OnIww==
   dependencies:
+    ar-gql "^0.0.3"
     arweave "^1.10.0"
     cacheweave "^2.1.0"
     moment "^2.29.1"
     node-fetch "^2.6.1"
-    smartweave "^0.4.13"
+    smartweave "^0.4.21"
 
 "@verto/ui@^0.0.3":
   version "0.0.3"
