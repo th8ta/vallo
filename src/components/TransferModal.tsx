@@ -7,6 +7,7 @@ import type { RootState } from "../stores/reducers";
 import { useSelector } from "react-redux";
 import qrcode_logo_dark from "../assets/qrcode/dark.png";
 import qrcode_logo_light from "../assets/qrcode/light.png";
+import { BarcodeScanner } from "@ionic-native/barcode-scanner";
 import styles from "../theme/components/TransferModal.module.sass";
 
 export default function TransferModal({ close }: TransferProps) {
@@ -15,10 +16,19 @@ export default function TransferModal({ close }: TransferProps) {
     assets = useSelector((state: RootState) => state.assets).find(
       ({ address }) => address === currentAddress
     ),
-    [selectedToken, setSelectedToken] = useState(assets?.tokens[0].id ?? "");
+    [selectedToken, setSelectedToken] = useState(assets?.tokens[0].id ?? ""),
+    [targetAddress, setTargetAddress] = useState("");
 
   async function transfer() {
     close();
+  }
+
+  async function scanQRCode() {
+    try {
+      const data = await BarcodeScanner.scan();
+
+      setTargetAddress(data.text);
+    } catch {}
   }
 
   return (
@@ -34,13 +44,18 @@ export default function TransferModal({ close }: TransferProps) {
             bold
             className={styles.Amount}
           >
-            <div className={styles.InputChild}>
+            <div className={styles.InputChild + " " + styles.InputChildSelect}>
               <IonSelect
                 value={selectedToken}
                 okText="Confirm"
                 cancelText="Cancel"
                 onIonChange={(e) => setSelectedToken(e.detail.value)}
                 className={styles.Select}
+                interface="action-sheet"
+                interfaceOptions={{
+                  header: "Select PST",
+                  className: styles.SelectActionSheet
+                }}
               >
                 {assets &&
                   assets.tokens.map(({ id, ticker }, key) => (
@@ -52,8 +67,14 @@ export default function TransferModal({ close }: TransferProps) {
               <ChevronRightIcon />
             </div>
           </Input>
-          <Input value="" label="Recipient address" type="text" bold>
-            <div className={styles.InputChild}>
+          <Input
+            value={targetAddress}
+            label="Recipient address"
+            type="text"
+            bold
+            onChange={(e) => setTargetAddress(e.target.value)}
+          >
+            <div className={styles.InputChild} onClick={scanQRCode}>
               <img
                 src={theme === "Dark" ? qrcode_logo_light : qrcode_logo_dark}
                 alt="qrcode-logo"

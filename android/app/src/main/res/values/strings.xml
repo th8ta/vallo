@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">wallet</string>
-    <string name="title_activity_main">wallet</string>
+    <string name="app_name">Wallet</string>
+    <string name="title_activity_main">Wallet</string>
     <string name="package_name">org.th8ta.wallet</string>
     <string name="custom_url_scheme">org.th8ta.wallet</string>
 </resources>

@@ -28,6 +28,15 @@
       width: 100%
       cursor: pointer
 
+      &.InputChildSelect
+        position: relative
+
+        svg
+          position: absolute
+          top: 50%
+          right: 0
+          transform: translateY(-50%)
+
       .QRCode
         display: block
         width: 1.15em
@@ -36,6 +45,12 @@
 .Select
   padding: 0
   font-family: var(--code-font-family)
+  width: 100%
 
   &::part(icon)
     display: none !important
+
+.SelectActionSheet
+  --button-color-selected: var(--ion-color-primary)
+  --button-color-hover: var(--ion-color-primary)
+  --button-color-focused: var(--ion-color-primary)
