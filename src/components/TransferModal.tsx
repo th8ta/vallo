@@ -1,14 +1,21 @@
-import React from "react";
-import { IonRippleEffect } from "@ionic/react";
+import React, { useState } from "react";
+import { IonRippleEffect, IonSelect, IonSelectOption } from "@ionic/react";
 import { Modal, Input } from "@verto/ui";
 import { ChevronRightIcon } from "@primer/octicons-react";
 import { useTheme } from "../utils/theme";
+import type { RootState } from "../stores/reducers";
+import { useSelector } from "react-redux";
 import qrcode_logo_dark from "../assets/qrcode/dark.png";
 import qrcode_logo_light from "../assets/qrcode/light.png";
 import styles from "../theme/components/TransferModal.module.sass";
 
 export default function TransferModal({ close }: TransferProps) {
-  const theme = useTheme();
+  const theme = useTheme(),
+    currentAddress = useSelector((state: RootState) => state.profile),
+    assets = useSelector((state: RootState) => state.assets).find(
+      ({ address }) => address === currentAddress
+    ),
+    [selectedToken, setSelectedToken] = useState(assets?.tokens[0].id ?? "");
 
   async function transfer() {
     close();
@@ -28,11 +35,24 @@ export default function TransferModal({ close }: TransferProps) {
             className={styles.Amount}
           >
             <div className={styles.InputChild}>
-              VRT
+              <IonSelect
+                value={selectedToken}
+                okText="Confirm"
+                cancelText="Cancel"
+                onIonChange={(e) => setSelectedToken(e.detail.value)}
+                className={styles.Select}
+              >
+                {assets &&
+                  assets.tokens.map(({ id, ticker }, key) => (
+                    <IonSelectOption value={id} key={key}>
+                      {ticker}
+                    </IonSelectOption>
+                  ))}
+              </IonSelect>
               <ChevronRightIcon />
             </div>
           </Input>
-          <Input value="0" label="Recipient address" type="number" bold>
+          <Input value="" label="Recipient address" type="text" bold>
             <div className={styles.InputChild}>
               <img
                 src={theme === "Dark" ? qrcode_logo_light : qrcode_logo_dark}
