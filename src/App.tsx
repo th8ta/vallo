@@ -21,6 +21,7 @@ import client from "./utils/apollo";
 import store from "./stores";
 
 import Routes from "./components/Routes";
+import AppUrlListener from "./components/AppUrlListener";
 
 import "./theme/global.sass";
 import "./theme/variables.sass";
@@ -34,6 +35,7 @@ const App: React.FunctionComponent = () => {
         <VertoProvider theme={theme}>
           <IonApp>
             <IonReactRouter>
+              <AppUrlListener />
               <Routes />
             </IonReactRouter>
           </IonApp>
