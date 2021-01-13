@@ -37,6 +37,7 @@ export default function Profile({ history }: RouteComponentProps) {
       text: ""
     }),
     [addressModal, setAddressModal] = useState(false),
+    [signoutModal, setSignoutModal] = useState(false),
     theme = useTheme();
 
   useEffect(() => {
@@ -49,6 +50,11 @@ export default function Profile({ history }: RouteComponentProps) {
     if (currentAddress === "") return;
     await Clipboard.write({ string: currentAddress });
     setToast({ shown: true, text: "Copied address" });
+  }
+
+  function signOutFromAllWallets() {
+    setSignoutModal(false);
+    dispatch(signOut());
   }
 
   return (
@@ -112,7 +118,7 @@ export default function Profile({ history }: RouteComponentProps) {
                     " ion-activatable ripple-parent"
                   }
                   detail={false}
-                  onClick={() => dispatch(signOut())}
+                  onClick={() => setSignoutModal(true)}
                 >
                   <span>Sign out</span>
                   <IonRippleEffect />
@@ -166,6 +172,32 @@ export default function Profile({ history }: RouteComponentProps) {
             className="ion-activatable ripple-parent action-button"
           >
             Ok
+            <IonRippleEffect />
+          </Modal.Action>
+        </Modal.Footer>
+      </Modal>
+      <Modal
+        open={signoutModal}
+        backdrop={true}
+        onClose={() => setSignoutModal(false)}
+      >
+        <Modal.Content>
+          <p>Are you sure you want to log out from all wallets?</p>
+        </Modal.Content>
+        <Modal.Footer>
+          <Modal.Action
+            passive
+            onClick={() => setSignoutModal(false)}
+            className="ion-activatable ripple-parent action-button"
+          >
+            Cancel
+            <IonRippleEffect />
+          </Modal.Action>
+          <Modal.Action
+            onClick={signOutFromAllWallets}
+            className="ion-activatable ripple-parent action-button"
+          >
+            Confirm
             <IonRippleEffect />
           </Modal.Action>
         </Modal.Footer>
