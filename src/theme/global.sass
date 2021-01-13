@@ -25,19 +25,19 @@
 
 .TopBackgroundSpacer
   position: relative
-  height: 14%
+  height: calc(14% + var(--top-additional-height))
 
   &.High
-    height: 37%
+    height: calc(37% + var(--top-additional-height))
 
 .BackgroundLayer
   background-color: var(--verto-background)
   border-top: 1px solid var(--verto-seperate)
-  min-height: 86%
+  min-height: calc(86% - var(--top-additional-height))
   padding: 0 .5em .2em
 
   &.Short
-    min-height: 63%
+    min-height: calc(63% - var(--top-additional-height))
 
 .Card
   border: 1px solid var(--verto-card-border)
