@@ -1,11 +1,15 @@
 import React from "react";
-import { IonIcon, IonRippleEffect } from "@ionic/react";
+import { IonRippleEffect } from "@ionic/react";
 import { Modal, Input } from "@verto/ui";
 import { ChevronRightIcon } from "@primer/octicons-react";
-import { qrCodeOutline } from "ionicons/icons";
+import { useTheme } from "../utils/theme";
+import qrcode_logo_dark from "../assets/qrcode/dark.png";
+import qrcode_logo_light from "../assets/qrcode/light.png";
 import styles from "../theme/components/TransferModal.module.sass";
 
 export default function TransferModal({ close }: TransferProps) {
+  const theme = useTheme();
+
   async function transfer() {
     close();
   }
@@ -30,7 +34,11 @@ export default function TransferModal({ close }: TransferProps) {
           </Input>
           <Input value="0" label="Recipient address" type="number" bold>
             <div className={styles.InputChild}>
-              <IonIcon icon={qrCodeOutline} className={styles.QRCode} />
+              <img
+                src={theme === "Dark" ? qrcode_logo_light : qrcode_logo_dark}
+                alt="qrcode-logo"
+                className={styles.QRCode}
+              />
               <ChevronRightIcon />
             </div>
           </Input>
