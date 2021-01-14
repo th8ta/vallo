@@ -35,3 +35,10 @@ export function getStatusColor(
 
   return "Error";
 }
+
+export function formatTotalBalance(balance?: string | number): string {
+  const numBalance = Number(balance ?? 0);
+
+  if (numBalance.toFixed(7).length > 10) return numBalance.toFixed(3);
+  else return numBalance.toFixed(7);
+}

@@ -31,7 +31,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateSwapItems } from "../../stores/actions";
 import { IToken } from "../../stores/reducers/tokens";
 import { loadTokens, preloadAssets } from "../../utils/data";
-import { getCommunityLogo } from "../../utils/arweave";
+import { getCommunityLogo, formatTotalBalance } from "../../utils/arweave";
 import logo_light from "../../assets/logo.png";
 import logo_dark from "../../assets/logo_dark.png";
 import { useTheme } from "../../utils/theme";
@@ -140,10 +140,10 @@ export default function Swap({ history }: RouteComponentProps) {
               <IonCardContent className="Content">
                 <p>Wallet Balance</p>
                 <h1>
-                  {Number(
+                  {formatTotalBalance(
                     balances.find(({ address }) => address === currentAddress)
                       ?.balance ?? 0
-                  ).toFixed(7)}
+                  )}
                   <span>AR</span>
                 </h1>
                 <IonRouterLink

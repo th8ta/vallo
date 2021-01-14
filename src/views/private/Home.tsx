@@ -25,7 +25,7 @@ import { preloadAssets, loadData } from "../../utils/data";
 import Verto from "@verto/lib";
 import { Modal } from "@verto/ui";
 import TransferModal from "../../components/TransferModal";
-import { getStatusColor } from "../../utils/arweave";
+import { getStatusColor, formatTotalBalance } from "../../utils/arweave";
 import { useTheme } from "../../utils/theme";
 import { QRCode } from "react-qr-svg";
 import qrcode_logo_dark from "../../assets/qrcode/dark.png";
@@ -92,10 +92,10 @@ export default function Home() {
           <div className={styles.Balance}>
             <p>Wallet Balance</p>
             <h1>
-              {Number(
+              {formatTotalBalance(
                 balances.find(({ address }) => address === currentAddress)
                   ?.balance ?? 0
-              ).toFixed(7)}
+              )}
               <span>AR</span>
             </h1>
             <div className={styles.ButtonGroup}>
