@@ -47,6 +47,7 @@ export default function Home() {
       }[]
     >([]),
     [loadingExchanges, setLoadingExchanges] = useState(true),
+    [loadingAssets, setLoadingAssets] = useState(true),
     [addressModal, setAddressModal] = useState(false),
     [transferModal, setTransferModal] = useState(false),
     theme = useTheme();
@@ -61,6 +62,7 @@ export default function Home() {
 
     await loadData();
     await preloadAssets();
+    setLoadingAssets(false);
 
     try {
       setExchanges(
@@ -134,7 +136,21 @@ export default function Home() {
                     routerLink={"/app/token/" + pst.id}
                     key={i}
                   />
-                ))) || <p>{"You don't have any tokens"}</p>}
+                ))) ||
+                (loadingAssets &&
+                  Array(3)
+                    .fill("_")
+                    .map((_, i) => (
+                      <IonSkeletonText
+                        key={i}
+                        style={{
+                          width: "100%",
+                          height: "2.66em",
+                          marginBottom: i === 2 ? "0" : ".75em",
+                          borderRadius: "3px"
+                        }}
+                      />
+                    ))) || <p>{"You don't have any tokens"}</p>}
             </IonCardContent>
             <IonItem
               class="CardFooter ion-text-end"
