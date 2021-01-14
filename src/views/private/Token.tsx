@@ -224,8 +224,12 @@ export default function Token({ history, match }: TokenProps) {
                       <>
                         {(communityInfo.logo !== "" && (
                           <>
-                            <IonSkeletonText className={styles.LoadingLogo} />
                             <IonSkeletonText
+                              animated
+                              className={styles.LoadingLogo}
+                            />
+                            <IonSkeletonText
+                              animated
                               style={{
                                 height: "1em",
                                 width: "3.4em",
@@ -251,6 +255,7 @@ export default function Token({ history, match }: TokenProps) {
                         communityInfo.token.ticker
                       }`) || (
                       <IonSkeletonText
+                        animated
                         style={{
                           height: "1.35em",
                           width: "2.4em",
@@ -264,6 +269,7 @@ export default function Token({ history, match }: TokenProps) {
                   <h1>
                     {(communityInfo.token && communityInfo.token.ticker) || (
                       <IonSkeletonText
+                        animated
                         style={{
                           height: "1.15em",
                           width: "2.8em",
@@ -277,6 +283,7 @@ export default function Token({ history, match }: TokenProps) {
                       <>{addZero(graphInfo.latestPrice)} AR</>
                     )) || (
                       <IonSkeletonText
+                        animated
                         style={{
                           height: "1.15em",
                           width: "3.75em",
@@ -298,6 +305,7 @@ export default function Token({ history, match }: TokenProps) {
                         </>
                       )) || (
                         <IonSkeletonText
+                          animated
                           style={{
                             display: "inline-block",
                             height: ".93em",
@@ -346,6 +354,7 @@ export default function Token({ history, match }: TokenProps) {
                       .map((_, i) => (
                         <IonSkeletonText
                           key={i}
+                          animated
                           style={{
                             height: "1.05em",
                             width: i === 2 ? "75%" : "100%",
@@ -369,6 +378,7 @@ export default function Token({ history, match }: TokenProps) {
                       .map((_, i) => (
                         <li key={i}>
                           <IonSkeletonText
+                            animated
                             style={{
                               height: ".93em",
                               width: "67%",
@@ -398,6 +408,7 @@ export default function Token({ history, match }: TokenProps) {
                     </>
                   )) || (
                     <IonSkeletonText
+                      animated
                       style={{
                         height: "1.05em",
                         width: "100%",
@@ -414,6 +425,7 @@ export default function Token({ history, match }: TokenProps) {
                     </>
                   )) || (
                     <IonSkeletonText
+                      animated
                       style={{
                         height: "1.05em",
                         width: "100%",
@@ -429,6 +441,7 @@ export default function Token({ history, match }: TokenProps) {
                     </>
                   )) || (
                     <IonSkeletonText
+                      animated
                       style={{
                         height: "1.05em",
                         width: "100%",

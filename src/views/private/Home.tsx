@@ -146,6 +146,7 @@ export default function Home() {
                     .fill("_")
                     .map((_, i) => (
                       <IonSkeletonText
+                        animated
                         key={i}
                         style={{
                           width: "100%",
@@ -211,6 +212,7 @@ export default function Home() {
                       key={i}
                     >
                       <IonSkeletonText
+                        animated
                         style={{
                           width: "100%",
                           height: "1.3em",

@@ -117,6 +117,7 @@ export default function Trades({ history }: RouteComponentProps) {
                         detail={false}
                       >
                         <IonSkeletonText
+                          animated
                           style={{
                             width: "100%",
                             height: "1.3em",

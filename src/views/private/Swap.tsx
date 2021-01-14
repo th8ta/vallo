@@ -175,7 +175,10 @@ export default function Swap({ history }: RouteComponentProps) {
                     />
                   )) ||
                     (swapItemLogos.from && swapItemLogos.from === "loading" && (
-                      <IonSkeletonText className={SwapItemsStyle.LoadingLogo} />
+                      <IonSkeletonText
+                        animated
+                        className={SwapItemsStyle.LoadingLogo}
+                      />
                     )) || (
                       <div className={SwapItemsStyle.NoLogo}>
                         <QuestionIcon />
@@ -220,6 +223,7 @@ export default function Swap({ history }: RouteComponentProps) {
                   )) ||
                     (swapItemLogos.to && swapItemLogos.to === "loading" && (
                       <IonSkeletonText
+                        animated
                         className={
                           SwapItemsStyle.LoadingLogo +
                           " " +
