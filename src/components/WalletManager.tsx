@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "../stores/reducers";
 import { removeWallet, setProfile, signOut } from "../stores/actions";
-import { IonActionSheet, IonToast } from "@ionic/react";
+import { IonActionSheet, IonRippleEffect, IonToast } from "@ionic/react";
 import { useHistory } from "react-router";
 import { add } from "ionicons/icons";
 import { loadData, preloadData } from "../utils/data";
+import { PlusIcon, XIcon } from "@primer/octicons-react";
 import styles from "../theme/components/WalletManager.module.sass";
 
 export default function WalletManager({
@@ -24,57 +25,32 @@ export default function WalletManager({
 
   return (
     <>
-      <IonActionSheet
-        isOpen={opened}
-        onDidDismiss={hide}
-        header={
-          mode === "delete" ? "Tap to remove wallet" : "Tap to switch wallet"
-        }
-        buttons={[
-          ...wallets.map((wallet) => ({
-            text: `${wallet.address.slice(0, 20)}...`,
-            cssClass: wallet.address === address ? styles.Active : "",
-            handler() {
-              if (mode === "delete") {
-                if (wallets.length === 1) dispatch(signOut());
-                else {
-                  if (wallet.address === address)
-                    dispatch(
-                      setProfile(
-                        wallets.find((val) => val.address !== address)
-                          ?.address || ""
-                      )
-                    );
-                  dispatch(removeWallet(wallet.address));
-                }
-                setToast({ shown: true, text: "Removed wallet" });
-              } else {
-                dispatch(setProfile(wallet.address));
-                setToast({ shown: true, text: "Switched wallet" });
-              }
-              loadData();
-              preloadData();
-            }
-          })),
-          ...(mode === "switch"
-            ? [
-                {
-                  text: "Add wallet",
-                  icon: add,
-                  cssClass: styles.AddButton,
-                  handler() {
-                    history.push("/welcome");
-                  }
-                }
-              ]
-            : []),
-          {
-            text: "Cancel",
-            role: "cancel",
-            handler: hide
-          }
-        ]}
-      />
+      <div className={styles.Manager}>
+        <div className={styles.Wallets}>
+          <h1>Tap to switch wallet</h1>
+          {wallets.map(({ address }, i) => (
+            <div
+              className={styles.Wallet + " ion-activatable ripple-parent"}
+              key={i}
+            >
+              {address}
+              <button>
+                <XIcon />
+              </button>
+              <IonRippleEffect />
+            </div>
+          ))}
+          <div className={styles.AddWallet + " ion-activatable ripple-parent"}>
+            <PlusIcon />
+            Add wallet
+            <IonRippleEffect />
+          </div>
+        </div>
+        <div className={styles.Cancel + " ion-activatable ripple-parent"}>
+          Cancel
+          <IonRippleEffect />
+        </div>
+      </div>
       <IonToast
         isOpen={toast.shown}
         onDidDismiss={() => setToast((val) => ({ ...val, shown: false }))}

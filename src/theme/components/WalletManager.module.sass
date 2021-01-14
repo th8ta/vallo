@@ -1,11 +1,62 @@
-.AddButton
-  span
-    justify-content: center !important
+$paddings: 1.1em
 
-    ion-icon
+.Manager
+  position: fixed
+  bottom: $paddings
+  left: $paddings
+  right: $paddings
+  z-index: 100000000
+
+.Wallets
+  background-color: var(--verto-background-clear)
+  border-radius: 5px
+  overflow: hidden
+  border: 1px solid var(--verto-card-border)
+  margin-bottom: .6em
+  box-shadow: 0 30px 60px rgba(#000, .12)
+
+  h1
+    font-size: .83em
+    color: var(--verto-secondary-text)
+    font-weight: 400
+    margin: $paddings
+
+  .Wallet, .AddWallet
+    position: relative
+    overflow: hidden
+    cursor: pointer
+    font-size: 1em
+    padding: $paddings / 2 $paddings
+    color: var(--ion-color-light-contrast)
+    font-weight: 600
+
+    &.Active
+      color: var(--ion-color-primary)
+      font-weight: 800
+
+    button
+      // TODO: remove button
+
+  .AddWallet
+    text-align: center
+
+    svg
       position: absolute
-      left: 0
+      top: 50%
+      left: $paddings
+      width: .8em
+      height: .8em
+      font-size: .8em
+      transform: translateY(-50%)
 
-.Active
-  color: var(--ion-color-primary) !important
-  font-weight: 800
+.Cancel
+  position: relative
+  overflow: hidden
+  background-color: var(--verto-background-clear)
+  border-radius: 5px
+  padding: $paddings
+  cursor: pointer
+  text-align: center
+  font-size: .83em
+  color: var(--verto-secondary-text)
+  font-weight: 400
