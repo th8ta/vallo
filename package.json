@@ -25,6 +25,7 @@
     "chart.js": "^2.9.4",
     "community-js": "^1.1.14",
     "cordova-plugin-app-version": "^0.1.12",
+    "framer-motion": "^3.2.1",
     "graphql": "^15.4.0",
     "ionicons": "^5.0.0",
     "phonegap-plugin-barcodescanner": "^8.1.0",
