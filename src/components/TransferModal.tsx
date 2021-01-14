@@ -7,12 +7,7 @@ import type { RootState } from "../stores/reducers";
 import { useSelector } from "react-redux";
 import qrcode_logo_dark from "../assets/qrcode/dark.png";
 import qrcode_logo_light from "../assets/qrcode/light.png";
-import {
-  BarcodeScannerPlugin,
-  EVENT_BARCODE_SCANNED,
-  IBarcodeScannerEventPayload
-} from "capacitor-plugin-barcodescanner";
-import { Plugins } from "@capacitor/core";
+import { BarcodeScanner } from "@ionic-native/barcode-scanner";
 import styles from "../theme/components/TransferModal.module.sass";
 
 export default function TransferModal({ close }: TransferProps) {
@@ -22,22 +17,18 @@ export default function TransferModal({ close }: TransferProps) {
       ({ address }) => address === currentAddress
     ),
     [selectedToken, setSelectedToken] = useState(assets?.tokens[0].id ?? ""),
-    [targetAddress, setTargetAddress] = useState(""),
-    BarcodeScanner = Plugins.BarcodeScanner as BarcodeScannerPlugin;
+    [targetAddress, setTargetAddress] = useState("");
 
   async function transfer() {
     close();
   }
 
-  function scanQRCode() {
-    BarcodeScanner.addListener(
-      EVENT_BARCODE_SCANNED,
-      (state: IBarcodeScannerEventPayload) => {
-        if (state.error || state.cancelled || !state.barcode) return;
-        setTargetAddress(state.barcode);
-      }
-    );
-    BarcodeScanner.scan();
+  async function scanQRCode() {
+    try {
+      const data = await BarcodeScanner.scan();
+
+      setTargetAddress(data.text);
+    } catch {}
   }
 
   return (
