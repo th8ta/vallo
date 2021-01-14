@@ -81,7 +81,6 @@ export default function Tabs() {
       <WalletManager
         opened={switcherOpened}
         hide={() => setSwitcherOpened(false)}
-        mode="switch"
       />
     </>
   );
