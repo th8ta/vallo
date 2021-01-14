@@ -11,14 +11,13 @@ import {
   IonText,
   IonRouterLink,
   IonRippleEffect,
-  IonIcon,
   IonRefresher,
   IonRefresherContent,
-  IonSkeletonText
+  IonSkeletonText,
+  IonToast
 } from "@ionic/react";
 import { RefresherEventDetail } from "@ionic/core";
 import { ArrowRightIcon } from "@primer/octicons-react";
-import { qrCodeOutline } from "ionicons/icons";
 import TokenDisplay from "../../components/TokenDisplay";
 import type { RootState } from "../../stores/reducers";
 import { useSelector } from "react-redux";
@@ -29,6 +28,8 @@ import TransferModal from "../../components/TransferModal";
 import { getStatusColor } from "../../utils/arweave";
 import { useTheme } from "../../utils/theme";
 import { QRCode } from "react-qr-svg";
+import qrcode_logo_dark from "../../assets/qrcode/dark.png";
+import qrcode_logo_light from "../../assets/qrcode/light.png";
 import QRModal from "../../theme/components/QRModal.module.sass";
 import styles from "../../theme/views/home.module.sass";
 
@@ -113,7 +114,10 @@ export default function Home() {
                 className={styles.Link + " ion-activatable ripple-parent"}
                 onClick={() => setAddressModal(true)}
               >
-                <IonIcon icon={qrCodeOutline} />
+                <img
+                  src={theme === "Dark" ? qrcode_logo_dark : qrcode_logo_light}
+                  alt="qr-icon"
+                />
                 <IonRippleEffect />
               </div>
             </div>
@@ -255,13 +259,24 @@ export default function Home() {
           </Modal.Action>
         </Modal.Footer>
       </Modal>
-      <Modal
-        open={transferModal}
-        backdrop={true}
-        onClose={() => setTransferModal(false)}
-      >
-        <TransferModal close={() => setTransferModal(false)} />
-      </Modal>
+      {(assets && assets.tokens.length > 0 && (
+        <Modal
+          open={transferModal}
+          backdrop={true}
+          onClose={() => setTransferModal(false)}
+        >
+          <TransferModal close={() => setTransferModal(false)} />
+        </Modal>
+      )) || (
+        <IonToast
+          isOpen={transferModal}
+          onDidDismiss={() => setTransferModal(false)}
+          message="You don't have tokens to transfer..."
+          duration={2000}
+          position="bottom"
+          color="danger"
+        />
+      )}
     </IonPage>
   );
 }
