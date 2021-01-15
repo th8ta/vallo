@@ -5,6 +5,7 @@ import { IProfileAction } from "./reducers/profile";
 import { IAssetsAction, IAsset } from "./reducers/assets";
 import { ITokensAction, IToken } from "./reducers/tokens";
 import { ISwapAction, ISwap } from "./reducers/swap";
+import { IThemeAction, UserTheme } from "./reducers/theme";
 
 export function addWallet(
   keyfile: JWKInterface,
@@ -84,5 +85,12 @@ export function updateSwapItems(items: ISwap): ISwapAction {
   return {
     type: "UPDATE_SWAP",
     payload: items
+  };
+}
+
+export function setTheme(theme: UserTheme): IThemeAction {
+  return {
+    type: "UPDATE_THEME",
+    payload: theme
   };
 }

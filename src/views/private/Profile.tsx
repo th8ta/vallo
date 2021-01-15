@@ -8,14 +8,15 @@ import {
   IonCardTitle,
   IonItem,
   IonRippleEffect,
-  IonToast
+  IonToast,
+  IonActionSheet
 } from "@ionic/react";
 import { ClippyIcon } from "@primer/octicons-react";
 import { RouteComponentProps } from "react-router-dom";
 import ShortTopLayerTitle from "../../components/ShortTopLayerTitle";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "../../stores/reducers";
-import { signOut } from "../../stores/actions";
+import { setTheme, signOut } from "../../stores/actions";
 import WalletManager from "../../components/WalletManager";
 import { Plugins } from "@capacitor/core";
 import { AppVersion } from "@ionic-native/app-version";
@@ -38,7 +39,9 @@ export default function Profile({ history }: RouteComponentProps) {
     }),
     [addressModal, setAddressModal] = useState(false),
     [signoutModal, setSignoutModal] = useState(false),
-    theme = useTheme();
+    theme = useTheme(),
+    userTheme = useSelector((state: RootState) => state.theme),
+    [showThemeSelector, setThemeSelector] = useState(false);
 
   useEffect(() => {
     AppVersion.getVersionNumber()
@@ -86,6 +89,16 @@ export default function Profile({ history }: RouteComponentProps) {
                 <IonCardTitle className="CardTitle">Settings</IonCardTitle>
               </IonCardHeader>
               <div>
+                <IonItem
+                  className={styles.Setting + " ion-activatable ripple-parent"}
+                  detail={true}
+                  onClick={() => setThemeSelector(true)}
+                >
+                  <span>
+                    Theme: {userTheme === "Auto" ? "System default" : userTheme}
+                  </span>
+                  <IonRippleEffect />
+                </IonItem>
                 <IonItem
                   className={styles.Setting + " ion-activatable ripple-parent"}
                   detail={true}
@@ -201,6 +214,40 @@ export default function Profile({ history }: RouteComponentProps) {
           </Modal.Action>
         </Modal.Footer>
       </Modal>
+      <IonActionSheet
+        isOpen={showThemeSelector}
+        onDidDismiss={() => setThemeSelector(false)}
+        buttons={[
+          {
+            text: "Light",
+            cssClass: userTheme === "Light" ? "selected-action-sheet" : "",
+            handler() {
+              dispatch(setTheme("Light"));
+            }
+          },
+          {
+            text: "Dark",
+            cssClass: userTheme === "Dark" ? "selected-action-sheet" : "",
+            handler() {
+              dispatch(setTheme("Dark"));
+            }
+          },
+          {
+            text: "System default",
+            cssClass: userTheme === "Auto" ? "selected-action-sheet" : "",
+            handler() {
+              dispatch(setTheme("Auto"));
+            }
+          },
+          {
+            text: "Cancel",
+            role: "cancel",
+            handler() {
+              setThemeSelector(false);
+            }
+          }
+        ]}
+      />
     </IonPage>
   );
 }
