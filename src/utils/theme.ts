@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import stores from "../stores";
 import { ThemeDetection } from "@ionic-native/theme-detection";
+import { Plugins, StatusBarStyle } from "@capacitor/core";
+
+const { StatusBar } = Plugins;
 
 export function useTheme() {
   const [theme, setTheme] = useState<"Dark" | "Light">("Light"),
@@ -60,6 +63,13 @@ export function useTheme() {
     };
     // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    try {
+      if (theme === "Dark") StatusBar.setStyle({ style: StatusBarStyle.Dark });
+      else StatusBar.setStyle({ style: StatusBarStyle.Light });
+    } catch {}
+  }, [theme]);
 
   return theme;
 }
