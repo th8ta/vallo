@@ -3589,6 +3589,11 @@ cordova-plugin-app-version@^0.1.12:
   resolved "https://registry.yarnpkg.com/cordova-plugin-app-version/-/cordova-plugin-app-version-0.1.12.tgz#08798f6edf870e42dc655a8f1028894428eb72a6"
   integrity sha512-P+0d9+h9HasanKuMd8tcEpuJJlsVmClie3Mbq16v3TV/VroDrgYB6Ea8Imkc/WjjMVSBCjWB+pji1LoupWlddA==
 
+cordova-plugin-theme-detection@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-theme-detection/-/cordova-plugin-theme-detection-1.3.0.tgz#9f8d78f0774577c2a0c3c14e52d9e779cb453dc8"
+  integrity sha512-q7jcFTwRZmbGmb/WgRn+5EyPHLLECrFegXgUQuqpnon1gZtWuyCzVTi+6P0GACIwfMVIcinS9fEJjG5sv+3FDA==
+
 core-js-compat@^3.6.2, core-js-compat@^3.8.0:
   version "3.8.1"
   resolved "https://registry.yarnpkg.com/core-js-compat/-/core-js-compat-3.8.1.tgz#8d1ddd341d660ba6194cbe0ce60f4c794c87a36e"
