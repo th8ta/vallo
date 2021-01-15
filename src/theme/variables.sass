@@ -223,21 +223,15 @@ html.md, html.ios
   --ion-tab-bar-background: #000
   --ion-card-background: #000
 
-html.DeviceDarkTheme
+// we use the @verto/ui dark-theme class
+// that is based on the "useTheme" hook
+// this will ensure that the theme always 
+// corresponds to the platform's native theme
+html.dark-theme
   +darkThemeBase
 
   &.ios body
     +iosDarkBody
 
   &.md body
-    +mdDarkBody
-
-@media (prefers-color-scheme: dark) 
-  body 
-    +darkThemeBase
-    
-  .ios body 
-    +iosDarkBody
-
-  .md body
     +mdDarkBody
