@@ -4,7 +4,7 @@ import { ThemeDetection } from "@ionic-native/theme-detection";
 
 export function useTheme() {
   const [theme, setTheme] = useState<"Dark" | "Light">("Light"),
-    [themeDetectionAvailable, setThemeDetectionAvailable] = useState(true);
+    [themeDetectionAvailable, setThemeDetectionAvailable] = useState(false);
 
   function adjustTheme() {
     const userTheme = stores.getState().theme;
@@ -15,7 +15,7 @@ export function useTheme() {
       ThemeDetection.isAvailable()
         .then(async (res) => {
           if (!res.value) return;
-          console.log("f");
+          setThemeDetectionAvailable(true);
 
           try {
             if ((await ThemeDetection.isDarkModeEnabled()).value)
