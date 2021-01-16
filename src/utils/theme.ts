@@ -1,68 +1,40 @@
 import { useEffect, useState } from "react";
-import stores from "../stores";
 import { ThemeDetection } from "@ionic-native/theme-detection";
 import { Plugins, StatusBarStyle } from "@capacitor/core";
+import { useSelector } from "react-redux";
+import { RootState } from "../stores/reducers";
 
 const { StatusBar } = Plugins;
 
 export function useTheme() {
   const [theme, setTheme] = useState<"Dark" | "Light">("Light"),
-    [themeDetectionAvailable, setThemeDetectionAvailable] = useState(false);
-
-  function adjustTheme() {
-    const userTheme = stores.getState().theme;
-
-    if (userTheme === theme) return;
-    if (userTheme !== "Auto") setTheme(userTheme);
-    else {
-      ThemeDetection.isAvailable()
-        .then(async (res) => {
-          if (!res.value) return;
-          setThemeDetectionAvailable(true);
-
-          try {
-            if ((await ThemeDetection.isDarkModeEnabled()).value)
-              setTheme("Dark");
-            else setTheme("Light");
-          } catch {
-            setThemeDetectionAvailable(false);
-          }
-        })
-        .catch(() => setThemeDetectionAvailable(false));
-    }
-  }
-
-  function adjustThemeBrowser() {
-    if (themeDetectionAvailable) return;
-    const newThemePreferred = window.matchMedia("(prefers-color-scheme: dark)")
-        .matches
-        ? "Dark"
-        : "Light",
-      userTheme = stores.getState().theme;
-
-    if (userTheme === "Auto") setTheme(newThemePreferred);
-    else setTheme(userTheme);
-  }
-
-  adjustTheme();
-  stores.subscribe(() => {
-    if (themeDetectionAvailable) adjustTheme();
-    else adjustThemeBrowser();
-  });
+    userTheme = useSelector((state: RootState) => state.theme);
 
   useEffect(() => {
-    window
-      .matchMedia("(prefers-color-scheme: dark)")
-      .addEventListener("change", adjustThemeBrowser);
-    adjustThemeBrowser();
+    if (userTheme === theme) return;
+    if (userTheme !== "Auto") return setTheme(userTheme);
 
-    return function cleanup() {
-      window
-        .matchMedia("(prefers-color-scheme: dark)")
-        .removeEventListener("change", adjustThemeBrowser);
-    };
-    // eslint-disable-next-line
-  }, []);
+    ThemeDetection.isAvailable()
+      .then(async (res) => {
+        if (!res.value) return;
+        try {
+          if (
+            (await ThemeDetection.isDarkModeEnabled()).value &&
+            theme !== "Dark"
+          )
+            setTheme("Dark");
+          else if (theme !== "Light") setTheme("Light");
+        } catch {
+          fallbackAutoTheme();
+        }
+      })
+      .catch(fallbackAutoTheme);
+  }, [userTheme, theme]);
+
+  function fallbackAutoTheme() {
+    const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    setTheme(isDark ? "Dark" : "Light");
+  }
 
   useEffect(() => {
     try {
