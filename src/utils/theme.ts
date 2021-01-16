@@ -3,6 +3,7 @@ import { ThemeDetection } from "@ionic-native/theme-detection";
 import { Plugins, StatusBarStyle } from "@capacitor/core";
 import { useSelector } from "react-redux";
 import { RootState } from "../stores/reducers";
+import { isPlatform } from "@ionic/react";
 
 const { StatusBar } = Plugins;
 
@@ -11,8 +12,7 @@ export function useTheme() {
     userTheme = useSelector((state: RootState) => state.theme);
 
   useEffect(() => {
-    if (userTheme === theme) return;
-    if (userTheme !== "Auto") return setTheme(userTheme);
+    if (userTheme !== "Auto" && userTheme !== theme) return setTheme(userTheme);
 
     ThemeDetection.isAvailable()
       .then(async (res) => {
@@ -29,11 +29,16 @@ export function useTheme() {
         }
       })
       .catch(fallbackAutoTheme);
+    // eslint-disable-next-line
   }, [userTheme, theme]);
 
   function fallbackAutoTheme() {
-    const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-    setTheme(isDark ? "Dark" : "Light");
+    const newTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "Dark"
+      : "Light";
+    if (newTheme === theme || isPlatform("ios") || isPlatform("android"))
+      return;
+    setTheme(newTheme);
   }
 
   useEffect(() => {
