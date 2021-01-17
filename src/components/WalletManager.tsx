@@ -2,22 +2,21 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "../stores/reducers";
 import { removeWallet, setProfile, signOut } from "../stores/actions";
-import { IonRippleEffect, IonToast } from "@ionic/react";
+import { IonRippleEffect } from "@ionic/react";
 import { useHistory } from "react-router";
 import { loadData, preloadData } from "../utils/data";
 import { PlusIcon, XIcon } from "@primer/octicons-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Plugins } from "@capacitor/core";
 import styles from "../theme/components/WalletManager.module.sass";
+
+const { Toast } = Plugins;
 
 export default function WalletManager({ opened, hide }: WalletManagerProps) {
   const wallets = useSelector((state: RootState) => state.wallet),
     currentAddress = useSelector((state: RootState) => state.profile),
     dispatch = useDispatch(),
-    history = useHistory(),
-    [toast, setToast] = useState<{ shown: boolean; text: string }>({
-      shown: false,
-      text: ""
-    });
+    history = useHistory();
 
   function deleteWallet(address: string) {
     if (address === currentAddress) {
@@ -29,7 +28,7 @@ export default function WalletManager({ opened, hide }: WalletManagerProps) {
     }
 
     dispatch(removeWallet(address));
-    setToast({ shown: true, text: "Removed wallet" });
+    Toast.show({ text: "Removed wallet" });
     loadData();
     preloadData();
     hide();
@@ -37,7 +36,7 @@ export default function WalletManager({ opened, hide }: WalletManagerProps) {
 
   function switchWallet(address: string) {
     dispatch(setProfile(address));
-    setToast({ shown: true, text: "Switched wallet" });
+    Toast.show({ text: "Switched wallet" });
     loadData();
     preloadData();
     hide();
@@ -116,14 +115,6 @@ export default function WalletManager({ opened, hide }: WalletManagerProps) {
           </motion.div>
         )}
       </AnimatePresence>
-      <IonToast
-        isOpen={toast.shown}
-        onDidDismiss={() => setToast((val) => ({ ...val, shown: false }))}
-        message={toast.text}
-        duration={2000}
-        position="bottom"
-        cssClass="SmallToast"
-      />
     </>
   );
 }

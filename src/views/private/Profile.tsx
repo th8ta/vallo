@@ -8,7 +8,6 @@ import {
   IonCardTitle,
   IonItem,
   IonRippleEffect,
-  IonToast,
   IonActionSheet
 } from "@ionic/react";
 import { ClippyIcon } from "@primer/octicons-react";
@@ -26,17 +25,13 @@ import { useTheme } from "../../utils/theme";
 import QRModal from "../../theme/components/QRModal.module.sass";
 import styles from "../../theme/views/profile.module.sass";
 
-const { Browser, Clipboard } = Plugins;
+const { Browser, Clipboard, Toast } = Plugins;
 
 export default function Profile({ history }: RouteComponentProps) {
   const dispatch = useDispatch(),
     currentAddress = useSelector((state: RootState) => state.profile),
     [walletManager, setWalletManager] = useState(false),
     [version, setVersion] = useState<string>(),
-    [toast, setToast] = useState<{ shown: boolean; text: string }>({
-      shown: false,
-      text: ""
-    }),
     [addressModal, setAddressModal] = useState(false),
     [signoutModal, setSignoutModal] = useState(false),
     theme = useTheme(),
@@ -52,7 +47,7 @@ export default function Profile({ history }: RouteComponentProps) {
   async function copyAddress() {
     if (currentAddress === "") return;
     await Clipboard.write({ string: currentAddress });
-    setToast({ shown: true, text: "Copied address" });
+    await Toast.show({ text: "Copied address" });
   }
 
   function signOutFromAllWallets() {
@@ -155,14 +150,6 @@ export default function Profile({ history }: RouteComponentProps) {
           hide={() => setWalletManager(false)}
         />
       </IonContent>
-      <IonToast
-        isOpen={toast.shown}
-        onDidDismiss={() => setToast((val) => ({ ...val, shown: false }))}
-        message={toast.text}
-        duration={2000}
-        position="bottom"
-        cssClass="SmallToast"
-      />
       <Modal
         open={addressModal}
         backdrop={true}
