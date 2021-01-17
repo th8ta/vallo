@@ -80,7 +80,12 @@ export default function Swap({ history }: RouteComponentProps) {
   function swapTokens() {
     if (!assets) return;
     // TODO: ETH and AR support
-    if (!assets.tokens.find(({ id }) => id === swapItems.to)) return;
+    if (
+      !assets.tokens.find(({ id }) => id === swapItems.to) &&
+      swapItems.to !== "AR_COIN" &&
+      swapItems.to !== "ETH_COIN"
+    )
+      return;
     dispatch(updateSwapItems({ from: swapItems.to, to: swapItems.from }));
   }
 
@@ -128,17 +133,23 @@ export default function Swap({ history }: RouteComponentProps) {
                   {(swapLogos.from &&
                     !swapLogos.loading &&
                     swapLogos.from !== "https://arweave.net/" && (
-                      <img
-                        className={SwapItemsStyle.Logo}
-                        src={
-                          swapTickers.from?.ticker.toUpperCase() !== "VRT"
-                            ? swapLogos.from
-                            : theme === "Dark"
-                            ? logo_dark
-                            : logo_light
-                        }
-                        alt="Token Logo"
-                      />
+                      <>
+                        {(typeof swapLogos.from === "string" && (
+                          <img
+                            className={SwapItemsStyle.Logo}
+                            src={
+                              swapTickers.from?.ticker.toUpperCase() !== "VRT"
+                                ? swapLogos.from
+                                : theme === "Dark"
+                                ? logo_dark
+                                : logo_light
+                            }
+                            alt="Token Logo"
+                          />
+                        )) || (
+                          <swapLogos.from className={SwapItemsStyle.Logo} />
+                        )}
+                      </>
                     )) ||
                     (swapLogos.loading && (
                       <IonSkeletonText
@@ -175,19 +186,33 @@ export default function Swap({ history }: RouteComponentProps) {
                   {(swapLogos.to &&
                     !swapLogos.loading &&
                     swapLogos.to !== "https://arweave.net/" && (
-                      <img
-                        className={
-                          SwapItemsStyle.Logo + " " + SwapItemsStyle.RightLogo
-                        }
-                        src={
-                          swapTickers.to?.ticker.toUpperCase() !== "VRT"
-                            ? swapLogos.to
-                            : theme === "Dark"
-                            ? logo_dark
-                            : logo_light
-                        }
-                        alt="Token Logo"
-                      />
+                      <>
+                        {(typeof swapLogos.to === "string" && (
+                          <img
+                            className={
+                              SwapItemsStyle.Logo +
+                              " " +
+                              SwapItemsStyle.RightLogo
+                            }
+                            src={
+                              swapTickers.to?.ticker.toUpperCase() !== "VRT"
+                                ? swapLogos.to
+                                : theme === "Dark"
+                                ? logo_dark
+                                : logo_light
+                            }
+                            alt="Token Logo"
+                          />
+                        )) || (
+                          <swapLogos.to
+                            className={
+                              SwapItemsStyle.Logo +
+                              " " +
+                              SwapItemsStyle.RightLogo
+                            }
+                          />
+                        )}
+                      </>
                     )) ||
                     (swapLogos.loading && (
                       <IonSkeletonText

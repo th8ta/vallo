@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function EtherumLogo() {
+export default function EtherumLogo({ className }: LogoProps) {
   return (
     <svg
       width="100%"
@@ -12,6 +12,7 @@ export default function EtherumLogo() {
       fillRule="evenodd"
       clipRule="evenodd"
       viewBox="0 0 784.37 1277.39"
+      className={className}
     >
       <g id="Layer_x0020_1">
         <metadata id="CorelCorpID_0Corel-Layer" />
@@ -52,4 +53,8 @@ export default function EtherumLogo() {
       </g>
     </svg>
   );
+}
+
+interface LogoProps {
+  className?: string;
 }

@@ -3,6 +3,8 @@ import { useSelector } from "react-redux";
 import { RootState } from "../stores/reducers";
 import { IToken } from "../stores/reducers/tokens";
 import { getCommunityLogo } from "../utils/arweave";
+import ArweaveLogo from "../components/chain_logos/Arweave";
+import EtherumLogo from "../components/chain_logos/Etherum";
 
 export function useSwapTickers() {
   const [swapTickers, setSwapTickers] = useState<{
@@ -48,8 +50,8 @@ export function useSwapTickers() {
 // TODO: ETH and AR support: set from/to to "" if they are either AR or ETH
 export function useSwapLogos() {
   const [logos, setLogos] = useState<{
-      from?: string;
-      to?: string;
+      from?: string | ((props: any) => JSX.Element);
+      to?: string | ((props: any) => JSX.Element);
       loading: boolean;
     }>({ loading: true }),
     swapItemTickers = useSwapTickers();
@@ -61,14 +63,24 @@ export function useSwapLogos() {
   }, [swapItemTickers]);
 
   async function updateLogos() {
-    const from = swapItemTickers.from
-        ? `https://arweave.net/${await getCommunityLogo(
-            swapItemTickers.from.id
-          )}`
-        : "",
-      to = swapItemTickers.to
-        ? `https://arweave.net/${await getCommunityLogo(swapItemTickers.to.id)}`
-        : "";
+    let from: string | ((props: any) => JSX.Element) = "",
+      to: string | ((props: any) => JSX.Element) = "";
+
+    if (!swapItemTickers.from) from = "";
+    else if (swapItemTickers.from.id === "AR_COIN") from = ArweaveLogo;
+    else if (swapItemTickers.from.id === "ETH_COIN") from = EtherumLogo;
+    else
+      from = `https://arweave.net/${await getCommunityLogo(
+        swapItemTickers.from.id
+      )}`;
+
+    if (!swapItemTickers.to) from = "";
+    else if (swapItemTickers.to.id === "AR_COIN") to = ArweaveLogo;
+    else if (swapItemTickers.to.id === "ETH_COIN") to = EtherumLogo;
+    else
+      to = `https://arweave.net/${await getCommunityLogo(
+        swapItemTickers.to.id
+      )}`;
 
     setLogos({ from, to, loading: false });
   }

@@ -1,8 +1,14 @@
 import React from "react";
 
-export default function ArweaveLogo() {
+export default function ArweaveLogo({ className }: LogoProps) {
   return (
-    <svg version="1.1" x="0px" y="0px" viewBox="0 0 31.8 31.8">
+    <svg
+      version="1.1"
+      x="0px"
+      y="0px"
+      viewBox="0 0 31.8 31.8"
+      className={className}
+    >
       <circle
         fill="transparent"
         strokeWidth="2px"
@@ -17,4 +23,8 @@ export default function ArweaveLogo() {
       />
     </svg>
   );
+}
+
+interface LogoProps {
+  className?: string;
 }
