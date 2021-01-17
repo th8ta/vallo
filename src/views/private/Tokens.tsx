@@ -84,6 +84,7 @@ export default function Tokens({ history }: RouteComponentProps) {
             : { ...update, to: swapItems.from };
 
     dispatch(updateSwapItems(update));
+    history.push("/app/swap");
   }
 
   return (

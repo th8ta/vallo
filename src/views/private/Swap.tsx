@@ -93,13 +93,24 @@ export default function Swap({ history }: RouteComponentProps) {
   function getSwapItemTokens(): { from?: IToken; to?: IToken } {
     if (!assets) return {};
 
-    // TODO: ETH and AR support
     const from =
-        tokens.find(({ id }) => id === swapItems.from) ??
-        assets.tokens.find(({ id }) => id === swapItems.from),
+        swapItems.from === "AR_COIN" || swapItems.from === "ETH_COIN"
+          ? {
+              id: swapItems.from,
+              name: swapItems.from,
+              ticker: swapItems.from === "AR_COIN" ? "AR" : "ETH"
+            }
+          : tokens.find(({ id }) => id === swapItems.from) ??
+            assets.tokens.find(({ id }) => id === swapItems.from),
       to =
-        tokens.find(({ id }) => id === swapItems.to) ??
-        assets.tokens.find(({ id }) => id === swapItems.to);
+        swapItems.to === "AR_COIN" || swapItems.to === "ETH_COIN"
+          ? {
+              id: swapItems.to,
+              name: swapItems.to,
+              ticker: swapItems.to === "AR_COIN" ? "AR" : "ETH"
+            }
+          : tokens.find(({ id }) => id === swapItems.to) ??
+            assets.tokens.find(({ id }) => id === swapItems.to);
 
     return { from, to };
   }
