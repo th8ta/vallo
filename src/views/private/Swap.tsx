@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   IonPage,
   IonContent,
@@ -29,12 +29,12 @@ import ShortTopLayerTitle from "../../components/ShortTopLayerTitle";
 import type { RootState } from "../../stores/reducers";
 import { useDispatch, useSelector } from "react-redux";
 import { updateSwapItems } from "../../stores/actions";
-import { IToken } from "../../stores/reducers/tokens";
 import { loadTokens, preloadAssets } from "../../utils/data";
-import { getCommunityLogo, formatTotalBalance } from "../../utils/arweave";
+import { formatTotalBalance } from "../../utils/arweave";
 import logo_light from "../../assets/logo.png";
 import logo_dark from "../../assets/logo_dark.png";
 import { useTheme } from "../../utils/theme";
+import { useSwapLogos, useSwapTickers } from "../../utils/swap";
 import styles from "../../theme/views/swap.module.sass";
 import SwapItemsStyle from "../../theme/components/Swap.module.sass";
 
@@ -47,14 +47,9 @@ export default function Swap({ history }: RouteComponentProps) {
     tokens = useSelector((state: RootState) => state.tokens),
     swapItems = useSelector((state: RootState) => state.swap),
     dispatch = useDispatch(),
-    [swapItemLogos, setSwapItemLogos] = useState<{
-      from?: string;
-      to?: string;
-    }>({
-      from: "loading",
-      to: "loading"
-    }),
-    theme = useTheme();
+    theme = useTheme(),
+    swapTickers = useSwapTickers(),
+    swapLogos = useSwapLogos();
 
   useEffect(() => {
     refresh();
@@ -71,63 +66,15 @@ export default function Swap({ history }: RouteComponentProps) {
           undefined;
 
       dispatch(updateSwapItems({ from, to }));
-      loadSwapItemLogos();
     }
     // eslint-disable-next-line
   }, [assets, swapItems, dispatch, tokens, history]);
 
-  useEffect(() => {
-    setSwapItemLogos({ from: "loading", to: "loading" });
-    loadSwapItemLogos();
-    // eslint-disable-next-line
-  }, [swapItems]);
-
   async function refresh(e?: CustomEvent<RefresherEventDetail>) {
     await preloadAssets();
     await loadTokens();
-    await loadSwapItemLogos();
 
     if (e) e.detail.complete();
-  }
-
-  function getSwapItemTokens(): { from?: IToken; to?: IToken } {
-    if (!assets) return {};
-
-    const from =
-        swapItems.from === "AR_COIN" || swapItems.from === "ETH_COIN"
-          ? {
-              id: swapItems.from,
-              name: swapItems.from,
-              ticker: swapItems.from === "AR_COIN" ? "AR" : "ETH"
-            }
-          : tokens.find(({ id }) => id === swapItems.from) ??
-            assets.tokens.find(({ id }) => id === swapItems.from),
-      to =
-        swapItems.to === "AR_COIN" || swapItems.to === "ETH_COIN"
-          ? {
-              id: swapItems.to,
-              name: swapItems.to,
-              ticker: swapItems.to === "AR_COIN" ? "AR" : "ETH"
-            }
-          : tokens.find(({ id }) => id === swapItems.to) ??
-            assets.tokens.find(({ id }) => id === swapItems.to);
-
-    return { from, to };
-  }
-
-  // TODO: ETH and AR support: set from/to to "" if they are either AR or ETH
-  async function loadSwapItemLogos() {
-    const swapItemTokens = getSwapItemTokens(),
-      from = swapItemTokens.from
-        ? `https://arweave.net/${await getCommunityLogo(
-            swapItemTokens.from.id
-          )}`
-        : "",
-      to = swapItemTokens.to
-        ? `https://arweave.net/${await getCommunityLogo(swapItemTokens.to.id)}`
-        : "";
-
-    setSwapItemLogos({ from, to });
   }
 
   function swapTokens() {
@@ -178,14 +125,14 @@ export default function Swap({ history }: RouteComponentProps) {
                   className={SwapItemsStyle.From}
                   onClick={() => history.push("/app/tokens?choose=from")}
                 >
-                  {(swapItemLogos.from !== "https://arweave.net/" &&
-                    swapItemLogos.from !== "loading" && (
+                  {(swapLogos.from &&
+                    !swapLogos.loading &&
+                    swapLogos.from !== "https://arweave.net/" && (
                       <img
                         className={SwapItemsStyle.Logo}
                         src={
-                          getSwapItemTokens().from?.ticker.toUpperCase() !==
-                          "VRT"
-                            ? swapItemLogos.from
+                          swapTickers.from?.ticker.toUpperCase() !== "VRT"
+                            ? swapLogos.from
                             : theme === "Dark"
                             ? logo_dark
                             : logo_light
@@ -193,7 +140,7 @@ export default function Swap({ history }: RouteComponentProps) {
                         alt="Token Logo"
                       />
                     )) ||
-                    (swapItemLogos.from && swapItemLogos.from === "loading" && (
+                    (swapLogos.loading && (
                       <IonSkeletonText
                         animated
                         className={SwapItemsStyle.LoadingLogo}
@@ -205,7 +152,7 @@ export default function Swap({ history }: RouteComponentProps) {
                     )}
                   <div className={SwapItemsStyle.Info}>
                     <h2>From</h2>
-                    <h1>{getSwapItemTokens().from?.ticker ?? "---"}</h1>
+                    <h1>{swapTickers.from?.ticker ?? "---"}</h1>
                   </div>
                 </div>
                 <div
@@ -223,17 +170,18 @@ export default function Swap({ history }: RouteComponentProps) {
                 >
                   <div className={SwapItemsStyle.Info}>
                     <h2>To</h2>
-                    <h1>{getSwapItemTokens().to?.ticker ?? "---"}</h1>
+                    <h1>{swapTickers.to?.ticker ?? "---"}</h1>
                   </div>
-                  {(swapItemLogos.to !== "https://arweave.net/" &&
-                    swapItemLogos.to !== "loading" && (
+                  {(swapLogos.to &&
+                    !swapLogos.loading &&
+                    swapLogos.to !== "https://arweave.net/" && (
                       <img
                         className={
                           SwapItemsStyle.Logo + " " + SwapItemsStyle.RightLogo
                         }
                         src={
-                          getSwapItemTokens().to?.ticker.toUpperCase() !== "VRT"
-                            ? swapItemLogos.to
+                          swapTickers.to?.ticker.toUpperCase() !== "VRT"
+                            ? swapLogos.to
                             : theme === "Dark"
                             ? logo_dark
                             : logo_light
@@ -241,7 +189,7 @@ export default function Swap({ history }: RouteComponentProps) {
                         alt="Token Logo"
                       />
                     )) ||
-                    (swapItemLogos.to && swapItemLogos.to === "loading" && (
+                    (swapLogos.loading && (
                       <IonSkeletonText
                         animated
                         className={
@@ -286,7 +234,7 @@ export default function Swap({ history }: RouteComponentProps) {
                     className={styles.Ticker}
                     onClick={() => history.push("/app/tokens?choose=from")}
                   >
-                    {getSwapItemTokens().from?.ticker ?? "---"}
+                    {swapTickers.from?.ticker ?? "---"}
                     <ChevronRightIcon />
                   </div>
                 </Input>
@@ -301,7 +249,7 @@ export default function Swap({ history }: RouteComponentProps) {
                     className={styles.Ticker}
                     onClick={() => history.push("/app/tokens?choose=to")}
                   >
-                    {getSwapItemTokens().to?.ticker ?? "---"}
+                    {swapTickers.to?.ticker ?? "---"}
                     <ChevronRightIcon />
                   </div>
                 </Input>
