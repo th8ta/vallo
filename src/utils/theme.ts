@@ -11,18 +11,32 @@ export function useTheme() {
     userTheme = useSelector((state: RootState) => state.theme);
 
   useEffect(() => {
-    if (userTheme !== "Auto" && userTheme !== theme) return setTheme(userTheme);
     DarkMode.addListener("darkModeStateChanged", nativeAutoTheme);
+    // eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
+    if (userTheme === "Auto" || userTheme === theme) return;
+    setTheme(userTheme);
+    adjustStatusBar();
     // eslint-disable-next-line
   }, [userTheme, theme]);
 
+  useEffect(() => {
+    nativeAutoTheme();
+    // eslint-disable-next-line
+  }, [userTheme]);
+
   async function nativeAutoTheme(state?: any) {
+    if (userTheme !== "Auto") return;
     if (!isPlatform("android") && !isPlatform("ios"))
       return fallbackAutoTheme();
 
     const darkMode = state ? state : await DarkMode.isDarkModeOn();
-    if (darkMode.isDarkModeOn && theme !== "Dark") return setTheme("Dark");
-    else if (theme !== "Light") return setTheme("Light");
+
+    if (darkMode.isDarkModeOn && theme !== "Dark") setTheme("Dark");
+    else if (theme !== "Light") setTheme("Light");
+    adjustStatusBar();
   }
 
   function fallbackAutoTheme() {
@@ -34,12 +48,18 @@ export function useTheme() {
     setTheme(newTheme);
   }
 
-  useEffect(() => {
+  function adjustStatusBar() {
+    if (!isPlatform("android")) return;
     try {
-      if (theme === "Dark") StatusBar.setStyle({ style: StatusBarStyle.Dark });
-      else StatusBar.setStyle({ style: StatusBarStyle.Light });
+      if (theme === "Dark") {
+        StatusBar.setStyle({ style: StatusBarStyle.Dark });
+        StatusBar.setBackgroundColor({ color: "#000000" });
+      } else {
+        StatusBar.setStyle({ style: StatusBarStyle.Light });
+        StatusBar.setBackgroundColor({ color: "#ffffff" });
+      }
     } catch {}
-  }, [theme]);
+  }
 
   return theme;
 }

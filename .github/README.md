@@ -8,7 +8,7 @@
 - [ ] Swap view
   - [x] Design
   - [x] Select token
-  - [ ] Select crypto
+  - [x] Select crypto
   - [ ] Last orders
 - [x] Profile view
 - [ ] All trades view

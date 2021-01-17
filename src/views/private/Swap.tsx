@@ -88,6 +88,16 @@ export default function Swap({ history }: RouteComponentProps) {
     dispatch(updateSwapItems({ from: swapItems.to, to: swapItems.from }));
   }
 
+  /*
+  function doSwap() {
+    // TODO
+    // after showing modal:
+    // Read to swap? (title)
+    // This will start the swap process to swap the 100 VRT (amount - tokenname) with 10 AR (amount - tokenname) (description)
+    // and confirming the swap, this executes the swap process
+  }
+  */
+
   return (
     <IonPage>
       <IonContent>

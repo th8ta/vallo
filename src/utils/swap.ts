@@ -47,7 +47,6 @@ export function useSwapTickers() {
   return swapTickers;
 }
 
-// TODO: ETH and AR support: set from/to to "" if they are either AR or ETH
 export function useSwapLogos() {
   const [logos, setLogos] = useState<{
       from?: string | ((props: any) => JSX.Element);

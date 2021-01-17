@@ -25,8 +25,6 @@ export default function SplashLoading({ history }: RouteComponentProps) {
     history.push("/app/home");
   }
 
-  // TODO: Load wallet here (check if logged in etc.)
-  // then: redirect to the appropriate route
   return (
     <IonPage>
       <IonContent className="IonContent" fullscreen>
