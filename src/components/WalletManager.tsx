@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "../stores/reducers";
 import { removeWallet, setProfile, signOut } from "../stores/actions";
