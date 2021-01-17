@@ -68,7 +68,7 @@ export default function Swap({ history }: RouteComponentProps) {
       dispatch(updateSwapItems({ from, to }));
     }
     // eslint-disable-next-line
-  }, [assets, swapItems, dispatch, tokens, history]);
+  }, [assets, swapItems, tokens, history]);
 
   async function refresh(e?: CustomEvent<RefresherEventDetail>) {
     await preloadAssets();
@@ -79,7 +79,6 @@ export default function Swap({ history }: RouteComponentProps) {
 
   function swapTokens() {
     if (!assets) return;
-    // TODO: ETH and AR support
     if (
       !assets.tokens.find(({ id }) => id === swapItems.to) &&
       swapItems.to !== "AR_COIN" &&

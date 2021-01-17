@@ -1,24 +1,52 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   IonPage,
   IonContent,
   IonCard,
   IonCardContent,
   IonCardHeader,
-  IonCardTitle
+  IonCardTitle,
+  IonRefresher,
+  IonRefresherContent,
+  IonSkeletonText
 } from "@ionic/react";
-import { ArrowSwitchIcon } from "@primer/octicons-react";
+import { RefresherEventDetail } from "@ionic/core";
+import { ArrowSwitchIcon, QuestionIcon } from "@primer/octicons-react";
 import { RouteComponentProps } from "react-router-dom";
 import ShortTopLayerTitle from "../../components/ShortTopLayerTitle";
 import { Line } from "react-chartjs-2";
 import { GraphOptions, GraphDataConfig, addZero } from "../../utils/graph";
+import { useSwapLogos, useSwapTickers } from "../../utils/swap";
+import { loadTokens, preloadAssets } from "../../utils/data";
+import { useTheme } from "../../utils/theme";
+import logo_light from "../../assets/logo.png";
+import logo_dark from "../../assets/logo_dark.png";
 import styles from "../../theme/views/analytics.module.sass";
 import SwapItemsStyle from "../../theme/components/Swap.module.sass";
 
 export default function Analytics({ history }: RouteComponentProps) {
+  const swapTickers = useSwapTickers(),
+    swapLogos = useSwapLogos(),
+    theme = useTheme();
+
+  useEffect(() => {
+    refresh();
+    // eslint-disable-next-line
+  }, []);
+
+  async function refresh(e?: CustomEvent<RefresherEventDetail>) {
+    await preloadAssets();
+    await loadTokens();
+
+    if (e) e.detail.complete();
+  }
+
   return (
     <IonPage>
       <IonContent>
+        <IonRefresher slot="fixed" onIonRefresh={refresh}>
+          <IonRefresherContent></IonRefresherContent>
+        </IonRefresher>
         <div className="TopBackgroundSpacer">
           <div className="ShortTitle">
             <ShortTopLayerTitle
@@ -32,16 +60,51 @@ export default function Analytics({ history }: RouteComponentProps) {
             <IonCard className="Card" style={{ marginTop: 0 }}>
               <IonCardContent className={"Content " + SwapItemsStyle.SwapItems}>
                 <div
-                  className={SwapItemsStyle.From + " " + SwapItemsStyle.Static}
+                  className={SwapItemsStyle.From}
+                  onClick={() => {
+                    if (!swapTickers.from) return;
+                    if (
+                      swapTickers.from.id === "AR_COIN" ||
+                      swapTickers.from.id === "ETH_COIN"
+                    )
+                      return;
+                    history.push(`/app/token/${swapTickers.from.id}`);
+                  }}
                 >
-                  <img
-                    className={SwapItemsStyle.Logo}
-                    src="https://verto.exchange/logo_dark.svg"
-                    alt="Verto Logo"
-                  />
+                  {(swapLogos.from &&
+                    !swapLogos.loading &&
+                    swapLogos.from !== "https://arweave.net/" && (
+                      <>
+                        {(typeof swapLogos.from === "string" && (
+                          <img
+                            className={SwapItemsStyle.Logo}
+                            src={
+                              swapTickers.from?.ticker.toUpperCase() !== "VRT"
+                                ? swapLogos.from
+                                : theme === "Dark"
+                                ? logo_dark
+                                : logo_light
+                            }
+                            alt="Token Logo"
+                          />
+                        )) || (
+                          <swapLogos.from className={SwapItemsStyle.Logo} />
+                        )}
+                      </>
+                    )) ||
+                    (swapLogos.loading && (
+                      <IonSkeletonText
+                        animated
+                        className={SwapItemsStyle.LoadingLogo}
+                      />
+                    )) || (
+                      <div className={SwapItemsStyle.NoLogo}>
+                        <QuestionIcon />
+                      </div>
+                    )}
                   <div className={SwapItemsStyle.Info}>
                     <h2>From</h2>
-                    <h1>VRT</h1>
+                    <h1>{swapTickers.from?.ticker ?? "---"}</h1>
                   </div>
                 </div>
                 <div
@@ -52,17 +115,70 @@ export default function Analytics({ history }: RouteComponentProps) {
                   <ArrowSwitchIcon />
                 </div>
                 <div
-                  className={SwapItemsStyle.To + " " + SwapItemsStyle.Static}
+                  className={SwapItemsStyle.To}
+                  onClick={() => {
+                    if (!swapTickers.to) return;
+                    if (
+                      swapTickers.to.id === "AR_COIN" ||
+                      swapTickers.to.id === "ETH_COIN"
+                    )
+                      return;
+                    history.push(`/app/token/${swapTickers.to.id}`);
+                  }}
                 >
                   <div className={SwapItemsStyle.Info}>
                     <h2>To</h2>
-                    <h1>VRT</h1>
+                    <h1>{swapTickers.to?.ticker ?? "---"}</h1>
                   </div>
-                  <img
-                    className={SwapItemsStyle.Logo}
-                    src="https://verto.exchange/logo_dark.svg"
-                    alt="Verto Logo"
-                  />
+                  {(swapLogos.to &&
+                    !swapLogos.loading &&
+                    swapLogos.to !== "https://arweave.net/" && (
+                      <>
+                        {(typeof swapLogos.to === "string" && (
+                          <img
+                            className={
+                              SwapItemsStyle.Logo +
+                              " " +
+                              SwapItemsStyle.RightLogo
+                            }
+                            src={
+                              swapTickers.to?.ticker.toUpperCase() !== "VRT"
+                                ? swapLogos.to
+                                : theme === "Dark"
+                                ? logo_dark
+                                : logo_light
+                            }
+                            alt="Token Logo"
+                          />
+                        )) || (
+                          <swapLogos.to
+                            className={
+                              SwapItemsStyle.Logo +
+                              " " +
+                              SwapItemsStyle.RightLogo
+                            }
+                          />
+                        )}
+                      </>
+                    )) ||
+                    (swapLogos.loading && (
+                      <IonSkeletonText
+                        animated
+                        className={
+                          SwapItemsStyle.LoadingLogo +
+                          " " +
+                          SwapItemsStyle.RightLogo
+                        }
+                      />
+                    )) || (
+                      <div
+                        className={
+                          SwapItemsStyle.NoLogo + " " + SwapItemsStyle.RightLogo
+                        }
+                      >
+                        <QuestionIcon />
+                      </div>
+                    )}
                 </div>
               </IonCardContent>
             </IonCard>
