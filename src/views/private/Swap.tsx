@@ -107,8 +107,14 @@ export default function Swap({ history }: RouteComponentProps) {
   // TODO: ETH and AR support: set from/to to "" if they are either AR or ETH
   async function loadSwapItemLogos() {
     const swapItemTokens = getSwapItemTokens(),
-      from = await getCommunityLogo(swapItemTokens.from?.id ?? ""),
-      to = await getCommunityLogo(swapItemTokens.to?.id ?? "");
+      from = swapItemTokens.from
+        ? `https://arweave.net/${await getCommunityLogo(
+            swapItemTokens.from.id
+          )}`
+        : "",
+      to = swapItemTokens.to
+        ? `https://arweave.net/${await getCommunityLogo(swapItemTokens.to.id)}`
+        : "";
 
     setSwapItemLogos({ from, to });
   }
@@ -161,19 +167,21 @@ export default function Swap({ history }: RouteComponentProps) {
                   className={SwapItemsStyle.From}
                   onClick={() => history.push("/app/tokens?choose=from")}
                 >
-                  {(swapItemLogos.from && swapItemLogos.from !== "loading" && (
-                    <img
-                      className={SwapItemsStyle.Logo}
-                      src={
-                        getSwapItemTokens().from?.ticker.toUpperCase() !== "VRT"
-                          ? `https://arweave.net/${swapItemLogos.from}`
-                          : theme === "Dark"
-                          ? logo_dark
-                          : logo_light
-                      }
-                      alt="Token Logo"
-                    />
-                  )) ||
+                  {(swapItemLogos.from !== "https://arweave.net/" &&
+                    swapItemLogos.from !== "loading" && (
+                      <img
+                        className={SwapItemsStyle.Logo}
+                        src={
+                          getSwapItemTokens().from?.ticker.toUpperCase() !==
+                          "VRT"
+                            ? swapItemLogos.from
+                            : theme === "Dark"
+                            ? logo_dark
+                            : logo_light
+                        }
+                        alt="Token Logo"
+                      />
+                    )) ||
                     (swapItemLogos.from && swapItemLogos.from === "loading" && (
                       <IonSkeletonText
                         animated
@@ -206,21 +214,22 @@ export default function Swap({ history }: RouteComponentProps) {
                     <h2>To</h2>
                     <h1>{getSwapItemTokens().to?.ticker ?? "---"}</h1>
                   </div>
-                  {(swapItemLogos.to && swapItemLogos.to !== "loading" && (
-                    <img
-                      className={
-                        SwapItemsStyle.Logo + " " + SwapItemsStyle.RightLogo
-                      }
-                      src={
-                        getSwapItemTokens().to?.ticker.toUpperCase() !== "VRT"
-                          ? `https://arweave.net/${swapItemLogos.to}`
-                          : theme === "Dark"
-                          ? logo_dark
-                          : logo_light
-                      }
-                      alt="Token Logo"
-                    />
-                  )) ||
+                  {(swapItemLogos.to !== "https://arweave.net/" &&
+                    swapItemLogos.to !== "loading" && (
+                      <img
+                        className={
+                          SwapItemsStyle.Logo + " " + SwapItemsStyle.RightLogo
+                        }
+                        src={
+                          getSwapItemTokens().to?.ticker.toUpperCase() !== "VRT"
+                            ? swapItemLogos.to
+                            : theme === "Dark"
+                            ? logo_dark
+                            : logo_light
+                        }
+                        alt="Token Logo"
+                      />
+                    )) ||
                     (swapItemLogos.to && swapItemLogos.to === "loading" && (
                       <IonSkeletonText
                         animated
