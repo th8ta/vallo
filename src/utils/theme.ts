@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
-import { ThemeDetection } from "@ionic-native/theme-detection";
 import { Plugins, StatusBarStyle } from "@capacitor/core";
 import { useSelector } from "react-redux";
 import { RootState } from "../stores/reducers";
 import { isPlatform } from "@ionic/react";
 
-const { StatusBar } = Plugins;
+const { StatusBar, DarkMode } = Plugins;
 
 export function useTheme() {
   const [theme, setTheme] = useState<"Dark" | "Light">("Light"),
@@ -13,24 +12,18 @@ export function useTheme() {
 
   useEffect(() => {
     if (userTheme !== "Auto" && userTheme !== theme) return setTheme(userTheme);
-
-    ThemeDetection.isAvailable()
-      .then(async (res) => {
-        if (!res.value) return;
-        try {
-          if (
-            (await ThemeDetection.isDarkModeEnabled()).value &&
-            theme !== "Dark"
-          )
-            setTheme("Dark");
-          else if (theme !== "Light") setTheme("Light");
-        } catch {
-          fallbackAutoTheme();
-        }
-      })
-      .catch(fallbackAutoTheme);
+    DarkMode.addListener("darkModeStateChanged", nativeAutoTheme);
     // eslint-disable-next-line
   }, [userTheme, theme]);
+
+  async function nativeAutoTheme(state?: any) {
+    if (!isPlatform("android") && !isPlatform("ios"))
+      return fallbackAutoTheme();
+
+    const darkMode = state ? state : await DarkMode.isDarkModeOn();
+    if (darkMode.isDarkModeOn && theme !== "Dark") return setTheme("Dark");
+    else if (theme !== "Light") return setTheme("Light");
+  }
 
   function fallbackAutoTheme() {
     const newTheme = window.matchMedia("(prefers-color-scheme: dark)").matches

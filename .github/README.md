@@ -37,3 +37,6 @@
   - [x] Detect native theme
   - [x] Set theme according to the theme redux store
   - [ ] Set status bar color
+
+### Capacitor TODOS:
+- [ ] Add IOS support for capacitor-dark-mode (https://www.npmjs.com/package/capacitor-dark-mode#ios-configuration)
