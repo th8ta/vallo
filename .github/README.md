@@ -14,7 +14,7 @@
 - [ ] All trades view
 - [ ] All orders for trading post view
 - [x] Token info view
-- [ ] Analytics view
+- [x] Analytics view
 - [x] Tokens view
 - [ ] Trade info view
   - [x] Design

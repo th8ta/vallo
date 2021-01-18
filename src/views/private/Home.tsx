@@ -9,7 +9,6 @@ import {
   IonLabel,
   IonCardTitle,
   IonText,
-  IonRouterLink,
   IonRippleEffect,
   IonRefresher,
   IonRefresherContent,
@@ -29,10 +28,13 @@ import { getStatusColor, formatTotalBalance } from "../../utils/arweave";
 import { useTheme } from "../../utils/theme";
 import { QRCode } from "react-qr-svg";
 import { forwardAnimation } from "../../utils/route_animations";
+import { Plugins } from "@capacitor/core";
 import qrcode_logo_dark from "../../assets/qrcode/dark.png";
 import qrcode_logo_light from "../../assets/qrcode/light.png";
 import QRModal from "../../theme/components/QRModal.module.sass";
 import styles from "../../theme/views/home.module.sass";
+
+const { Browser } = Plugins;
 
 export default function Home() {
   const balances = useSelector((state: RootState) => state.balance),
@@ -100,10 +102,15 @@ export default function Home() {
               <span>AR</span>
             </h1>
             <div className={styles.ButtonGroup}>
-              <IonRouterLink className={styles.Link} routerLink="/app/tokens">
+              <div
+                className={styles.Link + " ion-activatable ripple-parent"}
+                onClick={() =>
+                  Browser.open({ url: "https://oprit.th8ta.org/" })
+                }
+              >
                 Buy
                 <IonRippleEffect />
-              </IonRouterLink>
+              </div>
               <div
                 className={styles.Link + " ion-activatable ripple-parent"}
                 onClick={() => setTransferModal(true)}

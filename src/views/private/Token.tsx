@@ -10,7 +10,6 @@ import {
   IonRefresher,
   IonRefresherContent,
   IonSkeletonText,
-  IonToast,
   IonSpinner
 } from "@ionic/react";
 import { RefresherEventDetail } from "@ionic/core";
@@ -28,6 +27,8 @@ import { arweaveInstance } from "../../utils/arweave";
 import Community from "community-js";
 import limestone from "@limestonefi/api";
 import Verto from "@verto/lib";
+import { Modal } from "@verto/ui";
+import TransferModal from "../../components/TransferModal";
 import { StateInterface } from "community-js/lib/faces";
 import { useSelector } from "react-redux";
 import { RootState } from "../../stores/reducers";
@@ -37,7 +38,7 @@ import logo_dark from "../../assets/logo_dark.png";
 import { QuestionIcon } from "@primer/octicons-react";
 import styles from "../../theme/views/token.module.sass";
 
-const { Browser } = Plugins;
+const { Browser, Toast } = Plugins;
 
 export default function Token({ history, match }: TokenProps) {
   const arweave = arweaveInstance(),
@@ -69,11 +70,7 @@ export default function Token({ history, match }: TokenProps) {
       (val) => val.address === address
     ),
     theme = useTheme(),
-    [toastData, setToastData] = useState<{
-      color?: string;
-      text: string;
-      shown: boolean;
-    }>({ text: "", shown: false });
+    [transferModal, setTransferModal] = useState(false);
 
   useEffect(() => {
     refresh();
@@ -156,12 +153,10 @@ export default function Token({ history, match }: TokenProps) {
     try {
       const allPrices = await verto.price(match.params.tokenid);
 
-      if (!allPrices)
-        return setToastData({
-          shown: true,
-          text: "Could not load data for graph",
-          color: "danger"
-        });
+      if (!allPrices) {
+        Toast.show({ text: "Could not load data for graph" });
+        return;
+      }
 
       const dates = allPrices.prices,
         prices = allPrices.prices,
@@ -178,12 +173,21 @@ export default function Token({ history, match }: TokenProps) {
         percentageIncreased
       }));
     } catch {
-      setToastData({
-        shown: true,
-        text: "Could not load data for graph",
-        color: "danger"
-      });
+      Toast.show({ text: "Could not load data for graph" });
     }
+  }
+
+  function transferTokens() {
+    if (!assets) return;
+    const thisAsset = assets.tokens.find(
+      ({ id }) => id === match.params.tokenid
+    );
+
+    if (thisAsset && thisAsset.balance > 0) setTransferModal(true);
+    else
+      Toast.show({
+        text: `Not enough ${communityInfo.token?.ticker || "tokens"}.`
+      });
   }
 
   return (
@@ -462,6 +466,7 @@ export default function Token({ history, match }: TokenProps) {
             color="dark"
             shape="round"
             style={{ marginBottom: ".57em" }}
+            onClick={transferTokens}
           >
             Transfer
           </IonButton>
@@ -471,19 +476,24 @@ export default function Token({ history, match }: TokenProps) {
             expand="full"
             color="dark"
             shape="round"
+            onClick={() => Browser.open({ url: "https://oprit.th8ta.org/" })}
           >
             Buy with fiat
           </IonButton>
         </div>
       </IonContent>
-      <IonToast
-        isOpen={toastData.shown}
-        onDidDismiss={() => setToastData((val) => ({ ...val, shown: false }))}
-        message={toastData.text}
-        duration={2000}
-        position="bottom"
-        color={toastData.color}
-      />
+      {assets && assets.tokens.length > 0 && (
+        <Modal
+          open={transferModal}
+          backdrop={true}
+          onClose={() => setTransferModal(false)}
+        >
+          <TransferModal
+            close={() => setTransferModal(false)}
+            defaultAssetID={match.params.tokenid}
+          />
+        </Modal>
+      )}
     </IonPage>
   );
 }

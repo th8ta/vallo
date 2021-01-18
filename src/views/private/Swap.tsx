@@ -106,6 +106,8 @@ export default function Swap({ history }: RouteComponentProps) {
     // Read to swap? (title)
     // This will start the swap process to swap the 100 VRT (amount - tokenname) with 10 AR (amount - tokenname) (description)
     // and confirming the swap, this executes the swap process
+
+    // TODO: show toast and return if the current amount of pst/chain equals 0
   }
   */
 

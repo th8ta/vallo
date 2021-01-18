@@ -10,16 +10,22 @@ import qrcode_logo_light from "../assets/qrcode/light.png";
 import { BarcodeScanner } from "@ionic-native/barcode-scanner";
 import styles from "../theme/components/TransferModal.module.sass";
 
-export default function TransferModal({ close }: TransferProps) {
+export default function TransferModal({
+  close,
+  defaultAssetID
+}: TransferProps) {
   const theme = useTheme(),
     currentAddress = useSelector((state: RootState) => state.profile),
     assets = useSelector((state: RootState) => state.assets).find(
       ({ address }) => address === currentAddress
     ),
-    [selectedToken, setSelectedToken] = useState(assets?.tokens[0].id ?? ""),
+    [selectedToken, setSelectedToken] = useState(
+      defaultAssetID || assets?.tokens[0].id || ""
+    ),
     [targetAddress, setTargetAddress] = useState("");
 
   async function transfer() {
+    // TODO: show toast and return if the current amount of pst equals 0
     close();
   }
 
@@ -31,6 +37,10 @@ export default function TransferModal({ close }: TransferProps) {
     } catch {}
   }
 
+  function getMax(): number | undefined {
+    return assets?.tokens.find(({ id }) => id === selectedToken)?.balance;
+  }
+
   return (
     <>
       <Modal.Content className={styles.Content}>
@@ -38,7 +48,9 @@ export default function TransferModal({ close }: TransferProps) {
         <p>Transfer PSTs to a another address.</p>
         <div className={styles.Inputs}>
           <Input
-            value="0"
+            min={0}
+            max={getMax()}
+            value={getMax()}
             label="Amount"
             type="number"
             bold
@@ -108,4 +120,5 @@ export default function TransferModal({ close }: TransferProps) {
 
 interface TransferProps {
   close: () => void;
+  defaultAssetID?: string;
 }
