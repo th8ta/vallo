@@ -88,6 +88,16 @@ export default function Swap({ history }: RouteComponentProps) {
     dispatch(updateSwapItems({ from: swapItems.to, to: swapItems.from }));
   }
 
+  function getMax(): number | undefined {
+    if (!swapItems.from) return undefined;
+    if (swapItems.from === "AR_COIN")
+      return Number(
+        balances.find(({ address }) => address === currentAddress)?.balance
+      );
+    if (swapItems.from === "ETH_COIN") return undefined;
+    return assets?.tokens.find(({ id }) => id === swapItems.from)?.balance;
+  }
+
   /*
   function doSwap() {
     // TODO
@@ -258,11 +268,13 @@ export default function Swap({ history }: RouteComponentProps) {
             <IonCard className={"Card " + styles.SwapForm}>
               <IonCardContent className="Content">
                 <Input
-                  value="0"
                   label="You send"
                   type="number"
                   className={styles.Input}
                   bold
+                  min={0}
+                  max={getMax()}
+                  value={getMax()}
                 >
                   <div
                     className={styles.Ticker}
@@ -278,6 +290,7 @@ export default function Swap({ history }: RouteComponentProps) {
                   type="number"
                   className={styles.Input}
                   bold
+                  readOnly
                 >
                   <div
                     className={styles.Ticker}
