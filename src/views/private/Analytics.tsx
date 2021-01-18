@@ -19,6 +19,7 @@ import { GraphOptions, GraphDataConfig, addZero } from "../../utils/graph";
 import { useSwapLogos, useSwapTickers } from "../../utils/swap";
 import { loadTokens, preloadAssets } from "../../utils/data";
 import { useTheme } from "../../utils/theme";
+import { forwardAnimation } from "../../utils/route_animations";
 import ShortTopLayerTitle from "../../components/ShortTopLayerTitle";
 import Verto from "@verto/lib";
 import logo_light from "../../assets/logo.png";
@@ -117,6 +118,7 @@ export default function Analytics({ history }: RouteComponentProps) {
                       swapTickers.from.id === "ETH_COIN"
                     )
                       return;
+                    forwardAnimation();
                     history.push(`/app/token/${swapTickers.from.id}`);
                   }}
                 >
@@ -172,6 +174,7 @@ export default function Analytics({ history }: RouteComponentProps) {
                       swapTickers.to.id === "ETH_COIN"
                     )
                       return;
+                    forwardAnimation();
                     history.push(`/app/token/${swapTickers.to.id}`);
                   }}
                 >

@@ -7,6 +7,7 @@ import { useTheme } from "../utils/theme";
 import { IonPage, IonButton, IonLoading, IonContent } from "@ionic/react";
 import { RootState } from "../stores/reducers";
 import { useSelector } from "react-redux";
+import { forwardAnimation } from "../utils/route_animations";
 import styles from "../theme/views/login.module.sass";
 
 export default function Welcome() {
@@ -25,6 +26,7 @@ export default function Welcome() {
     console.log("Wallet created", "Wallet:", walletObject);
 
     setLoading(false);
+    forwardAnimation();
     history.push("/app/home");
   }
 
@@ -61,6 +63,9 @@ export default function Welcome() {
             color="dark"
             shape="round"
             routerLink="/loadwallet"
+            onClick={() => {
+              forwardAnimation();
+            }}
           >
             I have a wallet
           </IonButton>

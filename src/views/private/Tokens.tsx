@@ -19,6 +19,7 @@ import { loadTokens, preloadAssets } from "../../utils/data";
 import { IToken } from "../../stores/reducers/tokens";
 import { ISwap } from "../../stores/reducers/swap";
 import { updateSwapItems } from "../../stores/actions";
+import { forwardAnimation } from "../../utils/route_animations";
 import ShortTopLayerTitle from "../../components/ShortTopLayerTitle";
 import styles from "../../theme/views/tokens.module.sass";
 
@@ -85,6 +86,7 @@ export default function Tokens({ history }: RouteComponentProps) {
 
     dispatch(updateSwapItems(update));
     history.push("/app/swap");
+    forwardAnimation();
   }
 
   return (
@@ -155,7 +157,10 @@ export default function Tokens({ history }: RouteComponentProps) {
                   disabled={choose === "from" && !pst.balance}
                   key={i}
                   onClick={() => {
-                    if (!choose) return;
+                    if (!choose) {
+                      forwardAnimation();
+                      return;
+                    }
                     if (choose === "from" && !pst.balance) return;
                     selectToken(pst.id);
                   }}

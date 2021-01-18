@@ -5,6 +5,7 @@ import logo_dark from "../assets/logo_dark.png";
 import { useTheme } from "../utils/theme";
 import { ArrowRightIcon } from "@primer/octicons-react";
 import { useHistory } from "react-router";
+import { forwardAnimation } from "../utils/route_animations";
 import styles from "../theme/views/slideshow.module.sass";
 
 export default function Slideshow() {
@@ -36,7 +37,10 @@ export default function Slideshow() {
               fill="clear"
               color="primary"
               className={styles.Button}
-              onClick={() => history.push("/app/home")}
+              onClick={() => {
+                forwardAnimation();
+                history.push("/app/home");
+              }}
             >
               Go
               <ArrowRightIcon />

@@ -149,7 +149,10 @@ export default function Swap({ history }: RouteComponentProps) {
               <IonCardContent className={"Content " + SwapItemsStyle.SwapItems}>
                 <div
                   className={SwapItemsStyle.From}
-                  onClick={() => history.push("/app/tokens?choose=from")}
+                  onClick={() => {
+                    forwardAnimation();
+                    history.push("/app/tokens?choose=from");
+                  }}
                 >
                   {(swapLogos.from &&
                     !swapLogos.loading &&
@@ -198,7 +201,10 @@ export default function Swap({ history }: RouteComponentProps) {
                 </div>
                 <div
                   className={SwapItemsStyle.To}
-                  onClick={() => history.push("/app/tokens?choose=to")}
+                  onClick={() => {
+                    forwardAnimation();
+                    history.push("/app/tokens?choose=to");
+                  }}
                 >
                   <div className={SwapItemsStyle.Info}>
                     <h2>To</h2>

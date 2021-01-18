@@ -7,6 +7,7 @@ import { loadData, preloadData } from "../utils/data";
 import { useSelector } from "react-redux";
 import { RouteComponentProps } from "react-router";
 import type { RootState } from "../stores/reducers";
+import { fadeAnimation } from "../utils/route_animations";
 import styles from "../theme/views/splash.module.sass";
 
 export default function SplashLoading({ history }: RouteComponentProps) {
@@ -22,6 +23,7 @@ export default function SplashLoading({ history }: RouteComponentProps) {
   async function load() {
     await loadData();
     preloadData(); // no async
+    fadeAnimation();
     history.push("/app/home");
   }
 

@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addWallet, setProfile } from "../stores/actions";
 import { RootState } from "../stores/reducers";
 import { loadData, preloadData } from "../utils/data";
+import { forwardAnimation } from "../utils/route_animations";
 import styles from "../theme/views/login.module.sass";
 
 export default function WalletLoader() {
@@ -45,6 +46,7 @@ export default function WalletLoader() {
       dispatch(setProfile(address));
       await loadData();
       preloadData();
+      forwardAnimation();
       history.push(wallets.length > 0 ? "/app/home" : "/showcase");
     } catch (err) {
       setToastData({
@@ -85,6 +87,7 @@ export default function WalletLoader() {
           dispatch(setProfile(address));
           await loadData();
           preloadData();
+          forwardAnimation();
           history.push(wallets.length > 0 ? "/app/home" : "/showcase");
         } catch (err) {
           setToastData({
