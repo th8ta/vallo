@@ -9,6 +9,7 @@ import {
 import { getCommunityLogo } from "../utils/arweave";
 import { useTheme } from "../utils/theme";
 import { QuestionIcon } from "@primer/octicons-react";
+import { forwardAnimation } from "../utils/route_animations";
 import logo_light from "../assets/logo.png";
 import logo_dark from "../assets/logo_dark.png";
 import ETH from "./chain_logos/Etherum";
@@ -58,6 +59,9 @@ export default function TokenDisplay({
       key={id}
       lines="none"
       detail={false}
+      onClick={() => {
+        if (routerLink) forwardAnimation();
+      }}
     >
       {(loadingLogo && (
         <IonSkeletonText animated className={styles.LoadingLogo} />

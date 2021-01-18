@@ -1288,6 +1288,13 @@
   dependencies:
     "@types/cordova" latest
 
+"@ionic-native/native-page-transitions@^5.30.0":
+  version "5.30.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/native-page-transitions/-/native-page-transitions-5.30.0.tgz#d2f396c10c351ae15fe8558813881aa551ebf0a9"
+  integrity sha512-73fJjGi3uqzEdFfZ8B2voaIcYpW/026RaFrOy/TdauXE7DcI6d6kKpcUhTJRoYOykFpI9JVWT6RU/1GizO9YWw==
+  dependencies:
+    "@types/cordova" latest
+
 "@ionic/core@5.5.2":
   version "5.5.2"
   resolved "https://registry.yarnpkg.com/@ionic/core/-/core-5.5.2.tgz#6a2107236ca69c149d55ac99a9aa0ca716e973de"
@@ -3446,6 +3453,11 @@ colorette@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/colorette/-/colorette-1.2.1.tgz#4d0b921325c14faf92633086a536db6e89564b1b"
   integrity sha512-puCDz0CzydiSYOrnXpz/PKd69zRrribezjtE9yd4zvytoRc8+RY/KJPvtPFKZS3E3wP6neGyMe0vOTlHO5L3Pw==
+
+com.telerik.plugins.nativepagetransitions@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/com.telerik.plugins.nativepagetransitions/-/com.telerik.plugins.nativepagetransitions-0.7.0.tgz#caaa82722fdc27540dd4c36d17bfc8e32053850a"
+  integrity sha512-FdNmTG1K+j9EvxuDxU5h3aBYDuDyN893f0MEUWrhCROWAP9nSGUZcuV9TCthes7MSwQDiSQKN2057NfFtZZCTA==
 
 combined-stream@^1.0.6, combined-stream@~1.0.6:
   version "1.0.8"

@@ -1,14 +1,20 @@
 import React, { MouseEvent } from "react";
 import { IonRippleEffect } from "@ionic/react";
 import { ArrowLeftIcon } from "@primer/octicons-react";
+import { backAnimation } from "../utils/route_animations";
 import styles from "../theme/components/ShortTopLayerTitle.module.sass";
 
 export default function ShortTopLayerTitle({ back, title }: ThisProps) {
+  function goBackWithAnimation(e: MouseEvent) {
+    backAnimation();
+    if (back) back(e);
+  }
+
   return (
     <div className={styles.Title}>
       {back && (
         <div
-          onClick={back}
+          onClick={goBackWithAnimation}
           className={styles.BackArrow + " ion-activatable ripple-parent"}
         >
           <ArrowLeftIcon className={styles.BackIcon} />

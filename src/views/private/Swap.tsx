@@ -35,6 +35,7 @@ import logo_light from "../../assets/logo.png";
 import logo_dark from "../../assets/logo_dark.png";
 import { useTheme } from "../../utils/theme";
 import { useSwapLogos, useSwapTickers } from "../../utils/swap";
+import { forwardAnimation } from "../../utils/route_animations";
 import styles from "../../theme/views/swap.module.sass";
 import SwapItemsStyle from "../../theme/components/Swap.module.sass";
 
@@ -137,6 +138,7 @@ export default function Swap({ history }: RouteComponentProps) {
                 <IonRouterLink
                   routerLink="/app/profile"
                   className={styles.viewProfile}
+                  onClick={() => forwardAnimation()}
                 >
                   View profile
                   <ArrowRightIcon />
@@ -258,6 +260,7 @@ export default function Swap({ history }: RouteComponentProps) {
                 routerLink="/app/analytics"
                 lines="none"
                 detail={false}
+                onClick={() => forwardAnimation()}
               >
                 <IonLabel className="view-all">
                   <IonText slot="end">View analytics</IonText>
@@ -278,7 +281,10 @@ export default function Swap({ history }: RouteComponentProps) {
                 >
                   <div
                     className={styles.Ticker}
-                    onClick={() => history.push("/app/tokens?choose=from")}
+                    onClick={() => {
+                      forwardAnimation();
+                      history.push("/app/tokens?choose=from");
+                    }}
                   >
                     {swapTickers.from?.ticker ?? "---"}
                     <ChevronRightIcon />
@@ -294,7 +300,10 @@ export default function Swap({ history }: RouteComponentProps) {
                 >
                   <div
                     className={styles.Ticker}
-                    onClick={() => history.push("/app/tokens?choose=to")}
+                    onClick={() => {
+                      forwardAnimation();
+                      history.push("/app/tokens?choose=to");
+                    }}
                   >
                     {swapTickers.to?.ticker ?? "---"}
                     <ChevronRightIcon />
@@ -321,6 +330,7 @@ export default function Swap({ history }: RouteComponentProps) {
                   lines="none"
                   routerLink="/app/trade/test"
                   detail={false}
+                  onClick={() => forwardAnimation()}
                 >
                   10 AR
                   <ArrowRightIcon size={16} />
@@ -333,6 +343,7 @@ export default function Swap({ history }: RouteComponentProps) {
                   lines="none"
                   routerLink="/app/trade/test"
                   detail={false}
+                  onClick={() => forwardAnimation()}
                 >
                   10 AR
                   <ArrowRightIcon size={16} />
@@ -345,6 +356,7 @@ export default function Swap({ history }: RouteComponentProps) {
                   lines="none"
                   routerLink="/app/trade/test"
                   detail={false}
+                  onClick={() => forwardAnimation()}
                 >
                   10 AR
                   <ArrowRightIcon size={16} />
@@ -358,6 +370,7 @@ export default function Swap({ history }: RouteComponentProps) {
                 routerLink="/app/orders/post_id"
                 lines="none"
                 detail={false}
+                onClick={() => forwardAnimation()}
               >
                 <IonLabel className="view-all">
                   <IonText slot="end">View all</IonText>

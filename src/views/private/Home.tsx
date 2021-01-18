@@ -28,6 +28,7 @@ import TransferModal from "../../components/TransferModal";
 import { getStatusColor, formatTotalBalance } from "../../utils/arweave";
 import { useTheme } from "../../utils/theme";
 import { QRCode } from "react-qr-svg";
+import { forwardAnimation } from "../../utils/route_animations";
 import qrcode_logo_dark from "../../assets/qrcode/dark.png";
 import qrcode_logo_light from "../../assets/qrcode/light.png";
 import QRModal from "../../theme/components/QRModal.module.sass";
@@ -162,6 +163,7 @@ export default function Home() {
               routerLink="/app/tokens"
               lines="none"
               detail={false}
+              onClick={() => forwardAnimation()}
             >
               <IonLabel className="view-all">
                 <IonText slot="end">All tokens</IonText>
@@ -184,6 +186,7 @@ export default function Home() {
                     routerLink={`/app/trade/${exchange.id}`}
                     detail={false}
                     key={i}
+                    onClick={() => forwardAnimation()}
                   >
                     {exchange.sent}
                     <ArrowRightIcon size={16} />
@@ -227,6 +230,7 @@ export default function Home() {
               routerLink="/app/trades"
               lines="none"
               detail={false}
+              onClick={() => forwardAnimation()}
             >
               <IonLabel className="view-all">
                 <IonText slot="end">View full</IonText>
