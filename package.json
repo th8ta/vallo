@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.3.6",
-    "@capacitor-community/sqlite": "^2.4.4",
+    "@capacitor-community/sqlite": "^2.9.4",
     "@capacitor/android": "2.4.5",
     "@capacitor/cli": "^2.4.5",
     "@capacitor/core": "^2.4.5",

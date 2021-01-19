@@ -1144,10 +1144,10 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
-"@capacitor-community/sqlite@^2.4.4":
-  version "2.4.4"
-  resolved "https://registry.yarnpkg.com/@capacitor-community/sqlite/-/sqlite-2.4.4.tgz#8c241f2694b8485be029e4918ba71b2eeefb0f88"
-  integrity sha512-m3rYs20NJaQNA2k3UkDr73DVCPmrHPF/zSgcM/AO2/BJZBX+HRDGlT4cl+u30YxDXCRlA2y48saRgRO4Rb+QLA==
+"@capacitor-community/sqlite@^2.9.4":
+  version "2.9.4"
+  resolved "https://registry.yarnpkg.com/@capacitor-community/sqlite/-/sqlite-2.9.4.tgz#3773ee5b6a9885d9e9efe86ef54d096df0f2e2fb"
+  integrity sha512-T7vkM/glZcAWJFhamxSSaKlCDOOzFU1xsD9hHiv8er1B3tbP8p46IylS1RpriTvqkCgd/DgG36U60AhNQq9BwQ==
 
 "@capacitor/android@2.4.5":
   version "2.4.5"

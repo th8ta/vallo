@@ -33,10 +33,10 @@
 - [x] Buy
 - [x] QRCode to scan address / QRCode scanner
 - [ ] Biometrics/login
-- [ ] Dark theme support
+- [x] Dark theme support
   - [x] Detect native theme
   - [x] Set theme according to the theme redux store
-  - [ ] Set status bar color
+  - [x] Set status bar color
 - [ ] Push notifications
 
 ### Capacitor TODOS:
