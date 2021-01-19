@@ -35,7 +35,13 @@ export default function TransferModal({
 
   async function transfer() {
     if (!keyfile) return;
-    if (Number(transferInput.state) === 0) {
+
+    const transferAsset = assets?.tokens.find(({ id }) => id === selectedToken);
+    if (!transferAsset) return;
+    if (
+      Number(transferInput.state) === 0 ||
+      Number(transferInput.state) > transferAsset.balance
+    ) {
       Toast.show({ text: "Invalid amount" });
       return;
     }
