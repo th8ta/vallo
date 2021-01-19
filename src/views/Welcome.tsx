@@ -6,28 +6,53 @@ import vertoLogoDark from "../assets/logo_dark.png";
 import { useTheme } from "../utils/theme";
 import { IonPage, IonButton, IonLoading, IonContent } from "@ionic/react";
 import { RootState } from "../stores/reducers";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { forwardAnimation } from "../utils/route_animations";
+import { arweaveInstance } from "../utils/arweave";
+import { JWKInterface } from "arweave/node/lib/wallet";
+import { loadData, preloadData } from "../utils/data";
+import { addWallet, setProfile } from "../stores/actions";
+import {
+  Plugins,
+  FilesystemDirectory,
+  FilesystemEncoding
+} from "@capacitor/core";
 import styles from "../theme/views/login.module.sass";
+
+const { Filesystem, Toast } = Plugins;
 
 export default function Welcome() {
   const [loading, setLoading] = useState(false),
     history = useHistory(),
     theme = useTheme(),
-    wallets = useSelector((state: RootState) => state.wallet);
+    wallets = useSelector((state: RootState) => state.wallet),
+    dispatch = useDispatch();
 
-  // TODO
   async function createWallet() {
     setLoading(true);
 
-    let mnemonic = await generateMnemonic(),
-      walletObject = await getKeyFromMnemonic(mnemonic);
+    const mnemonic = await generateMnemonic(),
+      walletObject: JWKInterface = await getKeyFromMnemonic(mnemonic),
+      address = await arweaveInstance().wallets.jwkToAddress(walletObject);
 
-    console.log("Wallet created", "Wallet:", walletObject);
-
-    setLoading(false);
-    forwardAnimation();
-    history.push("/app/home");
+    try {
+      await Filesystem.writeFile({
+        path: `arweave-keyfile-${address}.json`,
+        data: JSON.stringify(walletObject, null, 2),
+        directory: FilesystemDirectory.Documents,
+        encoding: FilesystemEncoding.UTF8
+      });
+      Toast.show({ text: "Saved keyfile in documents" });
+      setLoading(false);
+      dispatch(addWallet(walletObject, address, mnemonic));
+      dispatch(setProfile(address));
+      await loadData();
+      preloadData();
+      forwardAnimation();
+      history.push("/showcase");
+    } catch {
+      Toast.show({ text: "Could not generate wallet" });
+    }
   }
 
   return (
