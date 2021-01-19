@@ -18,6 +18,7 @@ export function useTheme() {
   useEffect(() => {
     if (userTheme === "Auto" || userTheme === theme) return;
     setTheme(userTheme);
+    localStorage.setItem("wallet_last_theme", userTheme);
     // eslint-disable-next-line
   }, [userTheme, theme]);
 
@@ -30,10 +31,16 @@ export function useTheme() {
     if (!isPlatform("android")) return;
     try {
       StatusBar.setStyle({
-        style: theme === "Dark" ? StatusBarStyle.Dark : StatusBarStyle.Light
+        style:
+          (localStorage.getItem("wallet_last_theme") ?? theme) === "Dark"
+            ? StatusBarStyle.Dark
+            : StatusBarStyle.Light
       });
       StatusBar.setBackgroundColor({
-        color: theme === "Dark" ? "#000000" : "#ffffff"
+        color:
+          (localStorage.getItem("wallet_last_theme") ?? theme) === "Dark"
+            ? "#000000"
+            : "#ffffff"
       });
     } catch {}
   }, [theme]);
@@ -44,6 +51,10 @@ export function useTheme() {
       return fallbackAutoTheme();
 
     const darkMode = state ? state : await DarkMode.isDarkModeOn();
+    localStorage.setItem(
+      "wallet_last_theme",
+      darkMode.isDarkModeOn ? "Dark" : "Light"
+    );
 
     if (darkMode.isDarkModeOn && theme !== "Dark") setTheme("Dark");
     else if (theme !== "Light") setTheme("Light");

@@ -25,18 +25,19 @@
 - [ ] Slideshow on first login
   - [x] Implementation
   - [ ] Texts and images
-- [ ] Generate wallet
+- [x] Generate wallet
   - [x] Basic functionality
-  - [ ] Implementation
+  - [x] Implementation
 - [ ] Swap
-- [ ] Transfer
-- [ ] Buy
+- [x] Transfer
+- [x] Buy
 - [x] QRCode to scan address / QRCode scanner
 - [ ] Biometrics/login
 - [ ] Dark theme support
   - [x] Detect native theme
   - [x] Set theme according to the theme redux store
   - [ ] Set status bar color
+- [ ] Push notifications
 
 ### Capacitor TODOS:
 - [ ] Add IOS support for capacitor-dark-mode (https://www.npmjs.com/package/capacitor-dark-mode#ios-configuration)
