@@ -1,7 +1,7 @@
 import { NativePageTransitions } from "@ionic-native/native-page-transitions";
 
 const defaultConfig = {
-  duration: 300,
+  duration: 230,
   slowdownfactor: 3
 };
 
