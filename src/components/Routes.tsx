@@ -15,10 +15,19 @@ import Token from "../views/private/Token";
 import Trades from "../views/private/Trades";
 import Analytics from "../views/private/Analytics";
 import TradeInfo from "../views/private/TradeInfo";
+import { backAnimation } from "../utils/route_animations";
 
 export default function Routes() {
   const wallets = useSelector((state: RootState) => state.wallet),
     location = useLocation();
+
+  useEffect(() => {
+    document.addEventListener("ionBackButton", backAnimation);
+
+    return function cleanup() {
+      document.removeEventListener("ionBackButton", backAnimation);
+    };
+  }, []);
 
   useEffect(() => {
     if (wallets.length > 0) loadData();
