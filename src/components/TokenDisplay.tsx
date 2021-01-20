@@ -95,7 +95,7 @@ export default function TokenDisplay({
       </IonLabel>
       {!hideBalance && (
         <IonText slot="end" className={styles.Balance}>
-          {(balance ?? 0).toFixed(id === "AR_COIN" ? 5 : 2)} {ticker}
+          {(balance ?? 0).toFixed(id === "AR_COIN" ? 5 : 0)} {ticker}
         </IonText>
       )}
       {!full && <IonRippleEffect />}

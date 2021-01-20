@@ -115,7 +115,7 @@ export default function Home() {
                 className={styles.Link + " ion-activatable ripple-parent"}
                 onClick={() => setTransferModal(true)}
               >
-                Transfer
+                Send
                 <IonRippleEffect />
               </div>
               <div
