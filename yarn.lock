@@ -1178,6 +1178,13 @@
   dependencies:
     tslib "^1.9.0"
 
+"@capacitor/core@latest":
+  version "2.4.6"
+  resolved "https://registry.yarnpkg.com/@capacitor/core/-/core-2.4.6.tgz#71cc6e23ef37fbb47c3c1736f1dea47302a5e22a"
+  integrity sha512-3KLSMorCELA5RNRXwHOGlRGuxXaxCEYHC29wOUxObicI2mf14hbMJWylt4QBzNmSqh3/ha7u4/CAZMoJUQR/QA==
+  dependencies:
+    tslib "^1.9.0"
+
 "@capacitor/ios@2.4.5":
   version "2.4.5"
   resolved "https://registry.yarnpkg.com/@capacitor/ios/-/ios-2.4.5.tgz#c5a6f8aabb18104feaab342ea689bbf19dba65e8"
@@ -3146,6 +3153,13 @@ capacitor-dark-mode@^1.0.5:
   integrity sha512-M/4+iCUR1axcL2kCue+JSQlOWTmHGG6sSU4WIAzI6NtlhvbxesbcTlgPIMEp/ThWbD/AWkhX44Jz4dEdNbyVdQ==
   dependencies:
     "@rollup/plugin-node-resolve" "^9.0.0"
+
+capacitor-navigationbar@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/capacitor-navigationbar/-/capacitor-navigationbar-0.0.2.tgz#92c8193f4eb00feddb8fbe870373d8de65684bc1"
+  integrity sha512-Ig7dgMUCsx+9vQ/yUq+pubWn/LW2eYbsffNqN1HQoSVXbb3TlC5J+kFOsKWkXrIwRfv15KRtdio/XGCUhBCLqQ==
+  dependencies:
+    "@capacitor/core" latest
 
 capture-exit@^2.0.0:
   version "2.0.0"

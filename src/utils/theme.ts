@@ -3,8 +3,10 @@ import { Plugins, StatusBarStyle } from "@capacitor/core";
 import { useSelector } from "react-redux";
 import { RootState } from "../stores/reducers";
 import { isPlatform } from "@ionic/react";
+import { NavigationBarPlugin } from "capacitor-navigationbar";
 
-const { StatusBar, DarkMode } = Plugins;
+const { StatusBar, DarkMode, NavigationBar } = Plugins;
+const NavBar = NavigationBar as NavigationBarPlugin;
 
 export function useTheme() {
   const [theme, setTheme] = useState<"Dark" | "Light">("Light"),
@@ -28,7 +30,6 @@ export function useTheme() {
   }, [userTheme]);
 
   useEffect(() => {
-    if (!isPlatform("android")) return;
     try {
       StatusBar.setStyle({
         style:
@@ -36,11 +37,18 @@ export function useTheme() {
             ? StatusBarStyle.Dark
             : StatusBarStyle.Light
       });
+      if (!isPlatform("android")) return;
       StatusBar.setBackgroundColor({
         color:
           (localStorage.getItem("wallet_last_theme") ?? theme) === "Dark"
             ? "#000000"
             : "#ffffff"
+      });
+      NavBar.setBackgroundColor({
+        color:
+          (localStorage.getItem("wallet_last_theme") ?? theme) === "Dark"
+            ? "#111111"
+            : "#FAFAFA"
       });
     } catch {}
   }, [theme]);
