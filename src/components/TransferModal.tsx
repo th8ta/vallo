@@ -87,8 +87,8 @@ export default function TransferModal({
   return (
     <>
       <Modal.Content className={styles.Content}>
-        <h1 className={styles.Title}>Transfer</h1>
-        <p>Transfer PSTs to a another address.</p>
+        <h1 className={styles.Title}>Send</h1>
+        <p>Transfer tokens to another wallet.</p>
         <div className={styles.Inputs}>
           <Input
             min={0}
@@ -108,7 +108,7 @@ export default function TransferModal({
                 className={styles.Select}
                 interface="action-sheet"
                 interfaceOptions={{
-                  header: "Select PST",
+                  header: "Select Token",
                   className: styles.SelectActionSheet
                 }}
               >
