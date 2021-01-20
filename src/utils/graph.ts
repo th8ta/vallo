@@ -17,6 +17,11 @@ export function GraphOptions({
         borderCapStyle: "round"
       }
     },
+    layout: {
+      padding: {
+        top: 12
+      }
+    },
     tooltips: {
       mode: "index",
       intersect: false,

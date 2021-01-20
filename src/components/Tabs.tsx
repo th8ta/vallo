@@ -4,7 +4,8 @@ import {
   IonTabBar,
   IonTabButton,
   IonTabs,
-  createGesture
+  createGesture,
+  isPlatform
 } from "@ionic/react";
 import { ArrowSwitchIcon, HomeIcon, PersonIcon } from "@primer/octicons-react";
 import { Route, Redirect } from "react-router";
@@ -61,7 +62,11 @@ export default function Tabs() {
           <Route path="/app/profile" component={Profile} />
           <Redirect exact from="/app" to="/app/home" />
         </IonRouterOutlet>
-        <IonTabBar slot="bottom" className={styles.TabBar}>
+        <IonTabBar
+          slot="bottom"
+          className={styles.TabBar}
+          style={isPlatform("ios") ? { paddingBottom: "1.65em" } : {}}
+        >
           <IonTabButton tab="home" href="/app/home" className={styles.Item}>
             <HomeIcon size={24} />
           </IonTabButton>
