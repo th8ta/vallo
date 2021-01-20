@@ -23,6 +23,7 @@
     "arweave-mnemonic-keys": "0.0.3",
     "cacheweave": "^2.1.0",
     "capacitor-dark-mode": "^1.0.5",
+    "capacitor-native-biometric": "^2.0.8",
     "capacitor-navigationbar": "^0.0.2",
     "chart.js": "^2.9.4",
     "com.telerik.plugins.nativepagetransitions": "^0.7.0",
