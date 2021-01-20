@@ -211,19 +211,16 @@ export default function Token({ history, match }: TokenProps) {
                 <div className={styles.Balance}>
                   <h1>
                     {(communityInfo.logo && (
-                      <>
-                        <img
-                          src={
-                            communityInfo.logo !== "VRT"
-                              ? `https://arweave.net/${communityInfo.logo}`
-                              : theme === "Dark"
-                              ? logo_dark
-                              : logo_light
-                          }
-                          alt="community logo"
-                        />
-                        Balance
-                      </>
+                      <img
+                        src={
+                          communityInfo.logo !== "VRT"
+                            ? `https://arweave.net/${communityInfo.logo}`
+                            : theme === "Dark"
+                            ? logo_dark
+                            : logo_light
+                        }
+                        alt="community logo"
+                      />
                     )) || (
                       <>
                         {(communityInfo.logo !== "" && (
@@ -242,12 +239,9 @@ export default function Token({ history, match }: TokenProps) {
                             />
                           </>
                         )) || (
-                          <>
-                            <div className={styles.NoLogo}>
-                              <QuestionIcon />
-                            </div>
-                            Balance
-                          </>
+                          <div className={styles.NoLogo}>
+                            <QuestionIcon />
+                          </div>
                         )}
                       </>
                     )}
