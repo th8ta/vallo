@@ -157,7 +157,7 @@ export default function Profile({ history }: RouteComponentProps) {
       >
         <Modal.Content className={QRModal.ModalContent}>
           <h1>Address</h1>
-          <p>Scan this QR code to transfer assets.</p>
+          <p>Scan this QR code to receive tokens.</p>
           <QRCode
             className={QRModal.QRCode}
             value={currentAddress}
