@@ -89,9 +89,7 @@ export default function Profile({ history }: RouteComponentProps) {
                   detail={true}
                   onClick={() => setThemeSelector(true)}
                 >
-                  <span>
-                    Theme: {userTheme === "Auto" ? "System default" : userTheme}
-                  </span>
+                  <span>Theme: {userTheme}</span>
                   <IonRippleEffect />
                 </IonItem>
                 <IonItem
@@ -220,7 +218,7 @@ export default function Profile({ history }: RouteComponentProps) {
             }
           },
           {
-            text: "System default",
+            text: "Auto",
             cssClass: userTheme === "Auto" ? "selected-action-sheet" : "",
             handler() {
               dispatch(setTheme("Auto"));
