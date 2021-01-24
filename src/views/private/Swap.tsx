@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   IonPage,
   IonContent,
@@ -18,6 +18,7 @@ import {
 } from "@ionic/react";
 import { RefresherEventDetail } from "@ionic/core";
 import { Input } from "@verto/ui";
+import Verto from "@verto/lib";
 import {
   ArrowRightIcon,
   ArrowSwitchIcon,
@@ -31,6 +32,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateSwapItems } from "../../stores/actions";
 import { loadTokens, preloadAssets } from "../../utils/data";
 import { formatTotalBalance } from "../../utils/arweave";
+import { IToken } from "../../stores/reducers/tokens";
 import logo_light from "../../assets/logo.png";
 import logo_dark from "../../assets/logo_dark.png";
 import { useTheme } from "../../utils/theme";
@@ -50,7 +52,21 @@ export default function Swap({ history }: RouteComponentProps) {
     dispatch = useDispatch(),
     theme = useTheme(),
     swapTickers = useSwapTickers(),
-    swapLogos = useSwapLogos();
+    swapLogos = useSwapLogos(),
+    // eslint-disable-next-line
+    [post, setPost] = useState<string>(""),
+    [orderBook, setOrderBook] = useState<{
+      orders: {
+        token: string;
+        orders: OrderItem[];
+      }[];
+      loading: boolean;
+    }>({
+      orders: [],
+      loading: true
+    }),
+    // eslint-disable-next-line
+    [supportedTokens, setSupportedTokens] = useState<IToken[]>([]);
 
   useEffect(() => {
     refresh();
@@ -72,9 +88,21 @@ export default function Swap({ history }: RouteComponentProps) {
   }, [assets, swapItems, tokens, history]);
 
   async function refresh(e?: CustomEvent<RefresherEventDetail>) {
+    const verto = new Verto();
+
     await preloadAssets();
     await loadTokens();
 
+    const tradingPost = await verto.recommendPost();
+
+    if (tradingPost) {
+      setPost(tradingPost);
+      setOrderBook({
+        orders: await verto.getOrderBook(tradingPost),
+        loading: false
+      });
+      setSupportedTokens(await verto.getTPTokens(tradingPost));
+    }
     if (e) e.detail.complete();
   }
 
@@ -97,6 +125,22 @@ export default function Swap({ history }: RouteComponentProps) {
       );
     if (swapItems.from === "ETH_COIN") return undefined;
     return assets?.tokens.find(({ id }) => id === swapItems.from)?.balance;
+  }
+
+  function unifyOrders(): OrderItemWithTicker[] {
+    const orderGroups = orderBook.orders.map(({ orders }) => orders);
+    let allOrders: OrderItemWithTicker[] = [];
+
+    for (const group of orderGroups)
+      allOrders = [
+        ...allOrders,
+        ...group.map((val) => ({
+          ...val,
+          ticker: tokens.find((token) => token.id === val.token)?.ticker ?? ""
+        }))
+      ];
+
+    return allOrders.slice(0, 5);
   }
 
   /*
@@ -333,45 +377,55 @@ export default function Swap({ history }: RouteComponentProps) {
                 <IonCardTitle className="CardTitle">Orders</IonCardTitle>
               </IonCardHeader>
               <IonCardContent>
-                <IonItem
-                  className={styles.Order + " ion-activatable ripple-parent"}
-                  lines="none"
-                  routerLink="/app/trade/test"
-                  detail={false}
-                  onClick={() => forwardAnimation()}
-                >
-                  10 AR
-                  <ArrowRightIcon size={16} />
-                  100 VRT
-                  <div className={styles.Status + " " + styles.Warning}></div>
-                  <IonRippleEffect />
-                </IonItem>
-                <IonItem
-                  className={styles.Order + " ion-activatable ripple-parent"}
-                  lines="none"
-                  routerLink="/app/trade/test"
-                  detail={false}
-                  onClick={() => forwardAnimation()}
-                >
-                  10 AR
-                  <ArrowRightIcon size={16} />
-                  100 VRT
-                  <div className={styles.Status + " " + styles.Success}></div>
-                  <IonRippleEffect />
-                </IonItem>
-                <IonItem
-                  className={styles.Order + " ion-activatable ripple-parent"}
-                  lines="none"
-                  routerLink="/app/trade/test"
-                  detail={false}
-                  onClick={() => forwardAnimation()}
-                >
-                  10 AR
-                  <ArrowRightIcon size={16} />
-                  100 VRT
-                  <div className={styles.Status + " " + styles.Error}></div>
-                  <IonRippleEffect />
-                </IonItem>
+                {(!orderBook.loading &&
+                  unifyOrders().length > 0 &&
+                  unifyOrders().map((order, i) => (
+                    <IonItem
+                      className={
+                        styles.Order + " ion-activatable ripple-parent"
+                      }
+                      lines="none"
+                      routerLink={`/app/trade/${order.txID}`}
+                      detail={false}
+                      onClick={() => forwardAnimation()}
+                      key={i}
+                    >
+                      {order.amnt + " " + order.type === "Buy"
+                        ? "AR"
+                        : order.ticker}
+                      <ArrowRightIcon size={16} />
+                      {order.received + " " + order.type === "Buy"
+                        ? order.ticker
+                        : "AR"}
+                      <div
+                        className={styles.Status + " " + styles.Warning}
+                      ></div>
+                      <IonRippleEffect />
+                    </IonItem>
+                  ))) ||
+                  (unifyOrders.length < 1 && !orderBook.loading && (
+                    <p>No orders...</p>
+                  )) ||
+                  (orderBook.loading &&
+                    Array(5)
+                      .fill("_")
+                      .map((_, i) => (
+                        <IonItem
+                          className={styles.Order}
+                          lines="none"
+                          detail={false}
+                          key={i}
+                        >
+                          <IonSkeletonText
+                            animated
+                            style={{
+                              width: "100%",
+                              height: "1.07em",
+                              borderRadius: "3px"
+                            }}
+                          />
+                        </IonItem>
+                      )))}
               </IonCardContent>
               <IonItem
                 class="CardFooter ion-text-end"
@@ -391,4 +445,19 @@ export default function Swap({ history }: RouteComponentProps) {
       </IonContent>
     </IonPage>
   );
+}
+
+interface OrderItem {
+  txID: string;
+  amnt: number;
+  rate?: number;
+  addr: string;
+  type: "Buy" | "Sell";
+  createdAt: Date;
+  received: number;
+  token?: string;
+}
+
+interface OrderItemWithTicker extends OrderItem {
+  ticker: string;
 }

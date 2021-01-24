@@ -41,3 +41,4 @@
 
 ### Capacitor TODOS:
 - [ ] Add IOS support for capacitor-dark-mode (https://www.npmjs.com/package/capacitor-dark-mode#ios-configuration)
+- [ ] Add IOS support for capacitor-native-biometric (https://www.npmjs.com/package/capacitor-native-biometric)

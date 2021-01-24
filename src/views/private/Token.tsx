@@ -224,20 +224,10 @@ export default function Token({ history, match }: TokenProps) {
                     )) || (
                       <>
                         {(communityInfo.logo !== "" && (
-                          <>
-                            <IonSkeletonText
-                              animated
-                              className={styles.LoadingLogo}
-                            />
-                            <IonSkeletonText
-                              animated
-                              style={{
-                                height: "1em",
-                                width: "3.4em",
-                                borderRadius: "3px"
-                              }}
-                            />
-                          </>
+                          <IonSkeletonText
+                            animated
+                            className={styles.LoadingLogo}
+                          />
                         )) || (
                           <div className={styles.NoLogo}>
                             <QuestionIcon />

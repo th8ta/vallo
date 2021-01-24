@@ -129,6 +129,8 @@ export default function Tokens({ history }: RouteComponentProps) {
                   </IonCardContent>
                   <IonRippleEffect />
                 </IonCard>
+                {/** TODO: ETH SUPPORT */}
+                {/**
                 <IonCard
                   className="Card ListItem ion-activatable ripple-parent"
                   onClick={() => {
@@ -147,6 +149,7 @@ export default function Tokens({ history }: RouteComponentProps) {
                   </IonCardContent>
                   <IonRippleEffect />
                 </IonCard>
+                */}
               </>
             )}
             {combinedTokens().length > 0 &&
