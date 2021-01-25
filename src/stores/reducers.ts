@@ -7,6 +7,7 @@ import assets from "./reducers/assets";
 import tokens from "./reducers/tokens";
 import swap from "./reducers/swap";
 import theme from "./reducers/theme";
+import currency from "./reducers/currency";
 
 export const plainReducers = {
   wallet,
@@ -15,7 +16,8 @@ export const plainReducers = {
   assets,
   tokens,
   swap,
-  theme
+  theme,
+  currency
 };
 const reducers = combineReducers(plainReducers);
 
