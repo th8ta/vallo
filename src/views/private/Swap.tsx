@@ -31,7 +31,7 @@ import type { RootState } from "../../stores/reducers";
 import { useDispatch, useSelector } from "react-redux";
 import { updateSwapItems } from "../../stores/actions";
 import { loadTokens, preloadAssets } from "../../utils/data";
-import { formatTotalBalance } from "../../utils/arweave";
+import { cutSmall, formatTotalBalance } from "../../utils/arweave";
 import { IToken } from "../../stores/reducers/tokens";
 import logo_light from "../../assets/logo.png";
 import logo_dark from "../../assets/logo_dark.png";
@@ -65,7 +65,6 @@ export default function Swap({ history }: RouteComponentProps) {
       orders: [],
       loading: true
     }),
-    // eslint-disable-next-line
     [supportedTokens, setSupportedTokens] = useState<IToken[]>([]);
 
   useEffect(() => {
@@ -128,19 +127,28 @@ export default function Swap({ history }: RouteComponentProps) {
   }
 
   function unifyOrders(): OrderItemWithTicker[] {
-    const orderGroups = orderBook.orders.map(({ orders }) => orders);
     let allOrders: OrderItemWithTicker[] = [];
 
-    for (const group of orderGroups)
-      allOrders = [
-        ...allOrders,
-        ...group.map((val) => ({
-          ...val,
-          ticker: tokens.find((token) => token.id === val.token)?.ticker ?? ""
-        }))
-      ];
+    for (const { orders, token } of orderBook.orders)
+      if (token === "TX_STORE") continue;
+      else
+        allOrders = [
+          ...allOrders,
+          ...orders.map((val) => ({
+            ...val,
+            ticker:
+              token === "ETH"
+                ? "ETH"
+                : supportedTokens.find((supToken) => supToken.id === token)
+                    ?.ticker ?? ""
+          }))
+        ];
 
-    return allOrders.slice(0, 5);
+    return allOrders
+      .sort(
+        (a, b) => (b ? Number(b.createdAt) : 0) - (a ? Number(a.createdAt) : 0)
+      )
+      .slice(0, 5);
   }
 
   /*
@@ -390,16 +398,11 @@ export default function Swap({ history }: RouteComponentProps) {
                       onClick={() => forwardAnimation()}
                       key={i}
                     >
-                      {order.amnt + " " + order.type === "Buy"
-                        ? "AR"
-                        : order.ticker}
+                      {cutSmall(order.amnt)}{" "}
+                      {order.type === "Buy" ? "AR" : order.ticker}
                       <ArrowRightIcon size={16} />
-                      {order.received + " " + order.type === "Buy"
-                        ? order.ticker
-                        : "AR"}
-                      <div
-                        className={styles.Status + " " + styles.Warning}
-                      ></div>
+                      {cutSmall(order.received)}{" "}
+                      {order.type === "Buy" ? order.ticker : "AR"}
                       <IonRippleEffect />
                     </IonItem>
                   ))) ||
