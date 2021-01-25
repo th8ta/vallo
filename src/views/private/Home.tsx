@@ -59,7 +59,7 @@ export default function Home() {
   useEffect(() => {
     refresh();
     // eslint-disable-next-line
-  }, []);
+  }, [currentAddress]);
 
   async function refresh(e?: CustomEvent<RefresherEventDetail>) {
     const verto = new Verto();
