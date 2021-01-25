@@ -8,20 +8,30 @@ import {
   IonRippleEffect,
   IonInfiniteScroll,
   IonInfiniteScrollContent,
-  IonSkeletonText
+  IonSkeletonText,
+  IonRefresher,
+  IonRefresherContent
 } from "@ionic/react";
 import { OrderItem } from "./Swap";
 import { RefresherEventDetail } from "@ionic/core";
 import { ArrowRightIcon } from "@primer/octicons-react";
 import { RouteComponentProps } from "react-router-dom";
-import Verto from "@verto/lib";
 import { cutSmall } from "../../utils/arweave";
+import { useSelector } from "react-redux";
+import { RootState } from "../../stores/reducers";
+import { Plugins } from "@capacitor/core";
+import Verto from "@verto/lib";
 import ShortTopLayerTitle from "../../components/ShortTopLayerTitle";
 import styles from "../../theme/views/trades.module.sass";
 
+const { Toast } = Plugins;
+
 export default function Trades({ history }: RouteComponentProps) {
   const [items, setItems] = useState<ITrade[]>([]),
-    [loading, setLoading] = useState(true);
+    [loading, setLoading] = useState(true),
+    [orders, setIsOrders] = useState(false),
+    [lastCursor, setLastCursor] = useState<string>(),
+    address = useSelector((state: RootState) => state.profile);
 
   useEffect(() => {
     refresh();
@@ -35,6 +45,7 @@ export default function Trades({ history }: RouteComponentProps) {
       verto = new Verto();
 
     if (queries[1] === "orders") {
+      setIsOrders(true);
       // load order for a trading post
       const tradingPostID = queries[2],
         supportedTokens = await verto.getTPTokens(tradingPostID),
@@ -77,19 +88,44 @@ export default function Trades({ history }: RouteComponentProps) {
         )
       );
     } else {
-      // load trades for an address
+      setItems([]);
+      await loadMore();
     }
 
     setLoading(false);
+    if (e) e.detail.complete();
   }
 
-  async function loadMore(e: any) {
-    e.target.complete();
+  async function loadMore(e?: any) {
+    const verto = new Verto();
+    try {
+      const { cursor, exchanges } = await verto.paginateExchanges(
+        address,
+        lastCursor
+      );
+      setItems((val) => [
+        ...val,
+        ...exchanges.map(({ id, sent, received, status, timestamp }) => ({
+          id,
+          sent,
+          received,
+          status,
+          timestamp
+        }))
+      ]);
+      if (cursor) setLastCursor(cursor);
+    } catch {
+      Toast.show({ text: "Error loading exchanges..." });
+    }
+    if (e) e.target.complete();
   }
 
   return (
     <IonPage>
       <IonContent>
+        <IonRefresher slot="fixed" onIonRefresh={refresh}>
+          <IonRefresherContent></IonRefresherContent>
+        </IonRefresher>
         <div className="TopBackgroundSpacer">
           <div className="ShortTitle">
             <ShortTopLayerTitle title="Trades" back={() => history.goBack()} />
@@ -145,9 +181,11 @@ export default function Trades({ history }: RouteComponentProps) {
               </IonCardContent>
             </IonCard>
           </div>
-          <IonInfiniteScroll onIonInfinite={loadMore} threshold="100px">
-            <IonInfiniteScrollContent loadingSpinner="circular" />
-          </IonInfiniteScroll>
+          {!orders && (
+            <IonInfiniteScroll onIonInfinite={loadMore} threshold="100px">
+              <IonInfiniteScrollContent loadingSpinner="circular" />
+            </IonInfiniteScroll>
+          )}
         </div>
       </IonContent>
     </IonPage>
