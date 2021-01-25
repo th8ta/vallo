@@ -53,7 +53,6 @@ export default function Swap({ history }: RouteComponentProps) {
     theme = useTheme(),
     swapTickers = useSwapTickers(),
     swapLogos = useSwapLogos(),
-    // eslint-disable-next-line
     [post, setPost] = useState<string>(""),
     [orderBook, setOrderBook] = useState<{
       orders: {
@@ -96,11 +95,11 @@ export default function Swap({ history }: RouteComponentProps) {
 
     if (tradingPost) {
       setPost(tradingPost);
+      setSupportedTokens(await verto.getTPTokens(tradingPost));
       setOrderBook({
         orders: await verto.getOrderBook(tradingPost),
         loading: false
       });
-      setSupportedTokens(await verto.getTPTokens(tradingPost));
     }
     if (e) e.detail.complete();
   }
@@ -432,7 +431,7 @@ export default function Swap({ history }: RouteComponentProps) {
               </IonCardContent>
               <IonItem
                 class="CardFooter ion-text-end"
-                routerLink="/app/orders/post_id"
+                routerLink={post !== "" ? `/app/orders/${post}` : undefined}
                 lines="none"
                 detail={false}
                 onClick={() => forwardAnimation()}
@@ -450,7 +449,7 @@ export default function Swap({ history }: RouteComponentProps) {
   );
 }
 
-interface OrderItem {
+export interface OrderItem {
   txID: string;
   amnt: number;
   rate?: number;

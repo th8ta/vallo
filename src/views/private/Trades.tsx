@@ -1,6 +1,3 @@
-/* eslint-disable */
-/** TODO: finish trades, etc */
-
 import React, { useEffect, useState } from "react";
 import {
   IonPage,
@@ -13,76 +10,72 @@ import {
   IonInfiniteScrollContent,
   IonSkeletonText
 } from "@ionic/react";
+import { OrderItem } from "./Swap";
 import { RefresherEventDetail } from "@ionic/core";
 import { ArrowRightIcon } from "@primer/octicons-react";
 import { RouteComponentProps } from "react-router-dom";
+import Verto from "@verto/lib";
+import { cutSmall } from "../../utils/arweave";
 import ShortTopLayerTitle from "../../components/ShortTopLayerTitle";
-import { useSelector } from "react-redux";
-import { RootState } from "../../stores/reducers";
-import client from "../../utils/apollo";
-import { gql } from "@apollo/client";
 import styles from "../../theme/views/trades.module.sass";
 
 export default function Trades({ history }: RouteComponentProps) {
   const [items, setItems] = useState<ITrade[]>([]),
-    [loading, setLoading] = useState(true),
-    address = useSelector((state: RootState) => state.profile),
-    [lastCursor, setLastCursor] = useState<string>("");
+    [loading, setLoading] = useState(true);
 
   useEffect(() => {
     refresh();
     // eslint-disable-next-line
   }, [history]);
 
-  async function loadMoreExchanges(start: boolean): Promise<ITrade[]> {
-    try {
-      const { data } = await client.query({
-          query: gql(`query($recipients: [String!], $owners: [String!], $after: String) {
-          transactions(recipients: $recipients, owners: $owners, after: $after) {
-            pageInfo {
-              hasNextPage
-            }
-            edges {
-              cursor
-              node {
-                id
-                block {
-                  timestamp
-                }
-                quantity {
-                  ar
-                }
-                tags {
-                  name
-                  value
-                }
-              }
-            }
-          }
-        }`),
-          variables: {
-            owners: [address],
-            cursor: start ? "" : lastCursor
-          }
-        }),
-        txs = data.transactions.edges,
-        hasNext = data.transactions.pageInfo.hasNextPage;
-
-      console.log(txs, hasNext);
-    } catch {}
-
-    return [];
-  }
-
   async function refresh(e?: CustomEvent<RefresherEventDetail>) {
     const queries = history.location.pathname
-      .split("/")
-      .filter((val) => val !== "");
+        .split("/")
+        .filter((val) => val !== ""),
+      verto = new Verto();
 
-    await loadMoreExchanges(true);
     if (queries[1] === "orders") {
       // load order for a trading post
-      const tradingPostID = queries[2];
+      const tradingPostID = queries[2],
+        supportedTokens = await verto.getTPTokens(tradingPostID),
+        swaps: {
+          token: string;
+          orders: OrderItem[];
+        }[] = await verto.getOrderBook(tradingPostID);
+
+      let allOrders: ITrade[] = [];
+
+      for (const { orders, token } of swaps)
+        if (token === "TX_STORE") continue;
+        else
+          allOrders = [
+            ...allOrders,
+            ...orders.map((val) => {
+              const ticker =
+                token === "ETH"
+                  ? "ETH"
+                  : supportedTokens.find((supToken) => supToken.id === token)
+                      ?.ticker ?? "";
+
+              return {
+                id: val.txID,
+                sent: `${cutSmall(val.amnt)} ${
+                  val.type === "Buy" ? "AR" : ticker
+                }`,
+                received: `${cutSmall(val.received)} ${
+                  val.type === "Buy" ? ticker : "AR"
+                }`,
+                timestamp: val.createdAt
+              };
+            })
+          ];
+
+      setItems(
+        allOrders.sort(
+          (a, b) =>
+            (b ? Number(b.timestamp) : 0) - (a ? Number(a.timestamp) : 0)
+        )
+      );
     } else {
       // load trades for an address
     }
@@ -140,9 +133,11 @@ export default function Trades({ history }: RouteComponentProps) {
                         {item.sent}
                         <ArrowRightIcon size={16} />
                         {item.received}
-                        <div
-                          className={styles.Status + " " + styles.Error}
-                        ></div>
+                        {item.status && (
+                          <div
+                            className={styles.Status + " " + styles.Error}
+                          ></div>
+                        )}
                         <IonRippleEffect />
                       </IonItem>
                     )))}
@@ -163,5 +158,6 @@ interface ITrade {
   id: string;
   sent: string;
   received: string;
-  status: string;
+  status?: string;
+  timestamp: Date;
 }
