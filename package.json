@@ -74,6 +74,7 @@
     ]
   },
   "devDependencies": {
+    "@types/exchange-rates-api": "^1.0.0",
     "@types/limestonefi__api": "^0.1.0",
     "@types/node": "^12.12.24",
     "@types/react": "^16.9.17",

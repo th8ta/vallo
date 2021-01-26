@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../stores/reducers";
 import { getPrice } from "@limestonefi/api";
-// @ts-ignore
 import { convert } from "exchange-rates-api";
 import { cutSmall } from "./arweave";
 import stores from "../stores";
@@ -20,7 +19,9 @@ export default function useCurrency() {
   async function adjustMultiplier() {
     const arPrice = await getPrice("AR");
     if (currency.currency === "USD") return setMultiplier(arPrice.price);
-    setMultiplier(await convert(arPrice.price, "USD", currency.currency));
+    setMultiplier(
+      await convert(arPrice.price, "USD", currency.currency, "latest")
+    );
   }
 
   return multiplier;

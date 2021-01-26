@@ -33,7 +33,7 @@
 - [x] Buy
 - [x] QRCode to scan address / QRCode scanner
 - [ ] Biometrics/login
-- [ ] Toggle for AR/USD (or local currency) display
+- [x] Toggle for AR/USD (or local currency) display
 - [x] Dark theme support
   - [x] Detect native theme
   - [x] Set theme according to the theme redux store
