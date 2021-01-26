@@ -2,7 +2,10 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../stores/reducers";
 import { getPrice } from "@limestonefi/api";
+// @ts-ignore
 import { convert } from "exchange-rates-api";
+import { cutSmall } from "./arweave";
+import stores from "../stores";
 
 export default function useCurrency() {
   const [multiplier, setMultiplier] = useState(1),
@@ -21,4 +24,22 @@ export default function useCurrency() {
   }
 
   return multiplier;
+}
+
+export function formatPrice(price: string | number): string {
+  const withZero = cutSmall(price, 5),
+    { currency } = stores.getState().currency;
+
+  switch (currency) {
+    case "USD":
+      return `$${withZero}`;
+
+    case "EUR":
+      return `€ ${withZero}`;
+
+    case "GBP":
+      return `£${withZero}`;
+  }
+
+  return `${withZero} ${currency}`;
 }

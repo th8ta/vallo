@@ -14,7 +14,6 @@ import {
 } from "@ionic/react";
 import { RefresherEventDetail } from "@ionic/core";
 import { RouteComponentProps } from "react-router-dom";
-import ShortTopLayerTitle from "../../components/ShortTopLayerTitle";
 import { Line } from "react-chartjs-2";
 import {
   GraphOptions,
@@ -24,18 +23,20 @@ import {
 } from "../../utils/graph";
 import { Plugins } from "@capacitor/core";
 import { arweaveInstance } from "../../utils/arweave";
-import Community from "community-js";
-import limestone from "@limestonefi/api";
-import Verto from "@verto/lib";
 import { Modal } from "@verto/ui";
-import TransferModal from "../../components/TransferModal";
 import { StateInterface } from "community-js/lib/faces";
 import { useSelector } from "react-redux";
 import { RootState } from "../../stores/reducers";
 import { useTheme } from "../../utils/theme";
+import { QuestionIcon } from "@primer/octicons-react";
+import Community from "community-js";
+import limestone from "@limestonefi/api";
+import Verto from "@verto/lib";
+import TransferModal from "../../components/TransferModal";
 import logo_light from "../../assets/logo.png";
 import logo_dark from "../../assets/logo_dark.png";
-import { QuestionIcon } from "@primer/octicons-react";
+import useCurrency, { formatPrice } from "../../utils/currency";
+import ShortTopLayerTitle from "../../components/ShortTopLayerTitle";
 import styles from "../../theme/views/token.module.sass";
 
 const { Browser, Toast } = Plugins;
@@ -70,7 +71,9 @@ export default function Token({ history, match }: TokenProps) {
       (val) => val.address === address
     ),
     theme = useTheme(),
-    [transferModal, setTransferModal] = useState(false);
+    [transferModal, setTransferModal] = useState(false),
+    conversion = useCurrency(),
+    currencySetting = useSelector((state: RootState) => state.currency);
 
   useEffect(() => {
     refresh();
@@ -268,7 +271,11 @@ export default function Token({ history, match }: TokenProps) {
                   </h1>
                   <h1>
                     {(graphInfo.latestPrice && (
-                      <>{addZero(graphInfo.latestPrice)} AR</>
+                      <>
+                        {!currencySetting.status
+                          ? addZero(graphInfo.latestPrice) + " AR"
+                          : formatPrice(graphInfo.latestPrice * conversion)}
+                      </>
                     )) || (
                       <IonSkeletonText
                         animated
@@ -313,13 +320,18 @@ export default function Token({ history, match }: TokenProps) {
                         datasets: [
                           {
                             label: "AR",
-                            data: graphInfo.prices,
+                            data: graphInfo.prices.map(
+                              (val) => val * conversion
+                            ),
                             ...GraphDataConfig
                           }
                         ]
                       }}
                       options={GraphOptions({
-                        tooltipText: ({ value }) => `${addZero(value)} AR`
+                        tooltipText: ({ value }) =>
+                          !currencySetting.status
+                            ? `${addZero(value)} AR`
+                            : formatPrice(value)
                       })}
                     />
                   )) || (

@@ -43,10 +43,11 @@ export function formatTotalBalance(balance?: string | number): string {
   else return numBalance.toFixed(7);
 }
 
-export function cutSmall(num?: string | number): string {
+export function cutSmall(num?: string | number, cut?: number): string {
   const toNum = Number(num ?? 0),
     splitAtDot = toNum.toString().split(".");
 
-  if (splitAtDot[splitAtDot.length - 1].length > 3) return toNum.toFixed(3);
+  if (splitAtDot[splitAtDot.length - 1].length > (cut ?? 3))
+    return toNum.toFixed(cut ?? 3);
   else return toNum.toString();
 }
