@@ -32,7 +32,7 @@ export default function SplashLoading({ history }: RouteComponentProps) {
       <IonContent className="IonContent" fullscreen>
         <div className={styles.Center}>
           <img src={theme === "Dark" ? vertoLogoDark : vertoLogo} alt="logo" />
-          <h1>Verto</h1>
+          <h1>Vallo</h1>
           <h2>Wallet</h2>
         </div>
         <h1 className="th8ta">

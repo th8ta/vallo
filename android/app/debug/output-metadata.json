@@ -4,7 +4,7 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "org.th8ta.wallet",
+  "applicationId": "org.th8ta.vallo",
   "variantName": "processDebugResources",
   "elements": [
     {

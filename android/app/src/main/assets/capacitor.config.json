@@ -1,6 +1,6 @@
 {
-  "appId": "org.th8ta.wallet",
-  "appName": "Wallet",
+  "appId": "org.th8ta.vallo",
+  "appName": "Vallo",
   "bundledWebRuntime": false,
   "npmClient": "yarn",
   "webDir": "build",

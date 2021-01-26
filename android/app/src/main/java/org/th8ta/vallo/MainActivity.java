@@ -1,4 +1,4 @@
-package org.th8ta.wallet;
+package org.th8ta.vallo;
 
 import android.os.Bundle;
 
