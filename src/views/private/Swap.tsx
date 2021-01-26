@@ -17,7 +17,7 @@ import {
   IonSkeletonText
 } from "@ionic/react";
 import { RefresherEventDetail } from "@ionic/core";
-import { Input } from "@verto/ui";
+import { Input, Modal, useModal } from "@verto/ui";
 import Verto from "@verto/lib";
 import {
   ArrowRightIcon,
@@ -64,7 +64,10 @@ export default function Swap({ history }: RouteComponentProps) {
       orders: [],
       loading: true
     }),
-    [supportedTokens, setSupportedTokens] = useState<IToken[]>([]);
+    [supportedTokens, setSupportedTokens] = useState<IToken[]>([]),
+    confirmModal = useModal(),
+    [from, setFrom] = useState(0),
+    [receive, setReceive] = useState(0);
 
   useEffect(() => {
     refresh();
@@ -84,6 +87,16 @@ export default function Swap({ history }: RouteComponentProps) {
     }
     // eslint-disable-next-line
   }, [assets, swapItems, tokens, history]);
+
+  useEffect(() => {
+    setFrom(getMax() ?? 0);
+    // eslint-disable-next-line
+  }, [getMax()]);
+
+  useEffect(() => {
+    calculateReceive();
+    // eslint-disable-next-line
+  }, [from, swapItems.from, swapItems.to]);
 
   async function refresh(e?: CustomEvent<RefresherEventDetail>) {
     const verto = new Verto();
@@ -150,17 +163,18 @@ export default function Swap({ history }: RouteComponentProps) {
       .slice(0, 5);
   }
 
-  /*
+  async function calculateReceive() {
+    setReceive(0);
+  }
+
   function doSwap() {
     // TODO
     // after showing modal:
     // Read to swap? (title)
     // This will start the swap process to swap the 100 VRT (amount - tokenname) with 10 AR (amount - tokenname) (description)
     // and confirming the swap, this executes the swap process
-
     // TODO: show toast and return if the current amount of pst/chain equals 0
   }
-  */
 
   return (
     <IonPage>
@@ -337,6 +351,7 @@ export default function Swap({ history }: RouteComponentProps) {
                   min={0}
                   max={getMax()}
                   value={getMax()}
+                  onChange={(e) => setFrom(Number(e.target.value))}
                 >
                   <div
                     className={styles.Ticker}
@@ -350,9 +365,9 @@ export default function Swap({ history }: RouteComponentProps) {
                   </div>
                 </Input>
                 <Input
-                  value="0"
+                  value={`~${receive}`}
                   label="You recieve"
-                  type="number"
+                  type="text"
                   className={styles.Input}
                   bold
                   readOnly
@@ -374,6 +389,7 @@ export default function Swap({ history }: RouteComponentProps) {
                   expand="full"
                   color="dark"
                   shape="round"
+                  onClick={() => confirmModal.setState(true)}
                 >
                   Swap
                 </IonButton>
@@ -445,6 +461,35 @@ export default function Swap({ history }: RouteComponentProps) {
           </div>
         </div>
       </IonContent>
+      <Modal {...confirmModal.bindings}>
+        <Modal.Content className={styles.ModalContent}>
+          <h1>Confirm swap</h1>
+          <p>
+            {from} {swapTickers.from?.ticker ?? "---"}
+            <span style={{ margin: "0 .3em" }}>
+              <ArrowRightIcon size={16} />
+            </span>
+            {receive} {swapTickers.to?.ticker ?? "---"}
+          </p>
+        </Modal.Content>
+        <Modal.Footer>
+          <Modal.Action
+            passive
+            onClick={() => confirmModal.setState(false)}
+            className="ion-activatable ripple-parent action-button"
+          >
+            Cancel
+            <IonRippleEffect />
+          </Modal.Action>
+          <Modal.Action
+            onClick={doSwap}
+            className="ion-activatable ripple-parent action-button"
+          >
+            Confirm
+            <IonRippleEffect />
+          </Modal.Action>
+        </Modal.Footer>
+      </Modal>
     </IonPage>
   );
 }
