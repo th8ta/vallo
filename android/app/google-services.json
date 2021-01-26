@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "903514882046",
+    "project_id": "valloo",
+    "storage_bucket": "valloo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:903514882046:android:9d2a63154a271a58df0aaf",
+        "android_client_info": {
+          "package_name": "org.th8ta.vallo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "903514882046-vuho0qlaqul80rongkvfgmu9ppasa7hq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVuW7oH8Omp24DjrhqUacIF1dEbE396Xg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "903514882046-vuho0qlaqul80rongkvfgmu9ppasa7hq.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "903514882046-6p40tj8hsfa9sr3i6hfcql5l59ujpu7j.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.th8ta.vallo"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
