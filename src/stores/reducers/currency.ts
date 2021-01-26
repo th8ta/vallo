@@ -19,7 +19,7 @@ export default function currencyReducer(
 ): IState {
   switch (action.type) {
     case "CURRENCY_STATUS":
-      if (!action.payload.status) break;
+      if (action.payload.status === undefined) break;
       return { ...state, status: action.payload.status };
 
     case "CURRENCY_VAL":

@@ -8,14 +8,21 @@ import {
   IonCardTitle,
   IonItem,
   IonRippleEffect,
-  IonActionSheet
+  IonActionSheet,
+  IonLabel,
+  IonToggle
 } from "@ionic/react";
 import { ClippyIcon } from "@primer/octicons-react";
 import { RouteComponentProps } from "react-router-dom";
 import ShortTopLayerTitle from "../../components/ShortTopLayerTitle";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "../../stores/reducers";
-import { setTheme, signOut } from "../../stores/actions";
+import {
+  setCurrency,
+  setCurrencyVal,
+  setTheme,
+  signOut
+} from "../../stores/actions";
 import WalletManager from "../../components/WalletManager";
 import { Plugins } from "@capacitor/core";
 import { AppVersion } from "@ionic-native/app-version";
@@ -36,7 +43,9 @@ export default function Profile({ history }: RouteComponentProps) {
     [signoutModal, setSignoutModal] = useState(false),
     theme = useTheme(),
     userTheme = useSelector((state: RootState) => state.theme),
-    [showThemeSelector, setThemeSelector] = useState(false);
+    [showThemeSelector, setThemeSelector] = useState(false),
+    currencySetting = useSelector((state: RootState) => state.currency),
+    [currencySelector, setCurrencySelector] = useState(false);
 
   useEffect(() => {
     AppVersion.getVersionNumber()
@@ -90,6 +99,27 @@ export default function Profile({ history }: RouteComponentProps) {
                   onClick={() => setThemeSelector(true)}
                 >
                   <span>Theme: {userTheme}</span>
+                  <IonRippleEffect />
+                </IonItem>
+                <IonItem
+                  className={styles.Setting + " ion-activatable ripple-parent"}
+                  detail={false}
+                  onClick={() => dispatch(setCurrency(!currencySetting.status))}
+                >
+                  <IonLabel style={{ paddingLeft: "1em" }}>
+                    Show AR prices
+                  </IonLabel>
+                  <IonToggle checked={!currencySetting.status} />
+                  <IonRippleEffect />
+                </IonItem>
+                <IonItem
+                  className={styles.Setting + " ion-activatable ripple-parent"}
+                  detail={true}
+                  onClick={() => setCurrencySelector(true)}
+                >
+                  <span>
+                    Currency: <b>{currencySetting.currency}</b>
+                  </span>
                   <IonRippleEffect />
                 </IonItem>
                 <IonItem
@@ -229,6 +259,43 @@ export default function Profile({ history }: RouteComponentProps) {
             role: "cancel",
             handler() {
               setThemeSelector(false);
+            }
+          }
+        ]}
+      />
+      <IonActionSheet
+        isOpen={currencySelector}
+        onDidDismiss={() => setCurrencySelector(false)}
+        buttons={[
+          {
+            text: "USD",
+            cssClass:
+              currencySetting.currency === "USD" ? "selected-action-sheet" : "",
+            handler() {
+              dispatch(setCurrencyVal("USD"));
+            }
+          },
+          {
+            text: "EUR",
+            cssClass:
+              currencySetting.currency === "EUR" ? "selected-action-sheet" : "",
+            handler() {
+              dispatch(setCurrencyVal("EUR"));
+            }
+          },
+          {
+            text: "GBP",
+            cssClass:
+              currencySetting.currency === "GBP" ? "selected-action-sheet" : "",
+            handler() {
+              dispatch(setCurrencyVal("GBP"));
+            }
+          },
+          {
+            text: "Cancel",
+            role: "cancel",
+            handler() {
+              setCurrencySelector(false);
             }
           }
         ]}
