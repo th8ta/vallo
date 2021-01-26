@@ -8,5 +8,8 @@ project(':capacitor-community-sqlite').projectDir = new File('../node_modules/@c
 include ':capacitor-dark-mode'
 project(':capacitor-dark-mode').projectDir = new File('../node_modules/capacitor-dark-mode/android')
 
+include ':capacitor-native-biometric'
+project(':capacitor-native-biometric').projectDir = new File('../node_modules/capacitor-native-biometric/android')
+
 include ':capacitor-navigationbar'
 project(':capacitor-navigationbar').projectDir = new File('../node_modules/capacitor-navigationbar/android')

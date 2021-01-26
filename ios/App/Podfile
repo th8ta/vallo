@@ -12,6 +12,8 @@ def capacitor_pods
   pod 'CapacitorCordova', :path => '../../node_modules/@capacitor/ios'
   pod 'CapacitorCommunitySqlite', :path => '../../node_modules/@capacitor-community/sqlite'
   pod 'CapacitorDarkMode', :path => '../../node_modules/capacitor-dark-mode'
+  pod 'CapacitorNativeBiometric', :path => '../../node_modules/capacitor-native-biometric'
+  pod 'CapacitorNavigationbar', :path => '../../node_modules/capacitor-navigationbar'
   pod 'CordovaPlugins', :path => '../capacitor-cordova-ios-plugins'
   pod 'CordovaPluginsResources', :path => '../capacitor-cordova-ios-plugins'
   # Do not delete
@@ -20,4 +22,6 @@ end
 target 'App' do
   capacitor_pods
   # Add your Pods here
+  pod 'FirebaseCore'
+  pod 'Firebase/Messaging'
 end
