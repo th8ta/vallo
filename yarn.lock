@@ -1950,10 +1950,10 @@
   resolved "https://registry.yarnpkg.com/@ungap/global-this/-/global-this-0.4.3.tgz#44cb668b03e7c4bc88cb6e6f9329d381131878ee"
   integrity sha512-MuHEpDBurNVeD6mV9xBcAN2wfTwuaFQhHuhWkJuXmyVJ5P5sBCw+nnFpdfb0tAvgWkfefWCsAoAsh7MTUr3LPg==
 
-"@verto/lib@^0.9.3":
-  version "0.9.3"
-  resolved "https://registry.yarnpkg.com/@verto/lib/-/lib-0.9.3.tgz#bb62a0dafa8ddc6c4e5e63e816c52f447cb2f789"
-  integrity sha512-Hz8JG2IfCmBb52WBmAFpsIa00Sk9k9ge9yatPeb6EneA59OKpchXHLHNjHL+PuL5op5hUkFJGT2kxGwuT3ttbg==
+"@verto/lib@^0.9.5":
+  version "0.9.5"
+  resolved "https://registry.yarnpkg.com/@verto/lib/-/lib-0.9.5.tgz#e5ce1f8523c1dae70650359fc912a7cb95b1e61b"
+  integrity sha512-t1z1PGEiHRzXcEt7dldtFx0rpj2U3A+9RqxVfKqRWqv0LDxi11KJtsLMn0eHwwnrK35Ez7Fb/IWpqw2+veL/Qg==
   dependencies:
     ar-gql "^0.0.3"
     arweave "^1.10.0"

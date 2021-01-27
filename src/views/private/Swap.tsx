@@ -83,11 +83,8 @@ export default function Swap({ history }: RouteComponentProps) {
   useEffect(() => {
     if (!assets) return history.push("/app/home");
     if (!swapItems.from || !swapItems.to) {
-      const from = swapItems.from ?? assets.tokens[0]?.id ?? undefined,
-        to =
-          swapItems.to ??
-          tokens.find((val) => val.id !== from)?.id ??
-          undefined;
+      const from = swapItems.from || assets.tokens[0]?.id || undefined,
+        to = swapItems.to ?? "AR";
 
       dispatch(updateSwapItems({ from, to }));
     }
