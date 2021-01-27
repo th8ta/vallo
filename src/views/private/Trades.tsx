@@ -20,6 +20,7 @@ import { cutSmall, getStatusColor } from "../../utils/arweave";
 import { useSelector } from "react-redux";
 import { RootState } from "../../stores/reducers";
 import { Plugins } from "@capacitor/core";
+import { forwardAnimation } from "../../utils/route_animations";
 import Verto from "@verto/lib";
 import ShortTopLayerTitle from "../../components/ShortTopLayerTitle";
 import styles from "../../theme/views/trades.module.sass";
@@ -165,6 +166,7 @@ export default function Trades({ history }: RouteComponentProps) {
                         lines="none"
                         routerLink={`/app/trade/${item.id}`}
                         detail={false}
+                        onClick={forwardAnimation}
                       >
                         {item.sent}
                         <ArrowRightIcon size={16} />
