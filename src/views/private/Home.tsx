@@ -57,6 +57,8 @@ export default function Home() {
     theme = useTheme();
 
   useEffect(() => {
+    setExchanges([]);
+    setLoadingExchanges(true);
     refresh();
     // eslint-disable-next-line
   }, [currentAddress]);

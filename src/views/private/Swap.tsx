@@ -72,7 +72,7 @@ export default function Swap({ history }: RouteComponentProps) {
   useEffect(() => {
     refresh();
     // eslint-disable-next-line
-  }, []);
+  }, [currentAddress]);
 
   useEffect(() => {
     if (!assets) return history.push("/app/home");
