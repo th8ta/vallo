@@ -1962,10 +1962,10 @@
     node-fetch "^2.6.1"
     smartweave "^0.4.21"
 
-"@verto/ui@^0.0.7":
-  version "0.0.7"
-  resolved "https://registry.yarnpkg.com/@verto/ui/-/ui-0.0.7.tgz#92aeb67629d1c1ff5369a1535192a802cd7b0fb2"
-  integrity sha512-n47VaYkUjY7O4PORRD8oE+dOw3lo5z5IB8bj68Gy3/8yRpeTvB/UHm1/7wvaK1ygHkJWTBOR5q/atMarZ7ofIQ==
+"@verto/ui@^0.0.8":
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/@verto/ui/-/ui-0.0.8.tgz#0b4c97b751d9527a10923d327b06b6b8a60329e0"
+  integrity sha512-GSKz3K/03vLa/OYapMfnDLWsLdVeazG51I+U6P7NCZ/VqVnwzcXLnz/B/0Jhgh/oTl0OHV76sTH7nwStX4RRfg==
   dependencies:
     "@geist-ui/react-icons" "^1.0.1"
     "@geist-ui/style" "^2.0.0"

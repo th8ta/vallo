@@ -66,8 +66,8 @@ export default function Swap({ history }: RouteComponentProps) {
     }),
     [supportedTokens, setSupportedTokens] = useState<IToken[]>([]),
     confirmModal = useModal(),
-    [from, setFrom] = useState(0),
-    [receive, setReceive] = useState(0);
+    [fromAmount, setFromAmount] = useState(0),
+    [receiveAmount, setReceiveAmount] = useState<string>("...");
 
   useEffect(() => {
     refresh();
@@ -89,14 +89,14 @@ export default function Swap({ history }: RouteComponentProps) {
   }, [assets, swapItems, tokens, history]);
 
   useEffect(() => {
-    setFrom(getMax() ?? 0);
+    setFromAmount(getMax() ?? 0);
     // eslint-disable-next-line
   }, [getMax()]);
 
   useEffect(() => {
-    calculateReceive();
+    calculateReceiveAmount();
     // eslint-disable-next-line
-  }, [from, swapItems.from, swapItems.to]);
+  }, [fromAmount, swapItems.from, swapItems.to]);
 
   async function refresh(e?: CustomEvent<RefresherEventDetail>) {
     const verto = new Verto();
@@ -163,8 +163,29 @@ export default function Swap({ history }: RouteComponentProps) {
       .slice(0, 5);
   }
 
-  async function calculateReceive() {
-    setReceive(0);
+  async function calculateReceiveAmount() {
+    setReceiveAmount("...");
+    if (!fromAmount || !swapItems.from || !swapItems.to) return;
+    const verto = new Verto();
+
+    if (swapItems.from !== "ETH_COIN" && swapItems.to !== "ETH_COIN") {
+      if (swapItems.to === "AR_COIN")
+        return setReceiveAmount(
+          `~${((await verto.latestPrice(swapItems.from)) ?? 0) * fromAmount}`
+        );
+      else if (swapItems.from === "AR_COIN")
+        return setReceiveAmount(
+          `~${fromAmount / ((await verto.latestPrice(swapItems.to)) ?? 0)}`
+        );
+
+      const receiveInAR =
+        ((await verto.latestPrice(swapItems.from)) ?? 0) * fromAmount;
+      return setReceiveAmount(
+        `~${receiveInAR / ((await verto.latestPrice(swapItems.to)) ?? 0)}`
+      );
+    } else {
+      // TODO: ETH support
+    }
   }
 
   function doSwap() {
@@ -350,8 +371,9 @@ export default function Swap({ history }: RouteComponentProps) {
                   bold
                   min={0}
                   max={getMax()}
-                  value={getMax()}
-                  onChange={(e) => setFrom(Number(e.target.value))}
+                  value={fromAmount}
+                  onChange={(e) => setFromAmount(Number(e.target.value))}
+                  childClassName={styles.InputChildEl}
                 >
                   <div
                     className={styles.Ticker}
@@ -365,12 +387,13 @@ export default function Swap({ history }: RouteComponentProps) {
                   </div>
                 </Input>
                 <Input
-                  value={`~${receive}`}
+                  value={receiveAmount}
                   label="You recieve"
                   type="text"
                   className={styles.Input}
                   bold
                   readOnly
+                  childClassName={styles.InputChildEl}
                 >
                   <div
                     className={styles.Ticker}
@@ -465,11 +488,17 @@ export default function Swap({ history }: RouteComponentProps) {
         <Modal.Content className={styles.ModalContent}>
           <h1>Confirm swap</h1>
           <p>
-            {from} {swapTickers.from?.ticker ?? "---"}
-            <span style={{ margin: "0 .3em" }}>
-              <ArrowRightIcon size={16} />
+            {fromAmount} {swapTickers.from?.ticker ?? "---"}
+            <span
+              style={{
+                margin: "0 .3em",
+                display: "block",
+                transform: "rotate(90deg)"
+              }}
+            >
+              <ArrowSwitchIcon size={16} />
             </span>
-            {receive} {swapTickers.to?.ticker ?? "---"}
+            {receiveAmount} {swapTickers.to?.ticker ?? "---"}
           </p>
         </Modal.Content>
         <Modal.Footer>
