@@ -198,8 +198,29 @@ export default function Swap({ history }: RouteComponentProps) {
   async function doSwap() {
     if (!(fromAmount > 0) || fromAmount > (getMax() ?? 0))
       return Toast.show({ text: "Invalid amount..." });
+    if (!swapItems.from || !swapItems.to)
+      return Toast.show({ text: "Send or receive token is not selected..." });
+    if (!assets) return Toast.show({ text: "Assets is undefined..." });
+    if (swapItems.from !== "AR" && swapItems.from !== "ETH") {
+      const fromTokenVal = assets.tokens.find(
+        ({ id }) => id === swapItems.from
+      );
+      if (!fromTokenVal || fromTokenVal.balance <= 0)
+        return Toast.show({ text: "Not enough tokens..." });
+    }
     if (!keyfile) return Toast.show({ text: "Problems with keyfile..." });
-    // TODO
+    // TODO: do the swap
+    // checks done above:
+    // - check if the send amount is more than 0 and not more than the balance
+    // - check if from and to token IDs are not undefined
+    // - check if assets is not undefined
+    // - check if the send token exists and if their balance is more than 0
+    // - check if keyfile is not undefined
+    //
+    // variables:
+    // - swapItems.from: ID of the send token
+    // - swapItems.to: ID of the receive token
+    // - fromAmount: the amount of tokens that the user is sending
   }
 
   return (
