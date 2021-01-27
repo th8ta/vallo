@@ -14,7 +14,6 @@ import {
 } from "@ionic/react";
 import { ClippyIcon } from "@primer/octicons-react";
 import { RouteComponentProps } from "react-router-dom";
-import ShortTopLayerTitle from "../../components/ShortTopLayerTitle";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "../../stores/reducers";
 import {
@@ -23,12 +22,14 @@ import {
   setTheme,
   signOut
 } from "../../stores/actions";
-import WalletManager from "../../components/WalletManager";
 import { Plugins } from "@capacitor/core";
 import { AppVersion } from "@ionic-native/app-version";
 import { Modal } from "@verto/ui";
 import { QRCode } from "react-qr-svg";
 import { useTheme } from "../../utils/theme";
+import { forwardAnimation } from "../../utils/route_animations";
+import ShortTopLayerTitle from "../../components/ShortTopLayerTitle";
+import WalletManager from "../../components/WalletManager";
 import QRModal from "../../theme/components/QRModal.module.sass";
 import styles from "../../theme/views/profile.module.sass";
 
@@ -142,6 +143,7 @@ export default function Profile({ history }: RouteComponentProps) {
                   className={styles.Setting + " ion-activatable ripple-parent"}
                   detail={true}
                   routerLink="/welcome"
+                  onClick={forwardAnimation}
                 >
                   <span>Add new wallet</span>
                   <IonRippleEffect />
