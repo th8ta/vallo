@@ -18,7 +18,6 @@ import {
 } from "@ionic/react";
 import { RefresherEventDetail } from "@ionic/core";
 import { Input, Modal, useModal } from "@verto/ui";
-import Verto from "@verto/lib";
 import {
   ArrowRightIcon,
   ArrowSwitchIcon,
@@ -26,20 +25,24 @@ import {
   QuestionIcon
 } from "@primer/octicons-react";
 import { RouteComponentProps } from "react-router-dom";
-import ShortTopLayerTitle from "../../components/ShortTopLayerTitle";
 import type { RootState } from "../../stores/reducers";
 import { useDispatch, useSelector } from "react-redux";
 import { updateSwapItems } from "../../stores/actions";
 import { loadTokens, preloadAssets } from "../../utils/data";
 import { cutSmall, formatTotalBalance } from "../../utils/arweave";
 import { IToken } from "../../stores/reducers/tokens";
-import logo_light from "../../assets/logo.png";
-import logo_dark from "../../assets/logo_dark.png";
 import { useTheme } from "../../utils/theme";
 import { useSwapLogos, useSwapTickers } from "../../utils/swap";
 import { forwardAnimation } from "../../utils/route_animations";
+import { Plugins } from "@capacitor/core";
+import Verto from "@verto/lib";
+import ShortTopLayerTitle from "../../components/ShortTopLayerTitle";
+import logo_light from "../../assets/logo.png";
+import logo_dark from "../../assets/logo_dark.png";
 import styles from "../../theme/views/swap.module.sass";
 import SwapItemsStyle from "../../theme/components/Swap.module.sass";
+
+const { Toast } = Plugins;
 
 export default function Swap({ history }: RouteComponentProps) {
   const balances = useSelector((state: RootState) => state.balance),
@@ -67,7 +70,10 @@ export default function Swap({ history }: RouteComponentProps) {
     [supportedTokens, setSupportedTokens] = useState<IToken[]>([]),
     confirmModal = useModal(),
     [fromAmount, setFromAmount] = useState(0),
-    [receiveAmount, setReceiveAmount] = useState<string>("...");
+    [receiveAmount, setReceiveAmount] = useState<string>("..."),
+    keyfile = useSelector((state: RootState) => state.wallet).find(
+      ({ address }) => address === currentAddress
+    )?.keyfile;
 
   useEffect(() => {
     refresh();
@@ -121,8 +127,8 @@ export default function Swap({ history }: RouteComponentProps) {
     if (!assets) return;
     if (
       !assets.tokens.find(({ id }) => id === swapItems.to) &&
-      swapItems.to !== "AR_COIN" &&
-      swapItems.to !== "ETH_COIN"
+      swapItems.to !== "AR" &&
+      swapItems.to !== "ETH"
     )
       return;
     dispatch(updateSwapItems({ from: swapItems.to, to: swapItems.from }));
@@ -130,11 +136,12 @@ export default function Swap({ history }: RouteComponentProps) {
 
   function getMax(): number | undefined {
     if (!swapItems.from) return undefined;
-    if (swapItems.from === "AR_COIN")
+    if (swapItems.from === "AR")
       return Number(
         balances.find(({ address }) => address === currentAddress)?.balance
       );
-    if (swapItems.from === "ETH_COIN") return undefined;
+    // TODO: ETH support
+    if (swapItems.from === "ETH") return undefined;
     return assets?.tokens.find(({ id }) => id === swapItems.from)?.balance;
   }
 
@@ -168,12 +175,12 @@ export default function Swap({ history }: RouteComponentProps) {
     if (!fromAmount || !swapItems.from || !swapItems.to) return;
     const verto = new Verto();
 
-    if (swapItems.from !== "ETH_COIN" && swapItems.to !== "ETH_COIN") {
-      if (swapItems.to === "AR_COIN")
+    if (swapItems.from !== "ETH" && swapItems.to !== "ETH") {
+      if (swapItems.to === "AR")
         return setReceiveAmount(
           `~${((await verto.latestPrice(swapItems.from)) ?? 0) * fromAmount}`
         );
-      else if (swapItems.from === "AR_COIN")
+      else if (swapItems.from === "AR")
         return setReceiveAmount(
           `~${fromAmount / ((await verto.latestPrice(swapItems.to)) ?? 0)}`
         );
@@ -188,13 +195,11 @@ export default function Swap({ history }: RouteComponentProps) {
     }
   }
 
-  function doSwap() {
+  async function doSwap() {
+    if (!(fromAmount > 0) || fromAmount > (getMax() ?? 0))
+      return Toast.show({ text: "Invalid amount..." });
+    if (!keyfile) return Toast.show({ text: "Problems with keyfile..." });
     // TODO
-    // after showing modal:
-    // Read to swap? (title)
-    // This will start the swap process to swap the 100 VRT (amount - tokenname) with 10 AR (amount - tokenname) (description)
-    // and confirming the swap, this executes the swap process
-    // TODO: show toast and return if the current amount of pst/chain equals 0
   }
 
   return (
@@ -486,7 +491,10 @@ export default function Swap({ history }: RouteComponentProps) {
       </IonContent>
       <Modal {...confirmModal.bindings}>
         <Modal.Content className={styles.ModalContent}>
-          <h1>Confirm swap</h1>
+          <h1>Ready to swap?</h1>
+          <p>
+            This will start a swap process through the Verto Exchange Network.
+          </p>
           <p>
             {fromAmount} {swapTickers.from?.ticker ?? "---"}
             <span

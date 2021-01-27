@@ -22,20 +22,20 @@ export function useSwapTickers() {
     if (!assets) return;
 
     const from =
-        swapItems.from === "AR_COIN" || swapItems.from === "ETH_COIN"
+        swapItems.from === "AR" || swapItems.from === "ETH"
           ? {
               id: swapItems.from,
               name: swapItems.from,
-              ticker: swapItems.from === "AR_COIN" ? "AR" : "ETH"
+              ticker: swapItems.from === "AR" ? "AR" : "ETH"
             }
           : tokens.find(({ id }) => id === swapItems.from) ??
             assets.tokens.find(({ id }) => id === swapItems.from),
       to =
-        swapItems.to === "AR_COIN" || swapItems.to === "ETH_COIN"
+        swapItems.to === "AR" || swapItems.to === "ETH"
           ? {
               id: swapItems.to,
               name: swapItems.to,
-              ticker: swapItems.to === "AR_COIN" ? "AR" : "ETH"
+              ticker: swapItems.to === "AR" ? "AR" : "ETH"
             }
           : tokens.find(({ id }) => id === swapItems.to) ??
             assets.tokens.find(({ id }) => id === swapItems.to);
@@ -66,16 +66,16 @@ export function useSwapLogos() {
       to: string | ((props: any) => JSX.Element) = "";
 
     if (!swapItemTickers.from) from = "";
-    else if (swapItemTickers.from.id === "AR_COIN") from = ArweaveLogo;
-    else if (swapItemTickers.from.id === "ETH_COIN") from = EtherumLogo;
+    else if (swapItemTickers.from.id === "AR") from = ArweaveLogo;
+    else if (swapItemTickers.from.id === "ETH") from = EtherumLogo;
     else
       from = `https://arweave.net/${await getCommunityLogo(
         swapItemTickers.from.id
       )}`;
 
     if (!swapItemTickers.to) from = "";
-    else if (swapItemTickers.to.id === "AR_COIN") to = ArweaveLogo;
-    else if (swapItemTickers.to.id === "ETH_COIN") to = EtherumLogo;
+    else if (swapItemTickers.to.id === "AR") to = ArweaveLogo;
+    else if (swapItemTickers.to.id === "ETH") to = EtherumLogo;
     else
       to = `https://arweave.net/${await getCommunityLogo(
         swapItemTickers.to.id

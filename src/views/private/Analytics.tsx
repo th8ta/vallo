@@ -66,10 +66,7 @@ export default function Analytics({ history }: RouteComponentProps) {
     if (!swapTickers.from) return;
     const verto = new Verto();
 
-    if (
-      swapTickers.from.id === "AR_COIN" ||
-      swapTickers.from.id === "ETH_COIN"
-    ) {
+    if (swapTickers.from.id === "AR" || swapTickers.from.id === "ETH") {
       const rate = await verto.chainRate(swapTickers.from.ticker);
 
       setMetrics({ loading: false, rate });
@@ -114,8 +111,8 @@ export default function Analytics({ history }: RouteComponentProps) {
                   onClick={() => {
                     if (!swapTickers.from) return;
                     if (
-                      swapTickers.from.id === "AR_COIN" ||
-                      swapTickers.from.id === "ETH_COIN"
+                      swapTickers.from.id === "AR" ||
+                      swapTickers.from.id === "ETH"
                     )
                       return;
                     forwardAnimation();
@@ -170,8 +167,8 @@ export default function Analytics({ history }: RouteComponentProps) {
                   onClick={() => {
                     if (!swapTickers.to) return;
                     if (
-                      swapTickers.to.id === "AR_COIN" ||
-                      swapTickers.to.id === "ETH_COIN"
+                      swapTickers.to.id === "AR" ||
+                      swapTickers.to.id === "ETH"
                     )
                       return;
                     forwardAnimation();
@@ -235,8 +232,8 @@ export default function Analytics({ history }: RouteComponentProps) {
               </IonCardContent>
             </IonCard>
             {(swapTickers.from &&
-              (swapTickers.from.id === "AR_COIN" ||
-                swapTickers.from.id === "ETH_COIN") && (
+              (swapTickers.from.id === "AR" ||
+                swapTickers.from.id === "ETH") && (
                 <IonCard className="Card">
                   <IonCardHeader>
                     <IonCardTitle className="CardTitle">Rate</IonCardTitle>

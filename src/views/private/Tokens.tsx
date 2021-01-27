@@ -85,13 +85,13 @@ export default function Tokens({ history }: RouteComponentProps) {
             : { ...update, to: swapItems.from };
 
     if (
-      update.from !== "AR_COIN" &&
-      update.to !== "AR_COIN" &&
-      update.from !== "ETH_COIN" &&
-      update.to !== "ETH_COIN"
+      update.from !== "AR" &&
+      update.to !== "AR" &&
+      update.from !== "ETH" &&
+      update.to !== "ETH"
     )
-      if (choose === "from") update = { ...update, to: "AR_COIN" };
-      else if (choose === "to") update = { ...update, from: "AR_COIN" };
+      if (choose === "from") update = { ...update, to: "AR" };
+      else if (choose === "to") update = { ...update, from: "AR" };
 
     dispatch(updateSwapItems(update));
     history.push("/app/swap");
@@ -120,12 +120,12 @@ export default function Tokens({ history }: RouteComponentProps) {
                   className="Card ListItem ion-activatable ripple-parent"
                   onClick={() => {
                     if (!choose) return;
-                    selectToken("AR_COIN");
+                    selectToken("AR");
                   }}
                 >
                   <IonCardContent className="Content">
                     <TokenDisplay
-                      id="AR_COIN"
+                      id="AR"
                       name="Arweave"
                       ticker="AR"
                       full
@@ -143,13 +143,13 @@ export default function Tokens({ history }: RouteComponentProps) {
                   className="Card ListItem ion-activatable ripple-parent"
                   onClick={() => {
                     if (!choose) return;
-                    // selectToken("ETH_COIN");
+                    // selectToken("ETH");
                   }}
                   disabled
                 >
                   <IonCardContent className="Content">
                     <TokenDisplay
-                      id="ETH_COIN"
+                      id="ETH"
                       name="Etherum"
                       ticker="ETH"
                       full

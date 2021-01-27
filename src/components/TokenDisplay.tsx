@@ -35,11 +35,7 @@ export default function TokenDisplay({
   }, [id]);
 
   async function loadLogo() {
-    if (
-      ticker.toUpperCase() === "VRT" ||
-      id === "AR_COIN" ||
-      id === "ETH_COIN"
-    ) {
+    if (ticker.toUpperCase() === "VRT" || id === "AR" || id === "ETH") {
       setLoadingLogo(false);
       return setLogo(undefined);
     }
@@ -67,8 +63,8 @@ export default function TokenDisplay({
         <IonSkeletonText animated className={styles.LoadingLogo} />
       )) ||
         ((logo || ticker.toUpperCase() === "VRT") &&
-          id !== "AR_COIN" &&
-          id !== "ETH_COIN" && (
+          id !== "AR" &&
+          id !== "ETH" && (
             <img
               className={styles.Logo}
               src={
@@ -81,9 +77,9 @@ export default function TokenDisplay({
               alt={ticker + "-logo"}
             />
           )) ||
-        ((id === "AR_COIN" || id === "ETH_COIN") && (
+        ((id === "AR" || id === "ETH") && (
           <div className={styles.Logo}>
-            {(id === "AR_COIN" && <AR />) || <ETH />}
+            {(id === "AR" && <AR />) || <ETH />}
           </div>
         )) || (
           <div className={styles.NoLogo}>
@@ -95,7 +91,7 @@ export default function TokenDisplay({
       </IonLabel>
       {!hideBalance && (
         <IonText slot="end" className={styles.Balance}>
-          {(balance ?? 0).toFixed(id === "AR_COIN" ? 5 : 0)} {ticker}
+          {(balance ?? 0).toFixed(id === "AR" ? 5 : 0)} {ticker}
         </IonText>
       )}
       {!full && <IonRippleEffect />}
