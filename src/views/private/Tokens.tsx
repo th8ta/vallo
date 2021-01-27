@@ -84,6 +84,15 @@ export default function Tokens({ history }: RouteComponentProps) {
             ? { ...update, from: swapItems.to }
             : { ...update, to: swapItems.from };
 
+    if (
+      update.from !== "AR_COIN" &&
+      update.to !== "AR_COIN" &&
+      update.from !== "ETH_COIN" &&
+      update.to !== "ETH_COIN"
+    )
+      if (choose === "from") update = { ...update, to: "AR_COIN" };
+      else if (choose === "to") update = { ...update, from: "AR_COIN" };
+
     dispatch(updateSwapItems(update));
     history.push("/app/swap");
     forwardAnimation();
@@ -130,13 +139,13 @@ export default function Tokens({ history }: RouteComponentProps) {
                   <IonRippleEffect />
                 </IonCard>
                 {/** TODO: ETH SUPPORT */}
-                {/**
                 <IonCard
                   className="Card ListItem ion-activatable ripple-parent"
                   onClick={() => {
                     if (!choose) return;
-                    selectToken("ETH_COIN");
+                    // selectToken("ETH_COIN");
                   }}
+                  disabled
                 >
                   <IonCardContent className="Content">
                     <TokenDisplay
@@ -149,7 +158,6 @@ export default function Tokens({ history }: RouteComponentProps) {
                   </IonCardContent>
                   <IonRippleEffect />
                 </IonCard>
-                */}
               </>
             )}
             {combinedTokens().length > 0 &&
