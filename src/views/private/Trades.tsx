@@ -16,7 +16,7 @@ import { OrderItem } from "./Swap";
 import { RefresherEventDetail } from "@ionic/core";
 import { ArrowRightIcon } from "@primer/octicons-react";
 import { RouteComponentProps } from "react-router-dom";
-import { cutSmall } from "../../utils/arweave";
+import { cutSmall, getStatusColor } from "../../utils/arweave";
 import { useSelector } from "react-redux";
 import { RootState } from "../../stores/reducers";
 import { Plugins } from "@capacitor/core";
@@ -171,7 +171,11 @@ export default function Trades({ history }: RouteComponentProps) {
                         {item.received}
                         {item.status && (
                           <div
-                            className={styles.Status + " " + styles.Error}
+                            className={
+                              styles.Status +
+                              " " +
+                              styles[getStatusColor(item.status)]
+                            }
                           ></div>
                         )}
                         <IonRippleEffect />
