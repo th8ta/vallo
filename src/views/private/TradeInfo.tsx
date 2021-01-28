@@ -6,7 +6,9 @@ import {
   IonCardContent,
   IonChip,
   IonLabel,
-  IonSpinner
+  IonSpinner,
+  IonRefresher,
+  IonRefresherContent
 } from "@ionic/react";
 import { Plugins } from "@capacitor/core";
 import { RefresherEventDetail } from "@ionic/core";
@@ -42,6 +44,9 @@ export default function TradeInfo({ history, match }: TradeInfoProps) {
   return (
     <IonPage>
       <IonContent>
+        <IonRefresher slot="fixed" onIonRefresh={refresh}>
+          <IonRefresherContent></IonRefresherContent>
+        </IonRefresher>
         <div className="TopBackgroundSpacer">
           <div className="ShortTitle">
             <ShortTopLayerTitle title="Trade" back={() => history.goBack()} />
@@ -135,18 +140,27 @@ export default function TradeInfo({ history, match }: TradeInfoProps) {
                     <div className={styles.Status}>
                       <span
                         className={
-                          tradeInfo.status === "success"
-                            ? styles.Success
-                            : tradeInfo.status === "warning"
-                            ? styles.Warning
-                            : styles.Error
+                          styles[
+                            tradeInfo.status.charAt(0).toUpperCase() +
+                              tradeInfo.status.slice(1)
+                          ]
                         }
                       ></span>
-                      <IonChip color="warning" outline>
+                      <IonChip
+                        color={
+                          tradeInfo.status === "secondary"
+                            ? undefined
+                            : tradeInfo.status === "error"
+                            ? "danger"
+                            : tradeInfo.status
+                        }
+                        outline={tradeInfo.status !== "secondary"}
+                      >
                         <IonLabel>
-                          {tradeInfo.status === "warning"
-                            ? "Pending"
-                            : tradeInfo.status.charAt(0).toUpperCase() +
+                          {(tradeInfo.status === "secondary" &&
+                            "Refund/Return") ||
+                            (tradeInfo.status === "warning" && "Pending") ||
+                            tradeInfo.status.charAt(0).toUpperCase() +
                               tradeInfo.status.slice(1)}
                         </IonLabel>
                       </IonChip>

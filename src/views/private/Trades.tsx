@@ -121,6 +121,10 @@ export default function Trades({ history }: RouteComponentProps) {
     if (e) e.target.complete();
   }
 
+  function replaceZero(val: string) {
+    return val.replace(/^0 /, "??? ");
+  }
+
   return (
     <IonPage>
       <IonContent>
@@ -170,7 +174,7 @@ export default function Trades({ history }: RouteComponentProps) {
                       >
                         {item.sent}
                         <ArrowRightIcon size={16} />
-                        {item.received}
+                        {replaceZero(item.received)}
                         {item.status && (
                           <div
                             className={
