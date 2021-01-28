@@ -42,5 +42,5 @@
 
 ### Capacitor TODOS:
 - [ ] Add IOS support for capacitor-dark-mode (https://www.npmjs.com/package/capacitor-dark-mode#ios-configuration)
-- [ ] Add IOS support for capacitor-biometric-auth (https://www.npmjs.com/package/capacitor-biometric-auth)
+- [x] Add IOS support for capacitor-biometric-auth (https://www.npmjs.com/package/capacitor-biometric-auth) (Added? TODO: check if it works)
 - [ ] Check if biometrics works on iPhone 11 (https://github.com/arielhernandezmusa/capacitor-biometric-auth/issues/15#issuecomment-686639847)

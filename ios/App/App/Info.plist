@@ -55,6 +55,8 @@
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UIRequiredDeviceCapabilities</key>
+  <key>NSFaceIDUsageDescription</key>
+  <string>To verify yourself to make transactions</string>
 	<array>
 		<string>armv7</string>
 	</array>
