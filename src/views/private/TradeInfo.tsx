@@ -12,12 +12,10 @@ import {
 } from "@ionic/react";
 import { Plugins } from "@capacitor/core";
 import { RefresherEventDetail } from "@ionic/core";
-import { ArrowRightIcon } from "@primer/octicons-react";
 import { RouteComponentProps } from "react-router-dom";
 import Verto from "@verto/lib";
 import ShortTopLayerTitle from "../../components/ShortTopLayerTitle";
 import styles from "../../theme/views/tradeinfo.module.sass";
-import SwapItemsStyle from "../../theme/components/Swap.module.sass";
 
 const { Browser, Toast } = Plugins;
 

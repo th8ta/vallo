@@ -16,9 +16,9 @@
 - [x] Token info view
 - [x] Analytics view
 - [x] Tokens view
-- [ ] Trade info view
+- [x] Trade info view
   - [x] Design
-  - [ ] Load data
+  - [x] Load data
 
 ### Functionality
 - [ ] SQLite state cache
@@ -42,4 +42,3 @@
 
 ### Capacitor TODOS:
 - [ ] Add IOS support for capacitor-dark-mode (https://www.npmjs.com/package/capacitor-dark-mode#ios-configuration)
-- [ ] Add IOS support for capacitor-native-biometric (https://www.npmjs.com/package/capacitor-native-biometric)

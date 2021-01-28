@@ -8,7 +8,6 @@ import com.getcapacitor.Plugin;
 import com.bkon.capacitor.DarkMode.DarkMode;
 import com.getcapacitor.community.database.sqlite.CapacitorSQLite;
 import com.nikosdouvlis.navigationbar.NavigationBar;
-import com.epicshaggy.biometric.NativeBiometric;
 
 import java.util.ArrayList;
 
@@ -24,7 +23,6 @@ public class MainActivity extends BridgeActivity {
       add(DarkMode.class);
       add(CapacitorSQLite.class);
       add(NavigationBar.class);
-      add(NativeBiometric.class);
     }});
   }
 }

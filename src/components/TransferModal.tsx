@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { IonRippleEffect, IonSelect, IonSelectOption } from "@ionic/react";
-import { Plugins } from "@capacitor/core";
+import { Plugins, HapticsImpactStyle } from "@capacitor/core";
 import { Modal, Input, useInput } from "@verto/ui";
 import { ChevronRightIcon } from "@primer/octicons-react";
 import { useTheme } from "../utils/theme";
@@ -13,7 +13,7 @@ import { interactWrite } from "smartweave";
 import { arweaveInstance } from "../utils/arweave";
 import styles from "../theme/components/TransferModal.module.sass";
 
-const { Toast } = Plugins;
+const { Toast, Haptics } = Plugins;
 
 export default function TransferModal({
   close,
@@ -49,6 +49,9 @@ export default function TransferModal({
       Toast.show({ text: "Invalid address" });
       return;
     }
+
+    Haptics.impact({ style: HapticsImpactStyle.Medium });
+
     try {
       await interactWrite(
         arweaveInstance(),

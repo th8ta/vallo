@@ -34,7 +34,7 @@ import { IToken } from "../../stores/reducers/tokens";
 import { useTheme } from "../../utils/theme";
 import { useSwapLogos, useSwapTickers } from "../../utils/swap";
 import { forwardAnimation } from "../../utils/route_animations";
-import { Plugins } from "@capacitor/core";
+import { Plugins, HapticsImpactStyle } from "@capacitor/core";
 import Verto from "@verto/lib";
 import ShortTopLayerTitle from "../../components/ShortTopLayerTitle";
 import logo_light from "../../assets/logo.png";
@@ -42,7 +42,7 @@ import logo_dark from "../../assets/logo_dark.png";
 import styles from "../../theme/views/swap.module.sass";
 import SwapItemsStyle from "../../theme/components/Swap.module.sass";
 
-const { Toast } = Plugins;
+const { Toast, Haptics } = Plugins;
 
 export default function Swap({ history }: RouteComponentProps) {
   const balances = useSelector((state: RootState) => state.balance),
@@ -206,6 +206,8 @@ export default function Swap({ history }: RouteComponentProps) {
         return Toast.show({ text: "Not enough tokens..." });
     }
     if (!keyfile) return Toast.show({ text: "Problems with keyfile..." });
+    // indicate start of the process to the user with a haptics impact
+    Haptics.impact({ style: HapticsImpactStyle.Medium });
     // TODO: do the swap
     // checks done above:
     // - check if the send amount is more than 0 and not more than the balance
@@ -462,7 +464,7 @@ export default function Swap({ history }: RouteComponentProps) {
                       {cutSmall(order.amnt)}{" "}
                       {order.type === "Buy" ? "AR" : order.ticker}
                       <ArrowRightIcon size={16} />
-                      {cutSmall(order.received)}{" "}
+                      {cutSmall(order.received).replace(/^0$/, "??? ")}{" "}
                       {order.type === "Buy" ? order.ticker : "AR"}
                       <IonRippleEffect />
                     </IonItem>
