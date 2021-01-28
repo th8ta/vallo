@@ -58,49 +58,6 @@ export default function TradeInfo({ history, match }: TradeInfoProps) {
               <>
                 <IonCard className="Card" style={{ marginTop: 0 }}>
                   <IonCardContent className="Content">
-                    <div
-                      className={SwapItemsStyle.SwapItems}
-                      style={{ marginBottom: ".8em" }}
-                    >
-                      {/** TODO: from-to tokens @martonlederer */}
-                      <div
-                        className={
-                          SwapItemsStyle.From + " " + SwapItemsStyle.Static
-                        }
-                      >
-                        <img
-                          className={SwapItemsStyle.Logo}
-                          src="https://verto.exchange/logo_dark.svg"
-                          alt="Token Logo"
-                        />
-                        <div className={SwapItemsStyle.Info}>
-                          <h1>10</h1>
-                          <h2>VRT</h2>
-                        </div>
-                      </div>
-                      <div
-                        className={
-                          SwapItemsStyle.Arrows + " " + SwapItemsStyle.Static
-                        }
-                      >
-                        <ArrowRightIcon />
-                      </div>
-                      <div
-                        className={
-                          SwapItemsStyle.To + " " + SwapItemsStyle.Static
-                        }
-                      >
-                        <div className={SwapItemsStyle.Info}>
-                          <h1>1</h1>
-                          <h2>AR</h2>
-                        </div>
-                        <img
-                          className={SwapItemsStyle.Logo}
-                          src="https://verto.exchange/logo_dark.svg"
-                          alt="Token Logo"
-                        />
-                      </div>
-                    </div>
                     <p
                       className={"CodeParagraph " + styles.Text}
                       onClick={() =>
