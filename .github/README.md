@@ -32,7 +32,7 @@
 - [x] Transfer
 - [x] Buy
 - [x] QRCode to scan address / QRCode scanner
-- [ ] Biometrics/login
+- [x] Biometrics/login
 - [x] Toggle for AR/USD (or local currency) display
 - [x] Dark theme support
   - [x] Detect native theme
@@ -42,3 +42,5 @@
 
 ### Capacitor TODOS:
 - [ ] Add IOS support for capacitor-dark-mode (https://www.npmjs.com/package/capacitor-dark-mode#ios-configuration)
+- [ ] Add IOS support for capacitor-biometric-auth (https://www.npmjs.com/package/capacitor-biometric-auth)
+- [ ] Check if biometrics works on iPhone 11 (https://github.com/arielhernandezmusa/capacitor-biometric-auth/issues/15#issuecomment-686639847)

@@ -13,7 +13,7 @@ import { interactWrite } from "smartweave";
 import { arweaveInstance } from "../utils/arweave";
 import styles from "../theme/components/TransferModal.module.sass";
 
-const { Toast, Haptics } = Plugins;
+const { Toast, Haptics, BiometricAuth } = Plugins;
 
 export default function TransferModal({
   close,
@@ -34,6 +34,22 @@ export default function TransferModal({
     transferInput = useInput(getMax() ?? 0);
 
   async function transfer() {
+    const available = await BiometricAuth.isAvailable();
+
+    if (available.has) {
+      const auth = await BiometricAuth.verify({
+        reason: "Please verify yourself",
+        title: "Please verify yourself",
+        subTitle: "",
+        description: ""
+      });
+
+      if (!auth.verified) {
+        Toast.show({ text: "Failed to verificate..." });
+        return;
+      }
+    }
+
     if (!keyfile) return;
 
     const transferAsset = assets?.tokens.find(({ id }) => id === selectedToken);

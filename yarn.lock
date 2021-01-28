@@ -3211,6 +3211,13 @@ caniuse-lite@^1.0.0, caniuse-lite@^1.0.30000981, caniuse-lite@^1.0.30001035, can
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001171.tgz#3291e11e02699ad0a29e69b8d407666fc843eba7"
   integrity sha512-5Alrh8TTYPG9IH4UkRqEBZoEToWRLvPbSQokvzSz0lii8/FOWKG4keO1HoYfPWs8IF/NH/dyNPg1cmJGvV3Zlg==
 
+capacitor-biometric-auth@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/capacitor-biometric-auth/-/capacitor-biometric-auth-0.1.1.tgz#cfc815b74bd09bf9da6039535712f97accb80541"
+  integrity sha512-LZnYs5nG7dW+dnGu4rI1WotFgsZJq5hwFO6Q6TNO/AZV4UFZDEGYg5e3Z6qUdnKUjVr/NRJfxdLWVt2em83KOA==
+  dependencies:
+    "@capacitor/core" latest
+
 capacitor-dark-mode@^1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/capacitor-dark-mode/-/capacitor-dark-mode-1.0.5.tgz#7ded5afbbb0bf78a1fef5b3c33d979076318c8a9"

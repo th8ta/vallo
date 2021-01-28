@@ -42,7 +42,7 @@ import logo_dark from "../../assets/logo_dark.png";
 import styles from "../../theme/views/swap.module.sass";
 import SwapItemsStyle from "../../theme/components/Swap.module.sass";
 
-const { Toast, Haptics } = Plugins;
+const { Toast, Haptics, BiometricAuth } = Plugins;
 
 export default function Swap({ history }: RouteComponentProps) {
   const balances = useSelector((state: RootState) => state.balance),
@@ -206,8 +206,20 @@ export default function Swap({ history }: RouteComponentProps) {
         return Toast.show({ text: "Not enough tokens..." });
     }
     if (!keyfile) return Toast.show({ text: "Problems with keyfile..." });
-    // indicate start of the process to the user with a haptics impact
-    Haptics.impact({ style: HapticsImpactStyle.Medium });
+
+    const available = await BiometricAuth.isAvailable();
+
+    if (available.has) {
+      const auth = await BiometricAuth.verify({
+        reason: "Please verify yourself",
+        title: "Please verify yourself",
+        subTitle: "",
+        description: ""
+      });
+
+      if (!auth.verified)
+        return Toast.show({ text: "Failed to verificate..." });
+    }
     // TODO: do the swap
     // checks done above:
     // - check if the send amount is more than 0 and not more than the balance
@@ -215,11 +227,16 @@ export default function Swap({ history }: RouteComponentProps) {
     // - check if assets is not undefined
     // - check if the send token exists and if their balance is more than 0
     // - check if keyfile is not undefined
+    // - check user biometrics
     //
     // variables:
     // - swapItems.from: ID of the send token
     // - swapItems.to: ID of the receive token
     // - fromAmount: the amount of tokens that the user is sending
+
+    // indicate start of the process to the user with a haptics impact
+    Haptics.impact({ style: HapticsImpactStyle.Medium });
+    Toast.show({ text: "Processing your order..." });
   }
 
   return (

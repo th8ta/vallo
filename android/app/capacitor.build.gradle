@@ -10,8 +10,8 @@ android {
 apply from: "../capacitor-cordova-android-plugins/cordova.variables.gradle"
 dependencies {
     implementation project(':capacitor-community-sqlite')
+    implementation project(':capacitor-biometric-auth')
     implementation project(':capacitor-dark-mode')
-    implementation project(':capacitor-native-biometric')
     implementation project(':capacitor-navigationbar')
     implementation "com.android.support:support-v4:27.+"
 }
