@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { IonSlides, IonSlide, IonContent, IonButton } from "@ionic/react";
 import logo from "../assets/logo.png";
 import logo_dark from "../assets/logo_dark.png";
@@ -9,8 +9,19 @@ import { forwardAnimation } from "../utils/route_animations";
 import styles from "../theme/views/slideshow.module.sass";
 
 export default function Slideshow() {
-  const theme = useTheme(),
+  const theme = useTheme(false),
     history = useHistory();
+
+  useEffect(() => {
+    if (localStorage.getItem("wallet_slideshow_complete")) complete();
+    // eslint-disable-next-line
+  }, []);
+
+  function complete() {
+    forwardAnimation();
+    history.push("/app/home");
+    localStorage.setItem("wallet_slideshow_complete", "true");
+  }
 
   return (
     <IonContent>
@@ -37,10 +48,7 @@ export default function Slideshow() {
               fill="clear"
               color="primary"
               className={styles.Button}
-              onClick={() => {
-                forwardAnimation();
-                history.push("/app/home");
-              }}
+              onClick={complete}
             >
               Go
               <ArrowRightIcon />

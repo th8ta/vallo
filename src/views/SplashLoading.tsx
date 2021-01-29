@@ -11,7 +11,7 @@ import { fadeAnimation } from "../utils/route_animations";
 import styles from "../theme/views/splash.module.sass";
 
 export default function SplashLoading({ history }: RouteComponentProps) {
-  const theme = useTheme(),
+  const theme = useTheme(false),
     wallets = useSelector((state: RootState) => state.wallet);
 
   useEffect(() => {

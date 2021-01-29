@@ -8,7 +8,7 @@ import { NavigationBarPlugin } from "capacitor-navigationbar";
 const { StatusBar, DarkMode, NavigationBar } = Plugins;
 const NavBar = NavigationBar as NavigationBarPlugin;
 
-export function useTheme() {
+export function useTheme(changeNavbar: boolean = true) {
   const [theme, setTheme] = useState<"Dark" | "Light">("Light"),
     userTheme = useSelector((state: RootState) => state.theme);
 
@@ -44,14 +44,16 @@ export function useTheme() {
             ? "#000000"
             : "#ffffff"
       });
-      NavBar.setBackgroundColor({
-        color:
-          (localStorage.getItem("wallet_last_theme") ?? theme) === "Dark"
-            ? "#111111"
-            : "#FAFAFA"
-      });
+
+      if (changeNavbar)
+        NavBar.setBackgroundColor({
+          color:
+            (localStorage.getItem("wallet_last_theme") ?? theme) === "Dark"
+              ? "#111111"
+              : "#FAFAFA"
+        });
     } catch {}
-  }, [theme]);
+  }, [theme, changeNavbar]);
 
   async function nativeAutoTheme(state?: any) {
     if (userTheme !== "Auto") return;

@@ -4,7 +4,14 @@ import { useHistory } from "react-router";
 import vertoLogo from "../assets/logo.png";
 import vertoLogoDark from "../assets/logo_dark.png";
 import { useTheme } from "../utils/theme";
-import { IonPage, IonButton, IonLoading, IonContent } from "@ionic/react";
+import {
+  IonPage,
+  IonButton,
+  IonLoading,
+  IonContent,
+  IonRippleEffect,
+  IonTextarea
+} from "@ionic/react";
 import { RootState } from "../stores/reducers";
 import { useSelector, useDispatch } from "react-redux";
 import { forwardAnimation } from "../utils/route_animations";
@@ -12,21 +19,25 @@ import { arweaveInstance } from "../utils/arweave";
 import { JWKInterface } from "arweave/node/lib/wallet";
 import { loadData, preloadData } from "../utils/data";
 import { addWallet, setProfile } from "../stores/actions";
+import { Modal, useModal } from "@verto/ui";
 import {
   Plugins,
   FilesystemDirectory,
   FilesystemEncoding
 } from "@capacitor/core";
+import QRModal from "../theme/components/QRModal.module.sass";
 import styles from "../theme/views/login.module.sass";
 
-const { Filesystem, Toast } = Plugins;
+const { Filesystem, Toast, Clipboard } = Plugins;
 
 export default function Welcome() {
   const [loading, setLoading] = useState(false),
     history = useHistory(),
-    theme = useTheme(),
+    theme = useTheme(false),
     wallets = useSelector((state: RootState) => state.wallet),
-    dispatch = useDispatch();
+    dispatch = useDispatch(),
+    createdModal = useModal(),
+    [mnemonicString, setMnemonicString] = useState<string>();
 
   async function createWallet() {
     setLoading(true);
@@ -34,6 +45,8 @@ export default function Welcome() {
     const mnemonic = await generateMnemonic(),
       walletObject: JWKInterface = await getKeyFromMnemonic(mnemonic),
       address = await arweaveInstance().wallets.jwkToAddress(walletObject);
+
+    setMnemonicString(mnemonic);
 
     try {
       await Filesystem.writeFile({
@@ -48,11 +61,23 @@ export default function Welcome() {
       dispatch(setProfile(address));
       await loadData();
       preloadData();
-      forwardAnimation();
-      history.push("/showcase");
+      createdModal.setState(true);
     } catch {
       Toast.show({ text: "Could not generate wallet" });
     }
+  }
+
+  function goToSlideshow() {
+    copyMnemonic();
+    forwardAnimation();
+    history.push("/showcase");
+  }
+
+  async function copyMnemonic() {
+    try {
+      await Clipboard.write({ string: mnemonicString });
+      await Toast.show({ text: "Copied seedphrase to clipboard" });
+    } catch {}
   }
 
   return (
@@ -97,6 +122,37 @@ export default function Welcome() {
         </div>
       </IonContent>
       <IonLoading isOpen={loading} message={"Generating wallet..."} />
+      <Modal {...createdModal.bindings}>
+        <Modal.Content className={QRModal.ModalContent}>
+          <h1>Created wallet</h1>
+          <p>
+            Your wallet has been created and the keyfile has been saved in the
+            documents folder.
+          </p>
+          <p>
+            You can use the keyfile or save the seedphrase below for future
+            logins.
+          </p>
+          <IonTextarea
+            value={mnemonicString}
+            className={styles.MnemonicString}
+            onClick={copyMnemonic}
+            readonly
+          ></IonTextarea>
+        </Modal.Content>
+        <Modal.Footer>
+          <Modal.Action
+            onClick={() => {
+              createdModal.setState(false);
+              goToSlideshow();
+            }}
+            className="ion-activatable ripple-parent action-button"
+          >
+            Ok
+            <IonRippleEffect />
+          </Modal.Action>
+        </Modal.Footer>
+      </Modal>
     </IonPage>
   );
 }

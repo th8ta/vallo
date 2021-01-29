@@ -63,6 +63,8 @@ export default function Profile({ history }: RouteComponentProps) {
   function signOutFromAllWallets() {
     setSignoutModal(false);
     dispatch(signOut());
+    forwardAnimation();
+    Toast.show({ text: "Signed out from all wallets" });
   }
 
   return (

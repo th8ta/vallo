@@ -7,10 +7,10 @@ import { useHistory } from "react-router";
 import { loadData, preloadData } from "../utils/data";
 import { PlusIcon, XIcon } from "@primer/octicons-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plugins } from "@capacitor/core";
+import { Plugins, HapticsImpactStyle } from "@capacitor/core";
 import styles from "../theme/components/WalletManager.module.sass";
 
-const { Toast } = Plugins;
+const { Toast, Haptics } = Plugins;
 
 export default function WalletManager({ opened, hide }: WalletManagerProps) {
   const wallets = useSelector((state: RootState) => state.wallet),
@@ -29,6 +29,7 @@ export default function WalletManager({ opened, hide }: WalletManagerProps) {
 
     dispatch(removeWallet(address));
     Toast.show({ text: "Removed wallet" });
+    Haptics.impact({ style: HapticsImpactStyle.Medium });
     loadData();
     preloadData();
     hide();

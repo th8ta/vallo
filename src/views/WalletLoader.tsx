@@ -31,7 +31,7 @@ export default function WalletLoader() {
     }>({ text: "", shown: false }),
     fileRef = useRef(null),
     history = useHistory(),
-    theme = useTheme(),
+    theme = useTheme(false),
     dispatch = useDispatch(),
     wallets = useSelector((state: RootState) => state.wallet);
 
