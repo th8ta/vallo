@@ -170,26 +170,46 @@ export default function Swap({ history }: RouteComponentProps) {
   async function calculateReceiveAmount() {
     setReceiveAmount("...");
     if (!fromAmount || !swapItems.from || !swapItems.to) return;
-    const verto = new Verto();
 
-    if (swapItems.from !== "ETH" && swapItems.to !== "ETH") {
-      if (swapItems.to === "AR")
-        return setReceiveAmount(
-          `~${((await verto.latestPrice(swapItems.from)) ?? 0) * fromAmount}`
-        );
-      else if (swapItems.from === "AR")
-        return setReceiveAmount(
-          `~${fromAmount / ((await verto.latestPrice(swapItems.to)) ?? 0)}`
-        );
+    const verto = new Verto(),
+      type = swapItems.from === "AR" ? "Buy" : "Send",
+      orders: { token: string; orders: OrderItem[] }[] = orderBook.loading
+        ? await verto.getOrderBook(post)
+        : orderBook.orders,
+      filteredOrders = orders
+        .find((ordr) => ordr.token === swapItems.to)
+        ?.orders.filter((ordr) => ordr.type === type);
 
-      const receiveInAR =
-        ((await verto.latestPrice(swapItems.from)) ?? 0) * fromAmount;
-      return setReceiveAmount(
-        `~${receiveInAR / ((await verto.latestPrice(swapItems.to)) ?? 0)}`
-      );
-    } else {
-      // TODO: ETH support
+    let amnt = 0,
+      send = fromAmount;
+
+    if (!filteredOrders) return;
+
+    if (orderBook.loading)
+      setOrderBook({
+        orders,
+        loading: false
+      });
+
+    // TODO: ETH support
+    for (const order of filteredOrders) {
+      if (!order.rate) continue;
+      if (order.amnt >= send / order.rate) {
+        setReceiveAmount(
+          `~${
+            swapItems.from === "AR"
+              ? Math.floor(amnt + send / order.rate)
+              : amnt + send / order.rate
+          }`
+        );
+      } else {
+        send -= order.amnt * order.rate;
+        amnt += order.amnt;
+      }
     }
+
+    if (swapItems.from !== "AR") amnt = Math.floor(amnt);
+    setReceiveAmount(`>${amnt}`);
   }
 
   async function doSwap() {
