@@ -172,7 +172,7 @@ export default function Swap({ history }: RouteComponentProps) {
     if (!fromAmount || !swapItems.from || !swapItems.to) return;
 
     const verto = new Verto(),
-      type = swapItems.from === "AR" ? "Buy" : "Send",
+      type = swapItems.from === "AR" ? "Sell" : "Buy",
       orders: { token: string; orders: OrderItem[] }[] = orderBook.loading
         ? await verto.getOrderBook(post)
         : orderBook.orders,
@@ -194,14 +194,15 @@ export default function Swap({ history }: RouteComponentProps) {
     // TODO: ETH support
     for (const order of filteredOrders) {
       if (!order.rate) continue;
-      if (order.amnt >= send / order.rate) {
+      if (order.amnt >= send * order.rate) {
         setReceiveAmount(
           `~${
             swapItems.from === "AR"
-              ? Math.floor(amnt + send / order.rate)
-              : amnt + send / order.rate
+              ? Math.floor(amnt + send * order.rate)
+              : amnt + send * order.rate
           }`
         );
+        return;
       } else {
         send -= order.amnt * order.rate;
         amnt += order.amnt;
