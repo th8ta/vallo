@@ -17,7 +17,7 @@ import {
   IonSkeletonText
 } from "@ionic/react";
 import { RefresherEventDetail } from "@ionic/core";
-import { Input, Modal, useModal } from "@verto/ui";
+import { Input, Modal, useInput, useModal } from "@verto/ui";
 import {
   ArrowRightIcon,
   ArrowSwitchIcon,
@@ -69,11 +69,11 @@ export default function Swap({ history }: RouteComponentProps) {
     }),
     [supportedTokens, setSupportedTokens] = useState<IToken[]>([]),
     confirmModal = useModal(),
-    [fromAmount, setFromAmount] = useState(0),
-    [receiveAmount, setReceiveAmount] = useState<string>("..."),
     keyfile = useSelector((state: RootState) => state.wallet).find(
       ({ address }) => address === currentAddress
-    )?.keyfile;
+    )?.keyfile,
+    sendInput = useInput("0"),
+    receiveInput = useInput("...");
 
   useEffect(() => {
     refresh();
@@ -92,14 +92,19 @@ export default function Swap({ history }: RouteComponentProps) {
   }, [assets, swapItems, tokens, history]);
 
   useEffect(() => {
-    setFromAmount(getMax() ?? 0);
+    sendInput.setState(getMax() ?? 0);
     // eslint-disable-next-line
   }, [getMax()]);
 
   useEffect(() => {
     calculateReceiveAmount();
     // eslint-disable-next-line
-  }, [fromAmount, swapItems.from, swapItems.to]);
+  }, [sendInput.state, swapItems.from, swapItems.to]);
+
+  useEffect(() => {
+    if (swapItems.to === "AR") receiveInput.setState("");
+    // eslint-disable-next-line
+  }, [swapItems.from, swapItems.to]);
 
   async function refresh(e?: CustomEvent<RefresherEventDetail>) {
     const verto = new Verto();
@@ -168,8 +173,10 @@ export default function Swap({ history }: RouteComponentProps) {
   }
 
   async function calculateReceiveAmount() {
-    setReceiveAmount("...");
-    if (!fromAmount || !swapItems.from || !swapItems.to) return;
+    // TODO: ETH support
+    if (swapItems.to === "AR") return;
+    receiveInput.setState("...");
+    if (!sendInput.state || !swapItems.from || !swapItems.to) return;
 
     const verto = new Verto(),
       type = swapItems.from === "AR" ? "Sell" : "Buy",
@@ -181,7 +188,7 @@ export default function Swap({ history }: RouteComponentProps) {
         ?.orders.filter((ordr) => ordr.type === type);
 
     let amnt = 0,
-      send = fromAmount;
+      send = Number(sendInput.state);
 
     if (!filteredOrders) return;
 
@@ -195,7 +202,7 @@ export default function Swap({ history }: RouteComponentProps) {
     for (const order of filteredOrders) {
       if (!order.rate) continue;
       if (order.amnt >= send * order.rate) {
-        setReceiveAmount(
+        receiveInput.setState(
           `~${
             swapItems.from === "AR"
               ? Math.floor(amnt + send * order.rate)
@@ -210,10 +217,11 @@ export default function Swap({ history }: RouteComponentProps) {
     }
 
     if (swapItems.from !== "AR") amnt = Math.floor(amnt);
-    setReceiveAmount(`>${amnt}`);
+    receiveInput.setState(`>${amnt}`);
   }
 
   async function doSwap() {
+    const fromAmount = Number(sendInput.state);
     if (!(fromAmount > 0) || fromAmount > (getMax() ?? 0))
       return Toast.show({ text: "Invalid amount..." });
     if (!swapItems.from || !swapItems.to)
@@ -428,14 +436,13 @@ export default function Swap({ history }: RouteComponentProps) {
             <IonCard className={"Card " + styles.SwapForm}>
               <IonCardContent className="Content">
                 <Input
+                  {...sendInput.bindings}
                   label="You send"
                   type="number"
                   className={styles.Input}
                   bold
                   min={0}
                   max={getMax()}
-                  value={fromAmount}
-                  onChange={(e) => setFromAmount(Number(e.target.value))}
                   childClassName={styles.InputChildEl}
                 >
                   <div
@@ -450,12 +457,12 @@ export default function Swap({ history }: RouteComponentProps) {
                   </div>
                 </Input>
                 <Input
-                  value={receiveAmount}
+                  {...receiveInput.bindings}
                   label="You recieve"
                   type="text"
                   className={styles.Input}
                   bold
-                  readOnly
+                  readOnly={swapItems.from === "AR"}
                   childClassName={styles.InputChildEl}
                 >
                   <div
@@ -554,7 +561,7 @@ export default function Swap({ history }: RouteComponentProps) {
             This will start a swap process through the Verto Exchange Network.
           </p>
           <p>
-            {fromAmount} {swapTickers.from?.ticker ?? "---"}
+            {sendInput.state} {swapTickers.from?.ticker ?? "---"}
             <span
               style={{
                 margin: "0 .3em",
@@ -564,7 +571,7 @@ export default function Swap({ history }: RouteComponentProps) {
             >
               <ArrowSwitchIcon size={16} />
             </span>
-            {receiveAmount} {swapTickers.to?.ticker ?? "---"}
+            {receiveInput.state} {swapTickers.to?.ticker ?? "---"}
           </p>
         </Modal.Content>
         <Modal.Footer>
