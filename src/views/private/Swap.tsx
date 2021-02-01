@@ -14,7 +14,8 @@ import {
   IonCardTitle,
   IonRefresher,
   IonRefresherContent,
-  IonSkeletonText
+  IonSkeletonText,
+  IonLoading
 } from "@ionic/react";
 import { RefresherEventDetail } from "@ionic/core";
 import { Input, Modal, useInput, useModal } from "@verto/ui";
@@ -73,7 +74,14 @@ export default function Swap({ history }: RouteComponentProps) {
       ({ address }) => address === currentAddress
     )?.keyfile,
     sendInput = useInput("0"),
-    receiveInput = useInput("...");
+    receiveInput = useInput("..."),
+    [loadingSwap, setLoadingSwap] = useState<{
+      shown: boolean;
+      text: string;
+    }>({
+      shown: false,
+      text: ""
+    });
 
   useEffect(() => {
     refresh();
@@ -236,32 +244,63 @@ export default function Swap({ history }: RouteComponentProps) {
     }
     if (!keyfile) return Toast.show({ text: "Problems with keyfile..." });
 
-    const available = await BiometricAuth.isAvailable();
+    try {
+      const available = await BiometricAuth.isAvailable();
 
-    if (available.has) {
-      const auth = await BiometricAuth.verify({
-        reason: "Please verify yourself",
-        title: "Please verify yourself",
-        subTitle: "",
-        description: ""
-      });
+      if (available.has) {
+        const auth = await BiometricAuth.verify({
+          reason: "Please verify yourself",
+          title: "Please verify yourself",
+          subTitle: "",
+          description: ""
+        });
 
-      if (!auth.verified)
-        return Toast.show({ text: "Failed to verificate..." });
+        if (!auth.verified)
+          return Toast.show({ text: "Failed to verificate..." });
+      }
+    } catch {}
+
+    // creating and sending the order
+    try {
+      const verto = new Verto(keyfile),
+        type = swapItems.from === "AR" ? "Sell" : "Buy",
+        order = await verto.createOrder(
+          type,
+          fromAmount,
+          type === "Buy" ? swapItems.to : swapItems.from,
+          post,
+          (type === "Sell" && Number(receiveInput.state) / fromAmount) ||
+            undefined
+        );
+
+      if (order === "pst")
+        return Toast.show({
+          text: "You don't have the sufficient amount of tokens."
+        });
+      else if (order === "ar")
+        return Toast.show({ text: "You don't have enough AR." });
+
+      if (typeof order !== "string") {
+        if (order.pst > 0)
+          setLoadingSwap({
+            shown: true,
+            text: `Sending ${order.pst} ${swapItems.from} + ${order.ar} AR`
+          });
+        else
+          setLoadingSwap({
+            shown: true,
+            text: `Buying PST, sending ${order.ar}`
+          });
+
+        await verto.sendSwap(order.txs, post);
+
+        return Toast.show({
+          text: "The Verto Protocol is now processing your swap"
+        });
+      }
+    } catch {
+      Toast.show({ text: "Error creating order" });
     }
-    // TODO: do the swap
-    // checks done above:
-    // - check if the send amount is more than 0 and not more than the balance
-    // - check if from and to token IDs are not undefined
-    // - check if assets is not undefined
-    // - check if the send token exists and if their balance is more than 0
-    // - check if keyfile is not undefined
-    // - check user biometrics
-    //
-    // variables:
-    // - swapItems.from: ID of the send token
-    // - swapItems.to: ID of the receive token
-    // - fromAmount: the amount of tokens that the user is sending
 
     // indicate start of the process to the user with a haptics impact
     Haptics.impact({ style: HapticsImpactStyle.Medium });
@@ -554,6 +593,7 @@ export default function Swap({ history }: RouteComponentProps) {
           </div>
         </div>
       </IonContent>
+      <IonLoading isOpen={loadingSwap.shown} message={loadingSwap.text} />
       <Modal {...confirmModal.bindings}>
         <Modal.Content className={styles.ModalContent}>
           <h1>Ready to swap?</h1>
