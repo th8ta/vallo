@@ -78,7 +78,7 @@ export default function TokenDisplay({
             />
           )) ||
         ((id === "AR" || id === "ETH") && (
-          <div className={styles.Logo}>
+          <div className={styles.Logo + " " + styles.ChainLogo}>
             {(id === "AR" && <AR />) || <ETH />}
           </div>
         )) || (

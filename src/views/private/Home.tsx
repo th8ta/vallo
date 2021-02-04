@@ -28,7 +28,8 @@ import { getStatusColor, formatTotalBalance } from "../../utils/arweave";
 import { useTheme } from "../../utils/theme";
 import { QRCode } from "react-qr-svg";
 import { forwardAnimation } from "../../utils/route_animations";
-import { Plugins } from "@capacitor/core";
+import { Plugins, Toast } from "@capacitor/core";
+import { getPrice } from "@limestonefi/api";
 import qrcode_logo_dark from "../../assets/qrcode/dark.png";
 import qrcode_logo_light from "../../assets/qrcode/light.png";
 import QRModal from "../../theme/components/QRModal.module.sass";
@@ -54,7 +55,10 @@ export default function Home() {
     [loadingAssets, setLoadingAssets] = useState(true),
     [addressModal, setAddressModal] = useState(false),
     [transferModal, setTransferModal] = useState(false),
-    theme = useTheme();
+    theme = useTheme(),
+    [totalBalance, setTotalBalance] = useState(0),
+    currency = useSelector((state: RootState) => state.currency),
+    [arPrice, setArPrice] = useState(0);
 
   useEffect(() => {
     setExchanges([]);
@@ -67,6 +71,7 @@ export default function Home() {
     const verto = new Verto();
 
     await loadData();
+    calculateTotalBalance();
     await preloadAssets();
     setLoadingAssets(false);
 
@@ -84,7 +89,48 @@ export default function Home() {
     } catch {}
     setLoadingExchanges(false);
 
+    try {
+      setArPrice((await getPrice("AR")).price);
+    } catch {
+      Toast.show({ text: "Failed to get AR price" });
+    }
+
     if (e) e.detail.complete();
+  }
+
+  async function calculateTotalBalance() {
+    let totalBalanceCalculate = Number(
+      balances.find(({ address }) => address === currentAddress)?.balance ?? 0
+    );
+    const verto = new Verto();
+    if (totalBalance === 0 && totalBalanceCalculate > 0)
+      setTotalBalance(totalBalanceCalculate);
+    if (!assets) return;
+
+    for (const token of assets.tokens) {
+      const tokenPrice = await verto.latestPrice(token.id);
+      if (!tokenPrice) continue;
+      totalBalanceCalculate += tokenPrice * token.balance;
+    }
+    setTotalBalance(totalBalanceCalculate);
+  }
+
+  function formatCurrencyLocaly(bal: number) {
+    if (currency.currency === "USD")
+      return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD"
+      }).format(bal);
+    else if (currency.currency === "EUR")
+      return new Intl.NumberFormat("de-DE", {
+        style: "currency",
+        currency: "EUR"
+      }).format(bal);
+    else
+      return new Intl.NumberFormat("en", {
+        style: "currency",
+        currency: "GBP"
+      }).format(bal);
   }
 
   return (
@@ -97,12 +143,13 @@ export default function Home() {
           <div className={styles.Balance}>
             <p>Wallet Balance</p>
             <h1>
-              {formatTotalBalance(
-                balances.find(({ address }) => address === currentAddress)
-                  ?.balance ?? 0
-              )}
+              ~{formatTotalBalance(totalBalance)}
               <span>AR</span>
             </h1>
+            <h2>
+              {formatCurrencyLocaly(totalBalance * arPrice)}{" "}
+              {currency.currency === "USD" && "USD"}
+            </h2>
             <div className={styles.ButtonGroup}>
               <div
                 className={styles.Link + " ion-activatable ripple-parent"}
@@ -139,6 +186,15 @@ export default function Home() {
               <IonCardTitle className="CardTitle">Balances</IonCardTitle>
             </IonCardHeader>
             <IonCardContent className="Content">
+              <TokenDisplay
+                id="AR"
+                name="Arweave"
+                ticker="AR"
+                balance={Number(
+                  balances.find(({ address }) => address === currentAddress)
+                    ?.balance ?? 0
+                )}
+              />
               {(assets &&
                 assets.tokens.length > 0 &&
                 assets.tokens.map((pst, i) => (

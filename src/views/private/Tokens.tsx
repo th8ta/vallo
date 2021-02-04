@@ -114,51 +114,48 @@ export default function Tokens({ history }: RouteComponentProps) {
         </div>
         <div className="BackgroundLayer">
           <div className={styles.Tokens}>
+            <IonCard
+              className="Card ListItem ion-activatable ripple-parent"
+              onClick={() => {
+                if (!choose) return;
+                selectToken("AR");
+              }}
+            >
+              <IonCardContent className="Content">
+                <TokenDisplay
+                  id="AR"
+                  name="Arweave"
+                  ticker="AR"
+                  full
+                  balance={Number(
+                    balances.find(({ address }) => address === currentAddress)
+                      ?.balance ?? 0
+                  )}
+                />
+              </IonCardContent>
+              <IonRippleEffect />
+            </IonCard>
             {choose && (
-              <>
-                <IonCard
-                  className="Card ListItem ion-activatable ripple-parent"
-                  onClick={() => {
-                    if (!choose) return;
-                    selectToken("AR");
-                  }}
-                >
-                  <IonCardContent className="Content">
-                    <TokenDisplay
-                      id="AR"
-                      name="Arweave"
-                      ticker="AR"
-                      full
-                      balance={Number(
-                        balances.find(
-                          ({ address }) => address === currentAddress
-                        )?.balance ?? 0
-                      )}
-                    />
-                  </IonCardContent>
-                  <IonRippleEffect />
-                </IonCard>
-                {/** TODO: ETH SUPPORT */}
-                <IonCard
-                  className="Card ListItem ion-activatable ripple-parent"
-                  onClick={() => {
-                    if (!choose) return;
-                    // selectToken("ETH");
-                  }}
-                  disabled
-                >
-                  <IonCardContent className="Content">
-                    <TokenDisplay
-                      id="ETH"
-                      name="Etherum"
-                      ticker="ETH"
-                      full
-                      hideBalance
-                    />
-                  </IonCardContent>
-                  <IonRippleEffect />
-                </IonCard>
-              </>
+              <IonCard
+                className="Card ListItem ion-activatable ripple-parent"
+                onClick={() => {
+                  if (!choose) return;
+                  // selectToken("ETH");
+                  // TODO: ETH SUPPORT
+                }}
+                disabled
+              >
+                <IonCardContent className="Content">
+                  <TokenDisplay
+                    id="ETH"
+                    name="Etherum"
+                    ticker="ETH"
+                    full
+                    hideBalance
+                  />
+                </IonCardContent>
+                <IonRippleEffect />
+              </IonCard>
             )}
             {combinedTokens().length > 0 &&
               combinedTokens().map((pst, i) => (
