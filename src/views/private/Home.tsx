@@ -30,6 +30,7 @@ import { QRCode } from "react-qr-svg";
 import { forwardAnimation } from "../../utils/route_animations";
 import { Plugins, Toast } from "@capacitor/core";
 import { getPrice } from "@limestonefi/api";
+import { convert } from "exchange-rates-api";
 import qrcode_logo_dark from "../../assets/qrcode/dark.png";
 import qrcode_logo_light from "../../assets/qrcode/light.png";
 import QRModal from "../../theme/components/QRModal.module.sass";
@@ -66,6 +67,11 @@ export default function Home() {
     refresh();
     // eslint-disable-next-line
   }, [currentAddress]);
+
+  useEffect(() => {
+    calculateTotalBalance();
+    // eslint-disable-next-line
+  }, [currency.currency]);
 
   async function refresh(e?: CustomEvent<RefresherEventDetail>) {
     const verto = new Verto();
@@ -107,10 +113,23 @@ export default function Home() {
       setTotalBalance(totalBalanceCalculate);
     if (!assets) return;
 
+    let multiplier = 1;
+    if (currency.currency !== "USD") {
+      try {
+        const currencyPrice = await convert(
+          1,
+          "USD",
+          currency.currency,
+          "latest"
+        );
+        multiplier = currencyPrice;
+      } catch {}
+    }
+
     for (const token of assets.tokens) {
       const tokenPrice = await verto.latestPrice(token.id);
       if (!tokenPrice) continue;
-      totalBalanceCalculate += tokenPrice * token.balance;
+      totalBalanceCalculate += tokenPrice * token.balance * multiplier;
     }
     setTotalBalance(totalBalanceCalculate);
   }
