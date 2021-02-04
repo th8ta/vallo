@@ -325,14 +325,31 @@ export default function Swap({ history }: RouteComponentProps) {
               style={{ marginTop: 0 }}
             >
               <IonCardContent className="Content">
-                <p>Wallet Balance</p>
-                <h1>
-                  {formatTotalBalance(
-                    balances.find(({ address }) => address === currentAddress)
-                      ?.balance ?? 0
-                  )}
-                  <span>AR</span>
-                </h1>
+                {/** TODO: ETH support */}
+                <p>
+                  {swapItems.from
+                    ? `${
+                        swapItems.from === "AR"
+                          ? "Arweave"
+                          : swapTickers.from?.name ?? "???"
+                      } `
+                    : ""}
+                  Balance
+                </p>
+                {((!swapItems.from || swapItems.from === "AR") && (
+                  <h1>
+                    {formatTotalBalance(
+                      balances.find(({ address }) => address === currentAddress)
+                        ?.balance ?? 0
+                    )}
+                    <span>AR</span>
+                  </h1>
+                )) || (
+                  <h1>
+                    {getMax() ? formatTotalBalance(getMax()) : "??"}
+                    <span>{swapTickers.from?.ticker ?? "??"}</span>
+                  </h1>
+                )}
                 <IonRouterLink
                   routerLink="/app/profile"
                   className={styles.viewProfile}
