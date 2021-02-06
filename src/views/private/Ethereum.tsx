@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   IonPage,
   IonContent,
@@ -10,17 +10,21 @@ import { RouteComponentProps } from "react-router-dom";
 import type { RootState } from "../../stores/reducers";
 import { useSelector } from "react-redux";
 import { Modal, useModal } from "@verto/ui";
-import { Plugins } from "@capacitor/core";
+import { ClippyIcon } from "@primer/octicons-react";
+import {
+  Plugins,
+  FilesystemDirectory,
+  FilesystemEncoding
+} from "@capacitor/core";
 import ShortTopLayerTitle from "../../components/ShortTopLayerTitle";
 import styles from "../../theme/views/profile.module.sass";
 
-const { Clipboard, Toast } = Plugins;
+const { Clipboard, Toast, Filesystem } = Plugins;
 
 export default function Tokens({ history }: RouteComponentProps) {
   const currentAddress = useSelector((state: RootState) => state.profile),
     wallets = useSelector((state: RootState) => state.wallet),
-    ethAddressModal = useModal(false),
-    [publicKey, setPublicKey] = useState(false);
+    ethAddressModal = useModal(false);
 
   function getETHIdentity() {
     return wallets.find(({ address }) => address === currentAddress)?.eth;
@@ -29,12 +33,25 @@ export default function Tokens({ history }: RouteComponentProps) {
   async function copyETHAddressOrPublic() {
     const identity = getETHIdentity();
     if (!identity) return;
-    await Clipboard.write({
-      string: publicKey ? identity.publicKey : identity.address
-    });
-    Toast.show({
-      text: `Copied ETH ${publicKey ? "public key" : "address"} to clipboard`
-    });
+    await Clipboard.write({ string: identity.address });
+    Toast.show({ text: "Copied ETH address to clipboard" });
+  }
+
+  async function exportKey(type: "public" | "private") {
+    try {
+      const identity = getETHIdentity();
+      if (!identity) return Toast.show({ text: "Could not export key" });
+
+      await Filesystem.writeFile({
+        path: `eth-public-key-${identity.address}.txt`,
+        data: type === "public" ? identity.publicKey : identity.privateKey,
+        directory: FilesystemDirectory.Documents,
+        encoding: FilesystemEncoding.UTF8
+      });
+      Toast.show({ text: `Exported ${type} key to documents` });
+    } catch {
+      Toast.show({ text: "Could not export key" });
+    }
   }
 
   return (
@@ -63,18 +80,15 @@ export default function Tokens({ history }: RouteComponentProps) {
               <IonItem
                 className={styles.Setting + " ion-activatable ripple-parent"}
                 detail={true}
-                style={{ borderTop: "none" }}
-                onClick={() => {
-                  ethAddressModal.setState(true);
-                  setPublicKey(true);
-                }}
+                onClick={() => exportKey("public")}
               >
-                <span>View public key</span>
+                <span>Export public key</span>
                 <IonRippleEffect />
               </IonItem>
               <IonItem
                 className={styles.Setting + " ion-activatable ripple-parent"}
                 detail={true}
+                onClick={() => exportKey("private")}
               >
                 <span>Export private key</span>
                 <IonRippleEffect />
@@ -85,25 +99,17 @@ export default function Tokens({ history }: RouteComponentProps) {
       </IonContent>
       <Modal {...ethAddressModal.bindings}>
         <Modal.Content>
-          <p>Your Ethereum {publicKey ? "public key" : "address"} is:</p>
+          <p>Your Ethereum address is:</p>
           <p
             className={"CodeParagraph " + styles.Address}
             onClick={copyETHAddressOrPublic}
           >
-            `
-            {publicKey
-              ? getETHIdentity()?.publicKey
-              : getETHIdentity()?.address}
-            `
+            `{currentAddress}`
+            <ClippyIcon className={styles.CopyIcon} />
           </p>
         </Modal.Content>
         <Modal.Footer>
-          <Modal.Action
-            onClick={() => {
-              ethAddressModal.setState(false);
-              setPublicKey(false);
-            }}
-          >
+          <Modal.Action onClick={() => ethAddressModal.setState(false)}>
             Ok
           </Modal.Action>
         </Modal.Footer>
