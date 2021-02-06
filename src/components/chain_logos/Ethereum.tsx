@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function EtherumLogo({ className }: LogoProps) {
+export default function EthereumLogo({ className }: LogoProps) {
   return (
     <svg
       width="100%"

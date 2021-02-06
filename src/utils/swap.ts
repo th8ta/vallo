@@ -4,7 +4,7 @@ import { RootState } from "../stores/reducers";
 import { IToken } from "../stores/reducers/tokens";
 import { getCommunityLogo } from "../utils/arweave";
 import ArweaveLogo from "../components/chain_logos/Arweave";
-import EtherumLogo from "../components/chain_logos/Etherum";
+import EthereumLogo from "../components/chain_logos/Ethereum";
 
 export function useSwapTickers() {
   const [swapTickers, setSwapTickers] = useState<{
@@ -67,7 +67,7 @@ export function useSwapLogos() {
 
     if (!swapItemTickers.from) from = "";
     else if (swapItemTickers.from.id === "AR") from = ArweaveLogo;
-    else if (swapItemTickers.from.id === "ETH") from = EtherumLogo;
+    else if (swapItemTickers.from.id === "ETH") from = EthereumLogo;
     else
       from = `https://arweave.net/${await getCommunityLogo(
         swapItemTickers.from.id
@@ -75,7 +75,7 @@ export function useSwapLogos() {
 
     if (!swapItemTickers.to) from = "";
     else if (swapItemTickers.to.id === "AR") to = ArweaveLogo;
-    else if (swapItemTickers.to.id === "ETH") to = EtherumLogo;
+    else if (swapItemTickers.to.id === "ETH") to = EthereumLogo;
     else
       to = `https://arweave.net/${await getCommunityLogo(
         swapItemTickers.to.id

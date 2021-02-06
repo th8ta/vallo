@@ -148,7 +148,7 @@ export default function Tokens({ history }: RouteComponentProps) {
                 <IonCardContent className="Content">
                   <TokenDisplay
                     id="ETH"
-                    name="Etherum"
+                    name="Ethereum"
                     ticker="ETH"
                     full
                     hideBalance

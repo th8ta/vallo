@@ -12,7 +12,7 @@ import { QuestionIcon } from "@primer/octicons-react";
 import { forwardAnimation } from "../utils/route_animations";
 import logo_light from "../assets/logo.png";
 import logo_dark from "../assets/logo_dark.png";
-import ETH from "./chain_logos/Etherum";
+import ETH from "./chain_logos/Ethereum";
 import AR from "./chain_logos/Arweave";
 import styles from "../theme/components/TokenDisplay.module.sass";
 

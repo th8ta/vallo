@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { Redirect, Route, useLocation } from "react-router";
+import { backAnimation } from "../utils/route_animations";
 
 import type { RootState } from "../stores/reducers";
 import { useSelector } from "react-redux";
@@ -15,7 +16,7 @@ import Token from "../views/private/Token";
 import Trades from "../views/private/Trades";
 import Analytics from "../views/private/Analytics";
 import TradeInfo from "../views/private/TradeInfo";
-import { backAnimation } from "../utils/route_animations";
+import Ethereum from "../views/private/Ethereum";
 
 export default function Routes() {
   const wallets = useSelector((state: RootState) => state.wallet),
@@ -48,6 +49,7 @@ export default function Routes() {
           <Route path="/app/orders/:trading_post" component={Trades} />
           <Route path="/app/analytics" component={Analytics} />
           <Route path="/app/trade/:tradeid" component={TradeInfo} />
+          <Route path="/app/eth" component={Ethereum} />
         </>
       )) || <Redirect from="/app/**/*" to="/welcome" />}
     </>

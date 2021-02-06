@@ -128,6 +128,17 @@ export default function Profile({ history }: RouteComponentProps) {
                 <IonItem
                   className={styles.Setting + " ion-activatable ripple-parent"}
                   detail={true}
+                  onClick={() => {
+                    history.push("/app/eth");
+                    forwardAnimation();
+                  }}
+                >
+                  <span>Ethereum</span>
+                  <IonRippleEffect />
+                </IonItem>
+                <IonItem
+                  className={styles.Setting + " ion-activatable ripple-parent"}
+                  detail={true}
                   onClick={() => setAddressModal(true)}
                 >
                   <span>Show address QR code</span>
