@@ -90,7 +90,11 @@ export default function Tokens({ history }: RouteComponentProps) {
             className={"CodeParagraph " + styles.Address}
             onClick={copyETHAddressOrPublic}
           >
-            `{publicKey ? getETHIdentity()?.publicKey : currentAddress}`
+            `
+            {publicKey
+              ? getETHIdentity()?.publicKey
+              : getETHIdentity()?.address}
+            `
           </p>
         </Modal.Content>
         <Modal.Footer>
