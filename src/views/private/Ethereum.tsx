@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   IonPage,
   IonContent,
@@ -10,7 +10,6 @@ import { RouteComponentProps } from "react-router-dom";
 import type { RootState } from "../../stores/reducers";
 import { useSelector } from "react-redux";
 import { Modal, useModal } from "@verto/ui";
-import { ClippyIcon } from "@primer/octicons-react";
 import { Plugins } from "@capacitor/core";
 import ShortTopLayerTitle from "../../components/ShortTopLayerTitle";
 import styles from "../../theme/views/profile.module.sass";
@@ -20,17 +19,22 @@ const { Clipboard, Toast } = Plugins;
 export default function Tokens({ history }: RouteComponentProps) {
   const currentAddress = useSelector((state: RootState) => state.profile),
     wallets = useSelector((state: RootState) => state.wallet),
-    ethAddressModal = useModal(false);
+    ethAddressModal = useModal(false),
+    [publicKey, setPublicKey] = useState(false);
 
   function getETHIdentity() {
     return wallets.find(({ address }) => address === currentAddress)?.eth;
   }
 
-  async function copyETHAddress() {
+  async function copyETHAddressOrPublic() {
     const identity = getETHIdentity();
     if (!identity) return;
-    await Clipboard.write({ string: identity.address });
-    Toast.show({ text: "Copied ETH address to clipboard" });
+    await Clipboard.write({
+      string: publicKey ? identity.publicKey : identity.address
+    });
+    Toast.show({
+      text: `Copied ETH ${publicKey ? "public key" : "address"} to clipboard`
+    });
   }
 
   return (
@@ -53,14 +57,26 @@ export default function Tokens({ history }: RouteComponentProps) {
                 style={{ borderTop: "none" }}
                 onClick={() => ethAddressModal.setState(true)}
               >
-                <span>View Ethereum address</span>
+                <span>View address</span>
+                <IonRippleEffect />
+              </IonItem>
+              <IonItem
+                className={styles.Setting + " ion-activatable ripple-parent"}
+                detail={true}
+                style={{ borderTop: "none" }}
+                onClick={() => {
+                  ethAddressModal.setState(true);
+                  setPublicKey(true);
+                }}
+              >
+                <span>View public key</span>
                 <IonRippleEffect />
               </IonItem>
               <IonItem
                 className={styles.Setting + " ion-activatable ripple-parent"}
                 detail={true}
               >
-                <span>Export Ethereum identity</span>
+                <span>Export private key</span>
                 <IonRippleEffect />
               </IonItem>
             </IonCard>
@@ -69,17 +85,21 @@ export default function Tokens({ history }: RouteComponentProps) {
       </IonContent>
       <Modal {...ethAddressModal.bindings}>
         <Modal.Content>
-          <p>Your Ethereum address is:</p>
+          <p>Your Ethereum {publicKey ? "public key" : "address"} is:</p>
           <p
             className={"CodeParagraph " + styles.Address}
-            onClick={copyETHAddress}
+            onClick={copyETHAddressOrPublic}
           >
-            `{currentAddress}`
-            <ClippyIcon className={styles.CopyIcon} />
+            `{publicKey ? getETHIdentity()?.publicKey : currentAddress}`
           </p>
         </Modal.Content>
         <Modal.Footer>
-          <Modal.Action onClick={() => ethAddressModal.setState(false)}>
+          <Modal.Action
+            onClick={() => {
+              ethAddressModal.setState(false);
+              setPublicKey(false);
+            }}
+          >
             Ok
           </Modal.Action>
         </Modal.Footer>
