@@ -7,15 +7,18 @@ import { ITokensAction, IToken } from "./reducers/tokens";
 import { ISwapAction, ISwap } from "./reducers/swap";
 import { IThemeAction, UserTheme } from "./reducers/theme";
 import { Currency, ICurrencyAction } from "./reducers/currency";
+import { createIdentity } from "eth-crypto";
 
 export function addWallet(
   keyfile: JWKInterface,
   address: string,
   mnemonic?: string
 ): IWalletAction {
+  const eth = createIdentity();
+
   return {
     type: "ADD_WALLET",
-    payload: { keyfile, address, mnemonic }
+    payload: { keyfile, address, mnemonic, eth }
   };
 }
 

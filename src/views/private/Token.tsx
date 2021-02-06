@@ -29,13 +29,14 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../stores/reducers";
 import { useTheme } from "../../utils/theme";
 import { QuestionIcon } from "@primer/octicons-react";
+import { RampInstantSDK } from "@ramp-network/ramp-instant-sdk";
+import useCurrency, { formatPrice } from "../../utils/currency";
 import Community from "community-js";
 import limestone from "@limestonefi/api";
 import Verto from "@verto/lib";
 import TransferModal from "../../components/TransferModal";
 import logo_light from "../../assets/logo.png";
 import logo_dark from "../../assets/logo_dark.png";
-import useCurrency, { formatPrice } from "../../utils/currency";
 import ShortTopLayerTitle from "../../components/ShortTopLayerTitle";
 import styles from "../../theme/views/token.module.sass";
 
@@ -191,6 +192,25 @@ export default function Token({ history, match }: TokenProps) {
       Toast.show({
         text: `Not enough ${communityInfo.token?.ticker || "tokens"}.`
       });
+  }
+
+  function buyWithFiat() {
+    new RampInstantSDK({
+      hostAppName: "Vallo",
+      hostLogoUrl: "https://verto.exchange/logo_light.svg",
+      variant: "auto",
+      swapAsset: "ETH",
+      // TODO(@johnletey, @t8): Figure out this value
+      swapAmount: (0.008 * 1e18).toString(),
+      userAddress: address,
+      hostApiKey: "vzszc8sq8z8ksrdxds6asctz2az8k6wx72xazdwb",
+      webhookStatusUrl: "https://oprit.th8ta.org/api/webhook" // TODO
+    })
+      .on("*", (e) => {
+        if (e.type !== "PURCHASE_CREATED") return;
+        console.log("test");
+      })
+      .show();
   }
 
   return (
@@ -472,7 +492,7 @@ export default function Token({ history, match }: TokenProps) {
             expand="full"
             color="dark"
             shape="round"
-            onClick={() => Browser.open({ url: "https://oprit.th8ta.org/" })}
+            onClick={buyWithFiat}
           >
             Buy with fiat
           </IonButton>

@@ -6,6 +6,7 @@ export interface IWalletAction {
     keyfile?: JWKInterface;
     address?: string;
     mnemonic?: string;
+    eth?: ETHData;
   };
 }
 
@@ -13,6 +14,13 @@ interface Wallet {
   keyfile: JWKInterface;
   address: string;
   mnemonic?: string;
+  eth: ETHData;
+}
+
+interface ETHData {
+  address: string;
+  publicKey: string;
+  privateKey: string;
 }
 
 export default function walletReducer(
@@ -25,7 +33,8 @@ export default function walletReducer(
         !action.payload.address ||
         !action.payload.keyfile ||
         state.filter(({ address }) => address === action.payload.address)
-          .length > 0
+          .length > 0 ||
+        !action.payload.eth
       )
         break;
       return [
@@ -33,7 +42,8 @@ export default function walletReducer(
         {
           keyfile: action.payload.keyfile,
           address: action.payload.address,
-          mnemonic: action.payload.mnemonic
+          mnemonic: action.payload.mnemonic,
+          eth: action.payload.eth
         }
       ];
 
