@@ -30,10 +30,8 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../stores/reducers";
 import { useTheme } from "../../utils/theme";
 import { QuestionIcon } from "@primer/octicons-react";
-import {
-  RampInstantPurchase,
-  RampInstantSDK
-} from "@ramp-network/ramp-instant-sdk";
+import { RampInstantSDK } from "@ramp-network/ramp-instant-sdk";
+import { checkForPurchase } from "../../utils/ramp";
 import useCurrency, { formatPrice } from "../../utils/currency";
 import Community from "community-js";
 import limestone from "@limestonefi/api";
@@ -86,7 +84,9 @@ export default function Token({ history, match }: TokenProps) {
       purchaseID: string;
       secret: string;
     }>(),
-    [loadingTransaction, setLoadingTransaction] = useState(false);
+    [loadingTransaction, setLoadingTransaction] = useState(false),
+    keyfile = wallets.find(({ address }) => address === currentAddress)
+      ?.keyfile;
 
   useEffect(() => {
     refresh();
@@ -98,54 +98,17 @@ export default function Token({ history, match }: TokenProps) {
 
     setInterval(async () => {
       try {
-        if (
-          purchaseData.apiURL &&
-          purchaseData.purchaseID &&
-          purchaseData.secret
-        ) {
-          const res = await fetch(
-              `${purchaseData.apiURL}/host-api/purchase/${purchaseData.purchaseID}?secret=${purchaseData.secret}`
-            ),
-            purchase: RampInstantPurchase = await res.clone().json(),
-            action = purchase.actions.find(
-              (action) => action.newStatus === "RELEASING"
-            ),
-            keyfile = wallets.find(({ address }) => address === currentAddress)
-              ?.keyfile;
-
-          if (action && keyfile) {
-            const arweave = new Arweave({
-                host: "arweave.net",
-                port: 443,
-                protocol: "https"
-              }),
-              tags = {
-                Exchange: "Verto",
-                Type: "Swap",
-                Chain: "ETH",
-                Hash: action.details,
-                Value: parseFloat(purchase.cryptoAmount) / 1e18
-              },
-              post = await verto.recommendPost(),
-              tx = await arweave.createTransaction(
-                {
-                  target: post,
-                  data: Math.random().toString().slice(-4)
-                },
-                keyfile
-              );
-
-            for (const [key, value] of Object.entries(tags))
-              tx.addTag(key, value.toString());
-
-            tx.addTag("Token", match.params.tokenid);
-            await arweave.transactions.sign(tx, keyfile);
-            await arweave.transactions.post(tx);
-
-            setLoadingTransaction(false);
-            setPurchaseData(undefined);
-            Toast.show({ text: "Purchase completed" });
-          }
+        if (purchaseData && keyfile) {
+          checkForPurchase(
+            purchaseData,
+            keyfile,
+            () => {
+              setLoadingTransaction(false);
+              setPurchaseData(undefined);
+              Toast.show({ text: "Purchase completed" });
+            },
+            match.params.tokenid
+          );
         }
       } catch {
         if (purchaseData !== undefined)
@@ -268,7 +231,7 @@ export default function Token({ history, match }: TokenProps) {
       });
   }
 
-  async function buyWithFiat() {
+  function buyWithFiat() {
     // get the eth address
     const ethIdentity = wallets.find(
       ({ address }) => address === currentAddress

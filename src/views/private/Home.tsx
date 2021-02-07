@@ -31,6 +31,8 @@ import { forwardAnimation } from "../../utils/route_animations";
 import { Plugins, Toast } from "@capacitor/core";
 import { getPrice } from "@limestonefi/api";
 import { convert } from "exchange-rates-api";
+import { RampInstantSDK } from "@ramp-network/ramp-instant-sdk";
+import { checkForPurchase } from "../../utils/ramp";
 import qrcode_logo_dark from "../../assets/qrcode/dark.png";
 import qrcode_logo_light from "../../assets/qrcode/light.png";
 import QRModal from "../../theme/components/QRModal.module.sass";
@@ -59,7 +61,16 @@ export default function Home() {
     theme = useTheme(),
     [totalBalance, setTotalBalance] = useState(0),
     currency = useSelector((state: RootState) => state.currency),
-    [arPrice, setArPrice] = useState(0);
+    wallets = useSelector((state: RootState) => state.wallet),
+    [purchaseData, setPurchaseData] = useState<{
+      apiURL: string;
+      purchaseID: string;
+      secret: string;
+    }>(),
+    [loadingTransaction, setLoadingTransaction] = useState(false),
+    [arPrice, setArPrice] = useState(0),
+    keyfile = wallets.find(({ address }) => address === currentAddress)
+      ?.keyfile;
 
   useEffect(() => {
     setExchanges([]);
@@ -72,6 +83,26 @@ export default function Home() {
     calculateTotalBalance();
     // eslint-disable-next-line
   }, [currency.currency]);
+
+  useEffect(() => {
+    if (!purchaseData) return;
+
+    setInterval(async () => {
+      try {
+        if (purchaseData && keyfile) {
+          checkForPurchase(purchaseData, keyfile, () => {
+            setLoadingTransaction(false);
+            setPurchaseData(undefined);
+            Toast.show({ text: "Purchase completed" });
+          });
+        }
+      } catch {
+        if (purchaseData !== undefined)
+          Toast.show({ text: "Error fetching purchase data" });
+      }
+    }, 1000);
+    // eslint-disable-next-line
+  }, [purchaseData]);
 
   async function refresh(e?: CustomEvent<RefresherEventDetail>) {
     const verto = new Verto();
@@ -152,6 +183,34 @@ export default function Home() {
       }).format(bal);
   }
 
+  function buyWithFiat() {
+    // get the eth address
+    const ethIdentity = wallets.find(
+      ({ address }) => address === currentAddress
+    )?.eth;
+    if (!ethIdentity) return Toast.show({ text: "Error getting ETH info" });
+
+    new RampInstantSDK({
+      hostAppName: "Vallo",
+      hostLogoUrl: "https://verto.exchange/logo_light.svg",
+      variant: "auto",
+      swapAsset: "ETH",
+      userAddress: ethIdentity.address,
+      hostApiKey: "vzszc8sq8z8ksrdxds6asctz2az8k6wx72xazdwb",
+      webhookStatusUrl: "https://oprit.th8ta.org/api/webhook"
+    })
+      .on("*", (event) => {
+        if (event.type !== "PURCHASE_CREATED") return;
+        setPurchaseData({
+          apiURL: event.payload.apiUrl,
+          purchaseID: event.payload.purchase.id,
+          secret: event.payload.purchaseViewToken
+        });
+        setLoadingTransaction(true);
+      })
+      .show();
+  }
+
   return (
     <IonPage>
       <IonContent>
@@ -172,9 +231,7 @@ export default function Home() {
             <div className={styles.ButtonGroup}>
               <div
                 className={styles.Link + " ion-activatable ripple-parent"}
-                onClick={() =>
-                  Browser.open({ url: "https://oprit.th8ta.org/" })
-                }
+                onClick={buyWithFiat}
               >
                 Buy
                 <IonRippleEffect />
