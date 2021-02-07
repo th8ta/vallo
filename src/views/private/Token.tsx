@@ -39,7 +39,6 @@ import Verto from "@verto/lib";
 import TransferModal from "../../components/TransferModal";
 import logo_light from "../../assets/logo.png";
 import logo_dark from "../../assets/logo_dark.png";
-import Arweave from "arweave";
 import ShortTopLayerTitle from "../../components/ShortTopLayerTitle";
 import styles from "../../theme/views/token.module.sass";
 

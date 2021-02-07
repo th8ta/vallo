@@ -13,7 +13,8 @@ import {
   IonRefresher,
   IonRefresherContent,
   IonSkeletonText,
-  IonToast
+  IonToast,
+  IonLoading
 } from "@ionic/react";
 import { RefresherEventDetail } from "@ionic/core";
 import { ArrowRightIcon } from "@primer/octicons-react";
@@ -28,7 +29,7 @@ import { getStatusColor, formatTotalBalance } from "../../utils/arweave";
 import { useTheme } from "../../utils/theme";
 import { QRCode } from "react-qr-svg";
 import { forwardAnimation } from "../../utils/route_animations";
-import { Plugins, Toast } from "@capacitor/core";
+import { Plugins } from "@capacitor/core";
 import { getPrice } from "@limestonefi/api";
 import { convert } from "exchange-rates-api";
 import { RampInstantSDK } from "@ramp-network/ramp-instant-sdk";
@@ -38,7 +39,7 @@ import qrcode_logo_light from "../../assets/qrcode/light.png";
 import QRModal from "../../theme/components/QRModal.module.sass";
 import styles from "../../theme/views/home.module.sass";
 
-const { Browser } = Plugins;
+const { Toast } = Plugins;
 
 export default function Home() {
   const balances = useSelector((state: RootState) => state.balance),
@@ -424,6 +425,10 @@ export default function Home() {
           color="danger"
         />
       )}
+      <IonLoading
+        isOpen={loadingTransaction}
+        message="Loading transaction..."
+      />
     </IonPage>
   );
 }
