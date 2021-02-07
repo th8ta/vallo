@@ -10,7 +10,8 @@ import {
   IonRefresher,
   IonRefresherContent,
   IonSkeletonText,
-  IonSpinner
+  IonSpinner,
+  IonLoading
 } from "@ionic/react";
 import { RefresherEventDetail } from "@ionic/core";
 import { RouteComponentProps } from "react-router-dom";
@@ -29,7 +30,10 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../stores/reducers";
 import { useTheme } from "../../utils/theme";
 import { QuestionIcon } from "@primer/octicons-react";
-import { RampInstantSDK } from "@ramp-network/ramp-instant-sdk";
+import {
+  RampInstantPurchase,
+  RampInstantSDK
+} from "@ramp-network/ramp-instant-sdk";
 import useCurrency, { formatPrice } from "../../utils/currency";
 import Community from "community-js";
 import limestone from "@limestonefi/api";
@@ -37,6 +41,7 @@ import Verto from "@verto/lib";
 import TransferModal from "../../components/TransferModal";
 import logo_light from "../../assets/logo.png";
 import logo_dark from "../../assets/logo_dark.png";
+import Arweave from "arweave";
 import ShortTopLayerTitle from "../../components/ShortTopLayerTitle";
 import styles from "../../theme/views/token.module.sass";
 
@@ -67,19 +72,88 @@ export default function Token({ history, match }: TokenProps) {
       percentage?: number;
       percentageIncreased?: boolean;
     }>({}),
-    address = useSelector((state: RootState) => state.profile),
+    currentAddress = useSelector((state: RootState) => state.profile),
     assets = useSelector((state: RootState) => state.assets).find(
-      (val) => val.address === address
+      (val) => val.address === currentAddress
     ),
     theme = useTheme(),
     [transferModal, setTransferModal] = useState(false),
     conversion = useCurrency(),
-    currencySetting = useSelector((state: RootState) => state.currency);
+    currencySetting = useSelector((state: RootState) => state.currency),
+    wallets = useSelector((state: RootState) => state.wallet),
+    [purchaseData, setPurchaseData] = useState<{
+      apiURL: string;
+      purchaseID: string;
+      secret: string;
+    }>(),
+    [loadingTransaction, setLoadingTransaction] = useState(false);
 
   useEffect(() => {
     refresh();
     // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    if (!purchaseData) return;
+
+    setInterval(async () => {
+      try {
+        if (
+          purchaseData.apiURL &&
+          purchaseData.purchaseID &&
+          purchaseData.secret
+        ) {
+          const res = await fetch(
+              `${purchaseData.apiURL}/host-api/purchase/${purchaseData.purchaseID}?secret=${purchaseData.secret}`
+            ),
+            purchase: RampInstantPurchase = await res.clone().json(),
+            action = purchase.actions.find(
+              (action) => action.newStatus === "RELEASING"
+            ),
+            keyfile = wallets.find(({ address }) => address === currentAddress)
+              ?.keyfile;
+
+          if (action && keyfile) {
+            const arweave = new Arweave({
+                host: "arweave.net",
+                port: 443,
+                protocol: "https"
+              }),
+              tags = {
+                Exchange: "Verto",
+                Type: "Swap",
+                Chain: "ETH",
+                Hash: action.details,
+                Value: parseFloat(purchase.cryptoAmount) / 1e18
+              },
+              post = await verto.recommendPost(),
+              tx = await arweave.createTransaction(
+                {
+                  target: post,
+                  data: Math.random().toString().slice(-4)
+                },
+                keyfile
+              );
+
+            for (const [key, value] of Object.entries(tags))
+              tx.addTag(key, value.toString());
+
+            tx.addTag("Token", match.params.tokenid);
+            await arweave.transactions.sign(tx, keyfile);
+            await arweave.transactions.post(tx);
+
+            setLoadingTransaction(false);
+            setPurchaseData(undefined);
+            Toast.show({ text: "Purchase completed" });
+          }
+        }
+      } catch {
+        if (purchaseData !== undefined)
+          Toast.show({ text: "Error fetching purchase data" });
+      }
+    }, 1000);
+    // eslint-disable-next-line
+  }, [purchaseData]);
 
   async function refresh(e?: CustomEvent<RefresherEventDetail>) {
     if (assets) {
@@ -194,21 +268,30 @@ export default function Token({ history, match }: TokenProps) {
       });
   }
 
-  function buyWithFiat() {
+  async function buyWithFiat() {
+    // get the eth address
+    const ethIdentity = wallets.find(
+      ({ address }) => address === currentAddress
+    )?.eth;
+    if (!ethIdentity) return Toast.show({ text: "Error getting ETH info" });
+
     new RampInstantSDK({
       hostAppName: "Vallo",
       hostLogoUrl: "https://verto.exchange/logo_light.svg",
       variant: "auto",
       swapAsset: "ETH",
-      // TODO(@johnletey, @t8): Figure out this value
-      swapAmount: (0.008 * 1e18).toString(),
-      userAddress: address,
+      userAddress: ethIdentity.address,
       hostApiKey: "vzszc8sq8z8ksrdxds6asctz2az8k6wx72xazdwb",
-      webhookStatusUrl: "https://oprit.th8ta.org/api/webhook" // TODO
+      webhookStatusUrl: "https://oprit.th8ta.org/api/webhook"
     })
-      .on("*", (e) => {
-        if (e.type !== "PURCHASE_CREATED") return;
-        console.log("test");
+      .on("*", (event) => {
+        if (event.type !== "PURCHASE_CREATED") return;
+        setPurchaseData({
+          apiURL: event.payload.apiUrl,
+          purchaseID: event.payload.purchase.id,
+          secret: event.payload.purchaseViewToken
+        });
+        setLoadingTransaction(true);
       })
       .show();
   }
@@ -510,6 +593,10 @@ export default function Token({ history, match }: TokenProps) {
           />
         </Modal>
       )}
+      <IonLoading
+        isOpen={loadingTransaction}
+        message="Loading transaction..."
+      />
     </IonPage>
   );
 }
