@@ -220,7 +220,7 @@ export default function Home() {
         </IonRefresher>
         <div className="TopBackgroundSpacer High">
           <div className={styles.Balance}>
-            <p>Wallet Balance</p>
+            <p>Total Balance</p>
             <h1>
               ~{formatTotalBalance(totalBalance)}
               <span>AR</span>
