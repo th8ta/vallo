@@ -31,10 +31,38 @@ export default function Slideshow() {
         className={styles.Slideshow}
       >
         <IonSlide>
-          <h1>Slide 1</h1>
+          <div>
+            <h1 className={styles.Title}>Welcome 🎉</h1>
+            <p>
+              Vallo is a place for you to manage your Arweave and profit-sharing
+              tokens.
+            </p>
+          </div>
         </IonSlide>
         <IonSlide>
-          <h1>Slide 2</h1>
+          <div className={styles.JustifyContent}>
+            <h1 className={styles.Title}>PSTs? 🤔</h1>
+            <p>
+              Profit-Sharing Tokens (PSTs) enable people to buy into the
+              ownership and revenue stream of an application.
+            </p>
+            <p>
+              By holding PSTs, you're entitled to earn recurring revenue through
+              dividends on your tokens based on app usage.
+            </p>
+          </div>
+        </IonSlide>
+        <IonSlide>
+          <div className={styles.JustifyContent}>
+            <h1 className={styles.Title}>Like Magic 🔮</h1>
+            <p>
+              PSTs enable entirely new ways for people to own, use, and earn.
+            </p>
+            <p>
+              With Vallo, you can easily buy, monitor, and swap these exciting
+              assets.
+            </p>
+          </div>
         </IonSlide>
         <IonSlide>
           <div>
