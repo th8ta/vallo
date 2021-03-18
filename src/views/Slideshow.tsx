@@ -32,8 +32,13 @@ export default function Slideshow() {
       >
         <IonSlide>
           <div>
-            <h1 className={styles.Title}>Welcome 🎉</h1>
-            <p>
+            <h1 className={styles.Title}>
+              Welcome{" "}
+              <span role="img" aria-label="Party">
+                🎉
+              </span>
+            </h1>
+            <p style={{ textAlign: "center" }}>
               Vallo is a place for you to manage your Arweave and profit-sharing
               tokens.
             </p>
@@ -41,12 +46,17 @@ export default function Slideshow() {
         </IonSlide>
         <IonSlide>
           <div className={styles.JustifyContent}>
-            <h1 className={styles.Title}>PSTs? 🤔</h1>
-            <p>
+            <h1 className={styles.Title}>
+              PSTs?{" "}
+              <span role="img" aria-label="Thinking">
+                🤔
+              </span>
+            </h1>
+            <p style={{ textAlign: "center" }}>
               Profit-Sharing Tokens (PSTs) enable people to buy into the
               ownership and revenue stream of an application.
             </p>
-            <p>
+            <p style={{ textAlign: "center" }}>
               By holding PSTs, you're entitled to earn recurring revenue through
               dividends on your tokens based on app usage.
             </p>
@@ -54,11 +64,16 @@ export default function Slideshow() {
         </IonSlide>
         <IonSlide>
           <div className={styles.JustifyContent}>
-            <h1 className={styles.Title}>Like Magic 🔮</h1>
-            <p>
+            <h1 className={styles.Title}>
+              Like Magic{" "}
+              <span role="img" aria-label="Party">
+                🔮
+              </span>
+            </h1>
+            <p style={{ textAlign: "center" }}>
               PSTs enable entirely new ways for people to own, use, and earn.
             </p>
-            <p>
+            <p style={{ textAlign: "center" }}>
               With Vallo, you can easily buy, monitor, and swap these exciting
               assets.
             </p>

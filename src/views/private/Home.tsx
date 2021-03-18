@@ -184,6 +184,7 @@ export default function Home() {
       }).format(bal);
   }
 
+  // eslint-disable-next-line
   function buyWithFiat() {
     // get the eth address
     const ethIdentity = wallets.find(
@@ -231,8 +232,13 @@ export default function Home() {
             </h2>
             <div className={styles.ButtonGroup}>
               <div
-                className={styles.Link + " ion-activatable ripple-parent"}
-                onClick={buyWithFiat}
+                className={
+                  styles.Link +
+                  " " +
+                  styles.Disabled +
+                  " ion-activatable ripple-parent"
+                }
+                //onClick={buyWithFiat}
               >
                 Buy
                 <IonRippleEffect />

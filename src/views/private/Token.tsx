@@ -230,6 +230,7 @@ export default function Token({ history, match }: TokenProps) {
       });
   }
 
+  // eslint-disable-next-line
   function buyWithFiat() {
     // get the eth address
     const ethIdentity = wallets.find(
@@ -537,7 +538,8 @@ export default function Token({ history, match }: TokenProps) {
             expand="full"
             color="dark"
             shape="round"
-            onClick={buyWithFiat}
+            disabled={true}
+            //onClick={buyWithFiat}
           >
             Buy with fiat
           </IonButton>
